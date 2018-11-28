@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Nov 14, 2018 4:08:12 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.pojos.Departmentinfo" table="departmentinfo" catalog="mgmt" optimistic-lock="version">
+        <id name="departmentInfoId" type="java.lang.Integer">
+            <column name="departmentInfoId" />
+            <generator class="identity" />
+        </id>
+        <property name="name" type="string">
+            <column name="name" length="45" not-null="true" />
+        </property>
+        <set name="userinfos" table="userinfo" inverse="true" lazy="false" fetch="select">
+            <key>
+                <column name="departmentInfoId" not-null="true" />
+            </key>
+            <one-to-many class="com.pojos.Userinfo" />
+        </set>
+        <set name="announcementinfos" table="announcementinfo" inverse="true" lazy="false" fetch="select">
+            <key>
+                <column name="departmentInfoId" not-null="true" />
+            </key>
+            <one-to-many class="com.pojos.Announcementinfo" />
+        </set>
+        <set name="subjectinfos" table="subjectinfo" inverse="true" lazy="false" fetch="select">
+            <key>
+                <column name="departmentInfoId" not-null="true" />
+            </key>
+            <one-to-many class="com.pojos.Subjectinfo" />
+        </set>
+    </class>
+</hibernate-mapping>

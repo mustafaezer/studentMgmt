@@ -1,0 +1,190 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Subject Management</title>
+        <link rel="shorcut icon" type="image/x-icon" href="#{resource['images/i.png']}"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        <link href="../resources/css/myTokens.css" rel="stylesheet" type="text/css"/>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"/>
+
+        <style>
+            /*            .ui-widget-content {
+                            background-image: url("img/topography.png");
+                        }*/
+        </style>
+    </h:head>
+    <h:body>
+        <ui:insert name="sidemenu">
+            <ui:include src="templates/sidemenu.xhtml"/>
+        </ui:insert>
+
+        <div style="margin-left:20%;padding:0px 0px;height:1000px;">
+            <ui:insert name="navbar">
+                <ui:include src="templates/navbar.xhtml"/>
+            </ui:insert>
+            <div style="margin: 15px 15px 15px 15px;">
+                <p:breadCrumb>
+                    <p:menuitem value="Dashboard" url="dashboard.xhtml"/>
+                    <p:menuitem value="Subject Management" url="subjectlist.xhtml"/>
+                </p:breadCrumb>
+                
+                <ui:insert name="sidebarBottom">
+                    <ui:include src="templates/sidebarBottom.xhtml"/>
+                </ui:insert>
+
+                <h:form id="form">
+                    <p:outputPanel id="subjectListToUpdate">
+                        <p:growl id="subjectListGrowl" showDetail="true"/>
+                        <p:panel id="subjectList" header="Subject List" rendered="#{subjectBean.isRenderedP1}" toggleable="false" closable="false" toggleSpeed="500" closeSpeed="500" collapsed="#{subjectBean.isCollapsedP1}" style="margin-bottom:10px; font-size: 12px;">
+                            <p:dataTable var="_subject" 
+                                         value="#{subjectBean.subjectList}" 
+                                         rows="10" 
+                                         paginator="true" 
+                                         paginatorPosition="bottom"
+                                         style="font-size: 12px; text-align: center;" 
+                                         rowIndexVar="rowIndex"
+                                         selectionMode="single"
+                                         selection="#{subjectBean.selectedSubject}"
+                                         rowKey="#{_subject.subjectInfoId}"
+                                         >
+                                <f:facet name="header">
+                                    <p:commandButton process="@form" action="#{subjectBean.createNewSubjectPanelInitializer}" update=":form:subjectListToUpdate, :form:createNewSubjectToUpdate, :form:editSubjectToUpdate" value="Create New Subject" icon="fa fa-book" style="font-size: 12px;"/>
+                                    <p:commandButton process="@form" action="#{subjectBean.editSubjectPanelInitializer}" update=":form:subjectListToUpdate, :form:createNewSubjectToUpdate, :form:editSubjectToUpdate" value="Edit Subject Information" icon="fa fa-edit" style="font-size: 12px;"/>
+                                </f:facet>
+                                <p:column headerText="#" style="width: 10px;" >
+                                    <h:outputText value="#{rowIndex+1}"/>
+                                </p:column>
+                                <p:column headerText="Status" style="width: 40px;" styleClass="#{_subject.isActive eq 'Active' ? 'green' : null} #{_subject.isActive eq 'Inactive' ? 'red' : null}">
+                                    <h:outputText value="#{_subject.isActive}"/>
+                                </p:column>
+                                <p:column headerText="Department" style="width: 100px;">
+                                    <h:outputText value="#{_subject.departmentinfo.name}"/>
+                                </p:column>
+                                <p:column headerText="Year" style="width: 100px; text-align: center;">
+                                    <h:outputText value="#{_subject.year}"/>
+                                </p:column>
+                                <p:column headerText="Season" style="width: 50px; text-align: center;" >
+                                    <h:outputText value="#{_subject.season}"/>
+                                </p:column>
+                                <p:column headerText="Instructor Name" style="width: 100px;" >
+                                    <h:outputText value="#{_subject.userinfo.firstName} #{_subject.userinfo.middleName} #{_subject.userinfo.lastName}"/>
+                                </p:column>
+                                <p:column headerText="Subject Name" style="width: 200px;">
+                                    <h:outputText value="#{_subject.name}"/>
+                                </p:column>
+                                <p:column headerText="Quota" style="width: 30px; text-align: center;">
+                                    <h:outputText value="#{_subject.quota}"/>
+                                </p:column>
+                            </p:dataTable>  
+                        </p:panel>
+                    </p:outputPanel>
+
+                    <p:outputPanel id="createNewSubjectToUpdate">
+                        <p:growl id="createNewSubjectGrowl" showDetail="true"/>
+                        <p:panel id="createNewSubject" header="Create New Subject" rendered="#{subjectBean.isRenderedP2}" toggleable="false" closable="false" toggleSpeed="500" closeSpeed="500" collapsed="#{subjectBean.isCollapsedP2}" style="margin-bottom:10px; font-size: 12px;">
+                            <h:panelGrid columns="2" cellpadding="6">
+
+                                <h:outputLabel for="departmentInfoId" value="Department:*"/>
+                                <p:selectOneMenu id="departmentInfoId" value="#{subjectBean.departmentinfo.departmentInfoId}" required="false" style="width:230px">
+                                    <f:selectItem itemValue="#{null}" itemLabel="-- Select a Department --" noSelectionOption="true"/>
+                                    <f:selectItems value="#{userBean.departmentList}" var="department" itemLabel="#{department.name}" itemValue="#{department.departmentInfoId}"/>
+                                </p:selectOneMenu>
+
+                                <h:outputLabel for="name" value="Subject Name:*"/>
+                                <p:inputText maxlength="135" id="name" required="false" value="#{subjectBean.name}"/>
+
+                                <h:outputLabel for="citizenshipNumber" value="Instructor Citizenship Number:*"/>
+                                <p:inputText maxlength="11" id="citizenshipNumber" required="false" value="#{subjectBean.userinfo.citizenshipNumber}"/>
+
+                                <h:outputLabel for="quota" value="Quota:*"/>
+                                <p:inputText maxlength="11" id="quota" required="false" value="#{subjectBean.quota}"/>
+
+                                <h:outputLabel for="year" value="Year:*"/>
+                                <p:inputText maxlength="4" id="year" required="false" value="#{subjectBean.year}"/>
+
+                                <h:outputLabel for="season" value="Season:*"/>
+                                <p:selectOneMenu id="season" value="#{subjectBean.season}" style="width:230px" required="false">
+                                    <f:selectItem itemLabel="Fall" itemValue="Fall" />
+                                    <f:selectItem itemLabel="Spring" itemValue="Spring" />
+                                </p:selectOneMenu>
+
+                                <h:outputLabel for="isActive" value="Status:*"/>
+                                <p:selectOneMenu id="isActive" value="#{subjectBean.isActive}" style="width:230px" required="false">
+                                    <f:selectItem itemLabel="Active" itemValue="Active" />
+                                    <f:selectItem itemLabel="Inactive" itemValue="Inactive" />
+                                </p:selectOneMenu>
+
+                                <p:commandButton process="@form" action="#{subjectBean.createNewSubject}" update=":form:subjectListToUpdate, :form:createNewSubjectToUpdate, :form:editSubjectToUpdate" value="Create" icon="fa fa-user-plus"/>
+                                <p:commandButton process="@form" action="#{subjectBean.cancel}" update=":form:subjectListToUpdate, :form:createNewSubjectToUpdate, :form:editSubjectToUpdate" value="Cancel" icon="fa fa-mail-forward" />
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:outputPanel>
+
+                    <p:outputPanel id="editSubjectToUpdate">
+                        <p:growl id="editSubjectGrowl" showDetail="true"/>
+                        <p:panel id="editSubject" header="Edit Subject" rendered="#{subjectBean.isRenderedP3}" toggleable="false" closable="false" toggleSpeed="500" closeSpeed="500" collapsed="#{subjectBean.isCollapsedP3}" style="margin-bottom:10px; font-size: 12px;">
+                            <p:panelGrid  columns="2" rendered="#{not empty subjectBean.selectedSubject}" columnClasses="label,value" style="width= 500px;">
+
+                                <h:outputLabel for="isActiveUpdate" value="Status:*"/>
+                                <p:selectOneMenu id="isActiveUpdate" value="#{subjectBean.isActive}" style="width:230px" required="false">
+                                    <f:selectItem itemLabel="Active" itemValue="Active" />
+                                    <f:selectItem itemLabel="Inactive" itemValue="Inactive" />
+                                </p:selectOneMenu>
+
+                                <h:outputLabel for="departmentInfoIdUpdate" value="Department:"/>
+                                <p:selectOneMenu id="departmentInfoIdUpdate" value="#{subjectBean.selectedSubject.departmentinfo.departmentInfoId}" required="false" style="width:230px">
+                                    <f:selectItem itemValue="#{null}" itemLabel="-- Select a Department --" noSelectionOption="true"/>
+                                    <f:selectItems value="#{userBean.departmentList}" var="department" itemLabel="#{department.name}" itemValue="#{department.departmentInfoId}"/>
+                                </p:selectOneMenu>
+
+                                <h:outputLabel for="yearUpdate" value="Year:*"/>
+                                <p:inputText maxlength="4" id="yearUpdate" required="false" value="#{subjectBean.selectedSubject.year}"/>
+
+                                <h:outputLabel for="seasonUpdate" value="Season:*"/>
+                                <p:selectOneMenu id="seasonUpdate" value="#{subjectBean.selectedSubject.season}" style="width:230px" required="false">
+                                    <f:selectItem itemLabel="Fall" itemValue="Fall" />
+                                    <f:selectItem itemLabel="Spring" itemValue="Spring" />
+                                </p:selectOneMenu>
+
+
+                                <h:outputLabel for="citizenshipNumberUpdate" value="Instructor Citizenship Number:*"/>
+                                <p:inputText maxlength="11" id="citizenshipNumberUpdate" required="false" value="#{subjectBean.selectedSubject.userinfo.citizenshipNumber}"/>
+
+                                <h:outputLabel for="nameUpdate" value="Subject Name:*"/>
+                                <p:inputText maxlength="135" id="nameUpdate" required="false" value="#{subjectBean.selectedSubject.name}"/>
+
+                                <h:outputLabel for="quotaUpdate" value="Quota:*"/>
+                                <p:inputText maxlength="11" id="quotaUpdate" required="false" value="#{subjectBean.selectedSubject.quota}"/>
+
+                                <p:commandButton process="@form" action="#{subjectBean.updateSubject}" update=":form:subjectListToUpdate, :form:createNewSubjectToUpdate, :form:editSubjectToUpdate" value="Save Subject Information" icon="fa fa-save">
+                                    <p:confirm header="Confirmation" message="Selected subject's informations will be updated with new values given?" icon="ui-icon-alert" />
+                                </p:commandButton>
+                                <p:commandButton process="@form" action="#{subjectBean.cancel}" update=":form:subjectListToUpdate, :form:createNewSubjectToUpdate, :form:editSubjectToUpdate" value="Cancel" icon="fa fa-mail-forward"/>
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                </p:confirmDialog>
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:outputPanel>
+                </h:form>
+            </div>
+        </div>
+
+        <script>
+            $(function () {
+                $('a').each(function () {
+                    if ($(this).prop('href') == window.location.href) {
+                        $(this).addClass('active');
+                        $(this).parents('li').addClass('active');
+                    }
+                });
+            });
+        </script>
+    </h:body>
+</html>

@@ -1,0 +1,223 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Nov 26, 2018, 10:17:48 AM
+    Author     : Turktrust Stajyer
+*/
+
+/*Background Pattern
+.ui-widget-content {
+    background-image: url("topography.png") !important;
+}*/
+
+/*Primefaces - Button Styling*/
+.ui-button, button.ui-button.ui-state-default, .ui-button.ui-state-default {
+    border:1px solid #F1F3F5 !important;
+    background-color: #B5E8E1 !important;
+    height: 28px !important; 
+    text-indent: 0.1em !important;
+    color: #435D5B !important;
+
+    font-size: 12px;
+    font-family: "latoregular","Trebuchet MS",Arial,Helvetica,sans-serif;
+    text-align: left !important; 
+
+    border-radius: 8px;
+}
+
+/*Primefaces Panel Header*/
+.ui-panel.ui-widget .ui-panel-titlebar.ui-corner-all {
+    /*background-color: #A3E3DE !important;*/
+    color: #435D5B !important;
+    border-width: 0 0 0 0;
+    padding: .4em 1em .4em;
+}
+
+/*LayoutUnit Font*/
+root {
+    font-family: "latoregular","Trebuchet MS",Arial,Helvetica,sans-serif;
+}
+.ui-widget {
+    font-family: "latoregular","Trebuchet MS",Arial,Helvetica,sans-serif;
+}
+
+/*Side Navigation Menu - Button Width Adjustment*/
+.sidebarButton {
+    width: 100%; 
+}
+
+/*Dashboard Statistics Styling*/
+.count {
+    font-size: 32px;
+    text-align: center;
+    color: #606060;
+    font-weight: bold;
+}
+
+.infoText {
+    text-align: center;
+    font-size: 12px;
+    color: #7a7a7a;
+}
+
+.infoImg {
+    width: 60px;
+    margin-top: 0.3em;
+}
+
+/*Active - Inactive Colors*/
+.red {
+    color: #EB8D7D;
+    font-weight: bold;
+}
+.green {
+    color: #7B9EB5;
+    font-weight: bold;
+}
+
+/*Select Row Background Color*/
+.ui-datatable tr.ui-state-highlight {
+    background-color: #A3E3DE;
+    color: #435D5B;
+}
+
+/*Grades Coloring*/
+
+.AA {
+    color: #7B9EB5;
+    font-weight: bold;
+    font-size: 12px;
+}
+.BA {
+    color: #899BAE;
+    font-weight: bold;
+    font-size: 12px;
+}
+.BB {
+    color: #9799A7;
+    font-weight: bold;
+    font-size: 12px;
+}
+.CB {
+    color: #A597A0;
+    font-weight: bold;
+    font-size: 12px;
+}
+.CC {
+    color: #B39599;
+    font-weight: bold;
+    font-size: 12px;
+}
+.DC {
+    color: #C19392;
+    font-weight: bold;
+    font-size: 12px;
+}
+.DD {
+    color: #CF918B;
+    font-weight: bold;
+    font-size: 12px;
+}
+.FD {
+    color: #DD8F84;
+    font-weight: bold;
+    font-size: 12px;
+}
+.FF {
+    color: #EB8D7D;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+/*Primefaces Paginator Active State Coloring*/
+.ui-paginator .ui-paginator-page.ui-state-active {
+    background-color: #A3E3DE;
+    color: #435D5B;
+    border-color: #F1F3F5;
+}
+
+/*W3 Sidemenu*/
+body {
+    margin: 0;
+}
+
+body .sidemenuDiv ul {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 20%;
+    background-color: #f1f1f1;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+}
+
+body .sidemenuDiv ul li a {
+    display: block;
+    color: #000;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+body .sidemenuDiv ul li a.active {
+    background-color: #B5E8E1;
+    color: white;
+}
+
+body .sidemenuDiv ul li a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+}
+/*W3 Sidemenu End*/
+
+/*W3 Topbar*/
+body .topbarDiv ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #F1F1F1;
+}
+
+body .topbarDiv li {
+    float: left;
+}
+
+body .topbarDiv li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 16px 16px;
+    text-decoration: none;
+}
+
+body .topbarDiv li a:hover:not(.active) {
+    background-color: #F1F1F1;
+}
+
+body .topbarDiv .active {
+    background-color: #4CAF50;
+}
+/*W3 Topbar End*/
+
+/*Primefaces Breadcrumb*/
+.ui-breadcrumb {
+    /*padding: 0px 0px 0px 0px;*/
+    width: 100%;
+    border: 0px;
+    background-color: #ffffff;
+    margin-bottom: 1em;
+    color: #99bfb9;
+}
+
+.ui-breadcrumb ul li .ui-menuitem-link {
+    font-family: 'latoregular'; 
+    text-decoration: none; 
+    font-size: 12px;
+    color: #99bfb9;
+}

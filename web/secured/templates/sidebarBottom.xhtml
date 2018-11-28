@@ -1,0 +1,22 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <!--Bottom Sidebar-->
+    <p:sidebar appendTo="@(body)" widgetVar="sidebar2" position="right" baseZIndex="10000" style="background-color: #F1F1F1 !important;">
+        <div align="center">
+            <h:graphicImage value="/i.png" width="125"/>
+            <br></br>
+            <strong>
+                <h:outputLabel value="Dear. #{navbarBean.loggedUserList.get(0).firstName} #{navbarBean.loggedUserList.get(0).middleName} #{navbarBean.loggedUserList.get(0).lastName}" style="font-size:12px; font-family: 'Roboto';"/>
+            </strong>
+            <br></br>
+            <h:outputLabel/>
+            <br></br>
+            <p:button value="Personal Information" outcome="personalinfo" icon="fa fa-info-circle" style="font-size:12px; width: 175px; height: 25px;"/>
+            <p:commandButton value="Sign Out" action="#{loginBean.userLogout}" icon="fa fa-sign-out" style="font-size:12px; width: 175px; height: 25px;"/>
+        </div>
+    </p:sidebar>
+</ui:composition>    

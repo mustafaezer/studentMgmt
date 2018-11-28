@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Grades of Courses Given</title>
+        <link rel="shorcut icon" type="image/x-icon" href="#{resource['images/i.png']}"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        <link href="../resources/css/myTokens.css" rel="stylesheet" type="text/css"/>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"/>
+
+        <style>
+            /*            .ui-widget-content {
+                            background-image: url("img/topography.png");
+                        }*/
+        </style>
+    </h:head>
+    <h:body>
+        <ui:insert name="sidemenu">
+            <ui:include src="templates/sidemenu.xhtml"/>
+        </ui:insert>
+        <div style="margin-left:20%;padding:0px 0px;height:1000px;">
+            <ui:insert name="navbar">
+                <ui:include src="templates/navbar.xhtml"/>
+            </ui:insert>
+
+            <div style="margin: 15px 15px 15px 15px;">
+                <p:breadCrumb>
+                    <p:menuitem value="Dashboard" url="dashboard.xhtml"/>
+                    <p:menuitem value="Personal Information" url="personalinfo.xhtml"/>
+                </p:breadCrumb>
+                
+                <ui:insert name="sidebarBottom">
+                    <ui:include src="templates/sidebarBottom.xhtml"/>
+                </ui:insert>
+
+                <h:form id="form">
+                    <p:outputPanel id="personalInformationToUpdate">
+                        <p:panel id="personalInformation" header="Personal Information" rendered="true" toggleable="false" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{personalInfoBean.isCollapsedP1}" style="margin-bottom:10px; font-size: 12px;">
+                            <h:panelGrid columns="2" cellpadding="10">
+                                <p:carousel value="#{personalInfoBean.fetchPersonalInfo()}" 
+                                            vertical="true" 
+                                            headerText="Personal Information" 
+                                            var="_user" 
+                                            itemStyle="height:200px;width:300px;text-align:center" 
+                                            numVisible="1" 
+                                            style="width:300px; font-size:12px;">
+
+                                    <p:panelGrid columns="2" style="width:100%" columnClasses="label,value">
+                                        <f:facet name="header">
+                                            #{_user.firstName} #{_user.middleName} #{_user.lastName}
+                                        </f:facet>
+
+                                        <h:outputText value="Status: " />
+                                        <h:outputText value="#{_user.isActive}" />
+
+                                        <h:outputText value="Department: " />
+                                        <h:outputText value="#{_user.departmentinfo.name}" />
+
+                                        <h:outputText value="User Type: " />
+                                        <h:outputText value="#{_user.userType}" />
+
+                                        <h:outputText value="Citizenship Number: " />
+                                        <h:outputText value="#{_user.citizenshipNumber}" />
+
+                                        <h:outputText value="Gender: " />
+                                        <h:outputText value="#{_user.gender}" />
+
+                                        <h:outputText value="Email: " />
+                                        <h:outputText value="#{_user.email}" />
+
+                                        <h:outputText value="Date of Birth: " />
+                                        <h:outputText value="#{_user.dateOfBirth}" />
+                                    </p:panelGrid>
+                                </p:carousel>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:outputPanel>
+
+                    <p:outputPanel id="changePasswordToUpdate">
+                        <p:growl id="growl" showDetail="true"/>
+
+                        <p:panel id="changePassword" header="Change Password" rendered="true" toggleable="false" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{personalInfoBean.isCollapsedP2}" style="margin-bottom:10px; font-size: 12px;">
+                            <h:panelGrid columns="2" cellpadding="10">
+
+                                <p:outputLabel value="Current Password:"/>
+                                <p:password  value="#{personalInfoBean.password}" placeholder="Current Password" style="width: 132px;"/>
+
+                                <p:outputLabel value="New Password:"/>
+                                <p:password  value="#{personalInfoBean.newPassword}" placeholder="New Password" style="width: 132px;"/>
+
+                                <p:outputLabel value="Confirm New Password:"/>
+                                <p:password  value="#{personalInfoBean.confirmPassword}" placeholder="Confirm New Password" style="width: 132px;"/>
+
+                                <p:outputLabel/>
+                                <p:commandButton process="@form" action="#{personalInfoBean.changePassword}" update=":form:changePasswordToUpdate, :form:personalInformationToUpdate" value="Change Password" icon="fa fa-lock" />
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:outputPanel>
+                </h:form>
+            </div>
+        </div>
+
+        <script>
+            $(function () {
+                $('a').each(function () {
+                    if ($(this).prop('href') == window.location.href) {
+                        $(this).addClass('active');
+                        $(this).parents('li').addClass('active');
+                    }
+                });
+            });
+        </script>
+    </h:body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Department Management</title>
+        <link rel="shorcut icon" type="image/x-icon" href="#{resource['images/i.png']}"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        <link href="../resources/css/myTokens.css" rel="stylesheet" type="text/css"/>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"/>
+
+        <style>
+            /*            .ui-widget-content {
+                            background-image: url("img/topography.png");
+                        }*/
+        </style>
+    </h:head>
+    <h:body>
+        <ui:insert name="sidemenu">
+            <ui:include src="templates/sidemenu.xhtml"/>
+        </ui:insert>
+
+        <div style="margin-left:20%;padding:0px 0px;height:1000px;">
+            <ui:insert name="navbar">
+                <ui:include src="templates/navbar.xhtml"/>
+            </ui:insert>
+
+            <div style="margin: 15px 15px 15px 15px;">
+                <p:breadCrumb>
+                    <p:menuitem value="Dashboard" url="dashboard.xhtml"/>
+                    <p:menuitem value="Department Management" url="departmentlist.xhtml"/>
+                </p:breadCrumb>
+                
+                <ui:insert name="sidebarBottom">
+                    <ui:include src="templates/sidebarBottom.xhtml"/>
+                </ui:insert>
+
+                <h:form id="form">
+                    <!--Create New Department-->
+                    <p:outputPanel id="createNewDepartmentToUpdate">
+                        <p:growl id="createDepartment" showDetail="true" style="font-size:12px;"/>
+                        <p:panel header="Create New Department" toggleable="true" closable="false" style="font-size: 12px" toggleableHeader="true" rendered="#{departmentBean.isRenderedP0}" collapsed="#{departmentBean.isCollapsedP0}">
+                            <div class="ui-g ui-fluid">
+                                <div class="ui-g-12 ui-md-4">
+                                    <div class="ui-inputgroup">
+                                        <span class="ui-inputgroup-addon"><i class="fa fa-bank"></i></span>
+                                        <p:inputText maxlength="45" id="departmentName" required="false" value="#{departmentBean.name}" placeholder="Department Name" /> 
+                                        <p:commandButton process="@form" action="#{departmentBean.createNewDepartment}" update=":form:createNewDepartmentToUpdate, :form:departmentDTToUpdate, :form:departmentInstructorsToUpdate, :form:departmentStudentsToUpdate, :form:departmentSubjectsToUpdate" value="Create" style="border-radius: 0px !important;">
+                                            <p:confirm header="Confirmation" message="New department will be created by the informations given?" icon="ui-icon-alert" />
+                                        </p:commandButton>
+                                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                        </p:confirmDialog>
+                                    </div>
+                                </div>
+                            </div>
+                        </p:panel>
+                    </p:outputPanel>
+
+                    <!--Department Selection DT-->
+                    <p:outputPanel id="departmentDTToUpdate">
+                        <p:panel id="departmentDT" header="Department List" rendered="#{departmentBean.isRenderedP1}" footer="Select a department and click one of the actions in the datatable's footer, to view its informations." toggleable="false" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{departmentBean.isCollapsedP1}" style="margin-bottom:10px; font-size: 12px;">
+                            <h:panelGrid columns="2" cellpadding="10">
+                                <p:dataTable id="singleDT" 
+                                             var="_departmentList" 
+                                             value="#{departmentBean.departmentList}" 
+                                             selectionMode="single" 
+                                             selection="#{departmentBean.selectedDepartment}" 
+                                             rowKey="#{_departmentList.departmentInfoId}"
+                                             rowIndexVar="rowIndex"
+                                             style="font-size:12px;"
+                                             rows="10" 
+                                             paginator="true" 
+                                             paginatorPosition="bottom">
+
+                                    <!--                                    <f:facet name="header">
+                                                                            All Departments
+                                                                        </f:facet>-->
+                                    <p:column headerText="#" style="width: 10px;">
+                                        <h:outputText value="#{rowIndex+1}" />
+                                    </p:column>
+                                    <p:column headerText="Department Name">
+                                        <h:outputText value="#{_departmentList.name}" />
+                                    </p:column>
+                                    <f:facet name="header">
+                                        <p:commandButton process="@form" action="#{departmentBean.listDepartmentInstructors}" update=":form:createNewDepartmentToUpdate, :form:departmentDTToUpdate, :form:departmentInstructorsToUpdate, :form:departmentStudentsToUpdate, :form:departmentSubjectsToUpdate" value="Show Instructor Members" icon="fa fa-group" />
+                                        <p:commandButton process="@form" action="#{departmentBean.listDepartmentStudents}" update=":form:createNewDepartmentToUpdate, :form:departmentDTToUpdate, :form:departmentInstructorsToUpdate, :form:departmentStudentsToUpdate, :form:departmentSubjectsToUpdate" value="Show Student Members" icon="fa fa-graduation-cap" />
+                                        <p:commandButton process="@form" action="#{departmentBean.listDepartmentSubjects}" update=":form:createNewDepartmentToUpdate, :form:departmentDTToUpdate, :form:departmentInstructorsToUpdate, :form:departmentStudentsToUpdate, :form:departmentSubjectsToUpdate" value="Show Subjects Given By Department" icon="fa fa-file-text-o" />
+                                    </f:facet>
+                                </p:dataTable>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:outputPanel>
+
+                    <!--Instructors-->
+                    <p:outputPanel id="departmentInstructorsToUpdate">
+                        <p:growl id="instructors" showDetail="true" style="font-size:12px;"/>
+                        <p:panel id="departmentInstructors" header="Show Instructor Members" rendered="#{departmentBean.isRenderedP2}" toggleable="true" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{departmentBean.isCollapsedP2}" style="margin-bottom:10px; font-size: 12px;">
+                            <h:panelGrid columns="2" cellpadding="10">
+                                <p:dataTable var="_userList" 
+                                             value="#{departmentBean.instructorList}" 
+                                             rows="5" 
+                                             paginator="true" 
+                                             paginatorPosition="bottom"
+                                             style="font-size: 12px; text-align: center;" 
+                                             rowIndexVar="rowIndex">
+                                    <f:facet name="header">
+                                        Instructors Members of #{departmentBean.selectedDepartment.name}
+                                    </f:facet>
+                                    <p:column headerText="#" style="width: 10px;" >
+                                        <h:outputText value="#{rowIndex+1}"/>
+                                    </p:column>
+                                    <p:column headerText="Citizenship Number">
+                                        <h:outputText value="#{_userList.citizenshipNumber}"/>
+                                    </p:column>
+                                    <p:column headerText="Instructor Name">
+                                        <h:outputText value="#{_userList.firstName} #{_userList.middleName} #{_userList.lastName}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:outputPanel>
+
+                    <!--Students-->
+                    <p:outputPanel id="departmentStudentsToUpdate">
+                        <p:growl id="students" showDetail="true" style="font-size:12px;"/>
+                        <p:panel id="departmentStudents" header="Show Student Members" rendered="#{departmentBean.isRenderedP3}" toggleable="true" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{departmentBean.isCollapsedP3}" style="margin-bottom:10px; font-size: 12px;">
+                            <h:panelGrid columns="2" cellpadding="10">
+                                <p:dataTable var="_userList" 
+                                             value="#{departmentBean.studentList}" 
+                                             rows="5" 
+                                             paginator="true" 
+                                             paginatorPosition="bottom"
+                                             style="font-size: 12px; text-align: center;" 
+                                             rowIndexVar="rowIndex">
+                                    <f:facet name="header">
+                                        Student Members of #{departmentBean.selectedDepartment.name}
+                                    </f:facet>
+                                    <p:column headerText="#" style="width: 10px;" >
+                                        <h:outputText value="#{rowIndex+1}"/>
+                                    </p:column>
+                                    <p:column headerText="Status" groupRow="true" style="width: 40px;" styleClass="#{_userList.isActive eq 'Active' ? 'green' : null} #{_userList.isActive eq 'Inactive' ? 'red' : null}">
+                                        <h:outputText value="#{_userList.isActive}"/>
+                                    </p:column>
+                                    <p:column headerText="Full Name">
+                                        <h:outputText value="#{_userList.firstName} #{_userList.middleName} #{_userList.lastName}"/>
+                                    </p:column>
+                                    <p:column headerText="Citizenship Number" style="width: 75px;">
+                                        <h:outputText value="#{_userList.citizenshipNumber}"/>
+                                    </p:column>
+                                    <p:column headerText="Gender" style="width: 50px;" >
+                                        <h:outputText value="#{_userList.gender}" />
+                                    </p:column>
+                                    <p:column headerText="Email">
+                                        <h:outputText value="#{_userList.email}"/>
+                                    </p:column>
+                                    <p:column headerText="Date of Birth" style="width: 65px;">
+                                        <h:outputText value="#{_userList.dateOfBirth}"/>
+                                    </p:column>
+                                    <p:column headerText="Remark">
+                                        <h:outputText value="#{_userList.remark}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:outputPanel>
+
+                    <!--Subjects-->
+                    <p:outputPanel id="departmentSubjectsToUpdate">
+                        <p:growl id="subjects" showDetail="true" style="font-size:12px;"/>
+                        <p:panel id="departmentSubjects" header="Show Subjects Given By Department" rendered="#{departmentBean.isRenderedP4}" toggleable="true" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{departmentBean.isCollapsedP4}" style="margin-bottom:10px; font-size: 12px;">
+                            <h:panelGrid columns="2" cellpadding="2">
+                                <p:dataTable var="_subjectList" 
+                                             value="#{departmentBean.subjectList}" 
+                                             rows="5" 
+                                             paginator="true" 
+                                             paginatorPosition="bottom"
+                                             style="font-size: 12px; text-align: center;" 
+                                             rowIndexVar="rowIndex">
+                                    <f:facet name="header">
+                                        Subjects Given by #{departmentBean.selectedDepartment.name}
+                                    </f:facet>
+                                    <p:column headerText="#" style="width: 10px;" >
+                                        <h:outputText value="#{rowIndex+1}"/>
+                                    </p:column>
+                                    <p:column headerText="Subject Name" style="width: 200px;">
+                                        <h:outputText value="#{_subjectList.name}"/>
+                                    </p:column>
+                                    <p:column headerText="Instructor Citizenship Number" style="width: 75px;">
+                                        <h:outputText value="#{_subjectList.userinfo.citizenshipNumber}"/>
+                                    </p:column>
+                                    <p:column headerText="Instructor Name" style="width: 40px;">
+                                        <h:outputText value="#{_subjectList.userinfo.firstName} #{_subjectList.userinfo.middleName} #{_subjectList.userinfo.lastName}"/>
+                                    </p:column>
+                                    <p:column headerText="Year" style="width: 30px;">
+                                        <h:outputText value="#{_subjectList.year}"/>
+                                    </p:column>
+                                    <p:column headerText="Season" style="width: 40px;">
+                                        <h:outputText value="#{_subjectList.season}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:outputPanel>
+                </h:form>
+            </div>
+        </div>
+
+        <script>
+            $(function () {
+                $('a').each(function () {
+                    if ($(this).prop('href') == window.location.href) {
+                        $(this).addClass('active');
+                        $(this).parents('li').addClass('active');
+                    }
+                });
+            });
+        </script>
+    </h:body>
+</html>

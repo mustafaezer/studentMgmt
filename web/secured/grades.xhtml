@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>    
+        <title>Grades</title>
+        <link rel="shorcut icon" type="image/x-icon" href="#{resource['images/i.png']}"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        <link href="../resources/css/myTokens.css" rel="stylesheet" type="text/css"/>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"/>
+
+        <style>
+            /*            .ui-widget-content {
+                            background-image: url("img/topography.png");
+                        }*/
+        </style>
+    </h:head>
+    <h:body>
+        <ui:insert name="sidemenu">
+            <ui:include src="templates/sidemenu.xhtml"/>
+        </ui:insert>
+
+        <div style="margin-left:20%;padding:0px 0px;height:1000px;">
+            <ui:insert name="navbar">
+                <ui:include src="templates/navbar.xhtml"/>
+            </ui:insert>
+            <div style="margin: 15px 15px 15px 15px;">
+                <p:breadCrumb>
+                    <p:menuitem value="Dashboard" url="dashboard.xhtml"/>
+                    <p:menuitem value="Grades" url="grades.xhtml"/>
+                </p:breadCrumb>
+                
+                <ui:insert name="sidebarBottom">
+                    <ui:include src="templates/sidebarBottom.xhtml"/>
+                </ui:insert>
+                <h:form>
+                    <p:dataTable var="grading" 
+                                 value="#{gradesBean.grading}" 
+                                 style="font-size: 12px; text-align: center;" 
+
+                                 rowIndexVar="rowIndex">
+                        <f:facet name="header">
+                            Grade Informations of All Students 
+                        </f:facet>
+                        <p:column headerText="#" style="width: 10px;" >
+                            <h:outputText value="#{rowIndex+1}"/>
+                        </p:column>
+                        <p:column headerText="Department" style="width: 150px;" sortBy="#{grading.subjectinfo.departmentinfo.departmentInfoId}">
+                            <h:outputText value="#{grading.subjectinfo.departmentinfo.name}"/>
+                        </p:column>
+                        <p:column headerText="Instructor" >
+                            <h:outputText value="#{grading.subjectinfo.userinfo.firstName} #{grading.subjectinfo.userinfo.middleName} #{grading.subjectinfo.userinfo.lastName}"/>
+                        </p:column>
+                        <p:column headerText="Subject" style="width: 250px;">
+                            <h:outputText value="#{grading.subjectinfo.name}"/>
+                        </p:column>
+                        <p:column headerText="Student" >
+                            <h:outputText value="#{grading.userinfo.firstName} #{grading.userinfo.middleName} #{grading.userinfo.lastName}"/>
+                        </p:column>
+                        <p:column headerText="Midterm" style="width: 40px">
+                            <h:outputText value="#{grading.midtermNote}"/>
+                        </p:column>
+                        <p:column headerText="Finale" style="width: 40px">
+                            <h:outputText value="#{grading.finaleNote}"/>
+                        </p:column>
+                        <p:column headerText="Grade" style="width: 40px" styleClass="#{grading.grade eq 'AA' ? 'AA' : null} 
+                                  #{grading.grade eq 'BA' ? 'BA' : null}
+                                  #{grading.grade eq 'BB' ? 'BB' : null}
+                                  #{grading.grade eq 'CB' ? 'CB' : null}
+                                  #{grading.grade eq 'CC' ? 'CC' : null}
+                                  #{grading.grade eq 'DC' ? 'DC' : null}
+                                  #{grading.grade eq 'DD' ? 'DD' : null}
+                                  #{grading.grade eq 'FD' ? 'FD' : null}
+                                  #{grading.grade eq 'FF' ? 'FF' : null}">
+                            <h:outputText value="#{grading.grade}"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            (Notes: 
+                            <h:outputLabel value="AA " styleClass="AA"/>|
+                            <h:outputLabel value="BA " styleClass="BA"/>|
+                            <h:outputLabel value="BB " styleClass="BB"/>|
+                            <h:outputLabel value="CB " styleClass="CB"/>|
+                            <h:outputLabel value="CC " styleClass="CC"/>|
+                            <h:outputLabel value="DC " styleClass="DC"/>|
+                            <h:outputLabel value="DD " styleClass="DD"/>|
+                            <h:outputLabel value="FD " styleClass="FD"/>|
+                            <h:outputLabel value="FF" styleClass="FF"/>)
+                        </f:facet>
+                    </p:dataTable>
+                </h:form>
+            </div>
+        </div>
+
+        <script>
+            $(function () {
+                $('a').each(function () {
+                    if ($(this).prop('href') == window.location.href) {
+                        $(this).addClass('active');
+                        $(this).parents('li').addClass('active');
+                    }
+                });
+            });
+        </script>
+    </h:body>
+</html>

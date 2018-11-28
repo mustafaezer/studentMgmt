@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title> SiMS | Log In</title>
+        <link rel="shorcut icon" type="image/x-icon" href="#{resource['images/i.png']}"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        <link href="resources/css/myTokens.css" rel="stylesheet" type="text/css"/>
+
+        <style>
+            .Bimage {background-image: url("topography.png");}
+        </style>
+    </h:head>
+    <h:body styleClass="Bimage"> 
+        <h:form>
+            <p:growl id="login" showDetail="true"/>
+            <p:spacer height="150"/>
+            <p:panel id="loginPanel" style="font-size: 12px; width: 250px; margin: 0 auto; text-align: center; align-content: center;">
+                <f:facet name="header">
+                    <p:spacer height="30"/><br></br>
+                    <h:graphicImage value="/i.png" width="100"/><br></br>
+                    <p:spacer height="30"/>
+                </f:facet>
+                <h:panelGrid column="1">
+                    <h:panelGroup style="display:block; text-align:center">
+                        <div class="ui-g ui-fluid">
+                            <div class="ui-g-12 ui-md-6">
+                                <div class="ui-inputgroup">
+                                    <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
+                                    <p:inputText value="#{loginBean.citizenshipNumber}" maxlength="11" placeholder="Citizenship Number" style="width: 400px;"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui-g ui-fluid">
+                            <div class="ui-g-12 ui-md-6">
+                                <div class="ui-inputgroup">
+                                    <span class="ui-inputgroup-addon"><i class="fa fa-key"></i></span>
+                                    <p:password value="#{loginBean.password}" placeholder="Password" style="width: 400px;"/>
+                                </div>
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                </h:panelGrid>
+                <f:facet name="footer">
+                    <center>
+                        <p:commandButton value="Sign In" action="#{loginBean.checkUser}" styleClass="button" icon="fa fa-sign-in"/>
+                    </center>
+                </f:facet>
+            </p:panel>
+        </h:form>
+    </h:body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <h:head>
+        <title>Courses Taken</title>
+        <link rel="shorcut icon" type="image/x-icon" href="#{resource['images/i.png']}"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        <link href="../resources/css/myTokens.css" rel="stylesheet" type="text/css"/>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"/>
+
+        <style>
+/*            .ui-widget-content {
+                background-image: url("img/topography.png");
+            }*/
+        </style>
+    </h:head>
+    <h:body>
+        <ui:insert name="sidemenu">
+            <ui:include src="templates/sidemenu.xhtml"/>
+        </ui:insert>
+
+        <div style="margin-left:20%;padding:0px 0px;height:1000px;">
+            <ui:insert name="navbar">
+                <ui:include src="templates/navbar.xhtml"/>
+            </ui:insert>
+
+            <div style="margin: 15px 15px 15px 15px;">
+                <p:breadCrumb>
+                    <p:menuitem value="Dashboard" url="dashboard.xhtml"/>
+                    <p:menuitem value="Courses Taken" url="coursestaken.xhtml"/>
+                </p:breadCrumb>
+                
+                <ui:insert name="sidebarBottom">
+                    <ui:include src="templates/sidebarBottom.xhtml"/>
+                </ui:insert>
+
+                <h:form>
+                    <p:dataTable var="_coursesList" 
+                                 value="#{coursesTakenBean.coursesList}" 
+                                 style="font-size: 12px; text-align: center;" 
+                                 rowIndexVar="rowIndex">
+                        <f:facet name="header">
+                            Courses Taken by #{navbarBean.loggedUserList.get(0).firstName} #{navbarBean.loggedUserList.get(0).middleName} #{navbarBean.loggedUserList.get(0).lastName}
+                        </f:facet>
+                        <p:column headerText="#" style="width: 10px;" >
+                            <h:outputText value="#{rowIndex+1}"/>
+                        </p:column>
+
+                        <p:column headerText="Subject Name" groupRow="true" style="width: 300px;">
+                            <h:outputText value="#{_coursesList.subjectinfo.name}"/>
+                        </p:column>
+                        <p:column headerText="Midterm">
+                            <h:outputText value="#{_coursesList.midtermNote}"/>
+                        </p:column>
+                        <p:column headerText="Finale">
+                            <h:outputText value="#{_coursesList.finaleNote}"/>
+                        </p:column>
+                        <p:column headerText="Grade">
+                            <h:outputText value="#{_coursesList.grade}"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            In total, there are #{fn:length(coursesTakenBean.coursesList)} courses taken.
+                        </f:facet>
+                    </p:dataTable>
+                </h:form>
+            </div>
+        </div>
+        
+        <script>
+            $(function () {
+                $('a').each(function () {
+                    if ($(this).prop('href') == window.location.href) {
+                        $(this).addClass('active');
+                        $(this).parents('li').addClass('active');
+                    }
+                });
+            });
+        </script>
+    </h:body>
+</html>

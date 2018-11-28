@@ -1,0 +1,253 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>User Management</title>
+        <link rel="shorcut icon" type="image/x-icon" href="#{resource['images/i.png']}"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        <link href="../resources/css/myTokens.css" rel="stylesheet" type="text/css"/>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"/>
+
+        <style>
+            /*            .ui-widget-content {
+                            background-image: url("img/topography.png");
+                        }*/
+        </style>
+    </h:head>
+    <h:body>
+        <ui:insert name="sidemenu">
+            <ui:include src="templates/sidemenu.xhtml"/>
+        </ui:insert>
+
+        <div style="margin-left:20%;padding:0px 0px;height:1000px;">
+            <ui:insert name="navbar">
+                <ui:include src="templates/navbar.xhtml"/>
+            </ui:insert>
+            <div style="margin: 15px 15px 15px 15px;">
+                <p:breadCrumb>
+                    <p:menuitem value="Dashboard" url="dashboard.xhtml"/>
+                    <p:menuitem value="User Management" url="userlist.xhtml"/>
+                </p:breadCrumb>
+                
+                <ui:insert name="sidebarBottom">
+                    <ui:include src="templates/sidebarBottom.xhtml"/>
+                </ui:insert>
+
+                <h:form id="form">
+                    <p:outputPanel id="userListToUpdate">
+                        <p:growl id="userListGrowl" showDetail="true"/>
+                        <p:panel id="userList" header="User List" rendered="#{userBean.isRenderedP1}" footer="If you want to edit a user's information, select the user from table and hit 'Edit User Information' button." toggleable="false" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{userBean.isCollapsedP1}" style="margin-bottom:10px; font-size: 12px;">
+                            <p:dataTable id="singleDT"
+                                         var="_user" 
+                                         value="#{userBean.userList}" 
+                                         selectionMode="single"
+                                         selection="#{userBean.selectedUser}"
+                                         rowKey="#{_user.citizenshipNumber}"
+                                         rows="7" 
+                                         paginator="true" 
+                                         paginatorPosition="bottom"
+                                         style="font-size: 12px; text-align: center;" 
+                                         rowIndexVar="rowIndex"> 
+                                <f:facet name="header">
+                                    <p:commandButton process="@form" action="#{userBean.createNewUserPanelInitializer}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate" value="Create New User" icon="fa fa-user-plus" />
+                                    <p:commandButton process="@form" action="#{userBean.updateUserPanelInitializer}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate" value="Edit User Information" icon="fa fa-edit"/>
+                                </f:facet>
+                                <p:column headerText="#" style="width: 10px; height: 25px;">
+                                    <h:outputText value="#{rowIndex+1}"/>
+                                </p:column>
+                                <p:column headerText="Status" style="width: 40px;" styleClass="#{_user.isActive eq 'Active' ? 'green' : null} #{_user.isActive eq 'Inactive' ? 'red' : null}">
+                                    <h:outputText value="#{_user.isActive}"/>
+                                </p:column>
+                                <p:column headerText="Department">
+                                    <h:outputText value="#{_user.departmentinfo.name}"/>
+                                </p:column>
+                                <p:column headerText="User Type" style="width: 70px;">
+                                    <h:outputText value="#{_user.userType}"/>
+                                </p:column>
+                                <p:column filterBy="#{_user.firstName} #{_user.middleName} #{_user.lastName}" filterMatchMode="contains" headerText="First Name">
+                                    <h:outputText value="#{_user.firstName} #{_user.middleName} #{_user.lastName}"/>
+                                </p:column>
+                                <p:column filterBy="#{_user.citizenshipNumber}" filterMatchMode="contains" headerText="Citizenship Number">
+                                    <h:outputText value="#{_user.citizenshipNumber}"/>
+                                </p:column>
+                                <p:column headerText="Gender" style="width: 50px;">
+                                    <h:outputText value="#{_user.gender}" />
+                                </p:column>
+                                <p:column filterBy="#{_user.email}" filterMatchMode="contains" headerText="Email">
+                                    <h:outputText value="#{_user.email}"/>
+                                </p:column>
+                                <p:column headerText="Date of Birth">
+                                    <h:outputText value="#{_user.dateOfBirth}"/>
+                                </p:column>
+                                <p:column headerText="Remark">
+                                    <h:outputText value="#{_user.remark}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+                    </p:outputPanel>
+
+                    <p:outputPanel id="createNewUserToUpdate">
+                        <p:growl id="createNewUserGrowl" showDetail="true"/>
+                        <p:panel id="createNewUser" header="Create New User" rendered="#{userBean.isRenderedP2}" toggleable="false" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{userBean.isCollapsedP2}" style="margin-bottom:10px; font-size: 12px;">
+                            <h:panelGrid columns="2" cellpadding="2">
+
+                                <h:outputLabel for="citizenshipNumber" value="Citizenship Number:*"/> 
+                                <p:inputText maxlength="11" id="citizenshipNumber" required="false" value="#{userBean.citizenshipNumber}" style="width:246px"/>
+
+                                <h:outputLabel for="userType" value="User Type:*"/>
+                                <p:selectOneMenu id="userType" value="#{userBean.userType}" required="false" style="width:230px">
+                                    <f:selectItem itemLabel="" itemValue="null" />
+                                    <f:selectItem itemLabel="Instructor" itemValue="Instructor" />
+                                    <f:selectItem itemLabel="Student" itemValue="Student" />
+                                    <f:selectItem itemLabel="Administrator" itemValue="Administrator" />
+                                </p:selectOneMenu>
+
+                                <h:outputLabel for="departmentInfoId" value="Department:*"/>
+                                <p:selectOneMenu id="departmentInfoId" value="#{userBean.departmentinfo.departmentInfoId}" required="false" style="width:230px">
+                                    <f:selectItem itemValue="#{null}" itemLabel="-- Select a Department --" noSelectionOption="true"/>
+                                    <f:selectItems value="#{userBean.departmentList}" var="department" itemLabel="#{department.name}" itemValue="#{department.departmentInfoId}"/>
+                                </p:selectOneMenu>
+
+                                <h:outputLabel for="firstName" value="First Name:*"/>
+                                <p:inputText maxlength="45" id="firstName" required="false" value="#{userBean.firstName}" style="width:246px"/>
+
+                                <h:outputLabel for="middleName" value="Middle Name:"/>
+                                <p:inputText maxlength="45" id="middleName" value="#{userBean.middleName}" style="width:246px"/>
+
+                                <h:outputLabel for="lastName" value="Last Name:*"/>
+                                <p:inputText maxlength="45" id="lastName" required="false" value="#{userBean.lastName}" style="width:246px"/>
+
+                                <h:outputLabel for="gender" value="Gender:*"/>
+                                <p:selectOneMenu id="gender" value="#{userBean.gender}" style="width:230px">
+                                    <f:selectItem itemLabel="" itemValue="null" />
+                                    <f:selectItem itemLabel="Female" itemValue="Female" />
+                                    <f:selectItem itemLabel="Male" itemValue="Male" />
+                                    <f:selectItem itemLabel="Unknown" itemValue="Unknown" />
+                                </p:selectOneMenu>
+
+                                <h:outputLabel for="email" value="Email:*"/>
+                                <p:inputText maxlength="45" id="email" required="false" value="#{userBean.email}" style="width:246px"/>
+
+                                <h:outputLabel for="password" value="Password:*" />
+                                <p:password id="password" value="#{userBean.password}" style="width:246px" />
+
+                                <h:outputLabel for="dateOfBirth" value="Date of Birth:*"/>
+                                <p:calendar id="dateOfBirth" value="#{userBean.dateOfBirth}" required="false" pattern="yyyy-MM-dd" style="width:246px"/>
+
+                                <h:outputLabel for="remark" value="Remark:"/>
+                                <p:inputText maxlength="180" id="remark" required="false" value="#{userBean.remark}" style="width:246px"/>
+
+                                <h:outputLabel for="isActive" value="Status:*" style="width:246px"/>
+                                <p:selectOneMenu id="isActive" value="#{userBean.isActive}" style="width:230px" required="false">
+                                    <f:selectItem itemLabel="Active" itemValue="Active" />
+                                    <f:selectItem itemLabel="Inactive" itemValue="Inactive" />
+                                </p:selectOneMenu>
+
+                                <p:commandButton process="@form" action="#{userBean.createNewUser}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate" value="Save User Information" icon="fa fa-save">
+                                    <p:confirm header="Confirmation" message="New user will be created by the informations given?" icon="ui-icon-alert" />
+                                </p:commandButton>
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                </p:confirmDialog>
+
+                                <p:commandButton process="@form" action="#{userBean.cancel}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate" value="Cancel Editing" icon="fa fa-mail-forward"/>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:outputPanel>
+
+
+                    <p:outputPanel id="editUserInformationToUpdate">
+                        <p:growl id="editUserInformationGrowl" showDetail="true"/>
+                        <p:panel id="editUserInformation" header="Edit User Information" rendered="#{userBean.isRenderedP3}" toggleable="false" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{userBean.isCollapsedP3}" style="margin-bottom:10px; font-size: 12px;">
+                            <p:panelGrid  columns="3" rendered="#{not empty userBean.selectedUser}" columnClasses="label,value" style="width= 100px;">
+                                <f:facet name="header">
+                                    Editable fields are highlighted with an edit icon next to them. Please click to the value field that you want to change. After editing the value, hit the button below for changes to be made.
+                                </f:facet> 
+
+
+                                <h:outputLabel for="citizenshipNumberUpdate" value="Citizenship Number:"/> 
+                                <h:outputLabel id="citizenshipNumberUpdate" value="#{userBean.selectedUser.citizenshipNumber}"/> 
+                                <h:outputLabel value=" "/> 
+
+                                <h:outputLabel for="departmentInfoIdUpdate" value="Department:"/> 
+                                <h:outputLabel id="departmentInfoIdUpdate" value="#{userBean.selectedUser.departmentinfo.name}"/>
+                                <h:outputLabel value=" "/> 
+
+                                <h:outputLabel for="userTypeUpdate" value="User Type:"/> 
+                                <h:outputLabel id="userTypeUpdate" value="#{userBean.selectedUser.userType}"/> 
+                                <h:outputLabel value=" "/> 
+
+                                <h:outputLabel for="firstNameUpdate" value="First Name:"/> 
+                                <p:inputText maxlength="45" id="firstNameUpdate" required="false" value="#{userBean.selectedUser.firstName}"  style="width: 650px;"/>
+                                <span class="fa fa-edit" />
+
+                                <h:outputLabel for="middleNameUpdate" value="Middle Name:"/> 
+                                <p:inputText maxlength="45" id="middleNameUpdate" required="false" value="#{userBean.selectedUser.middleName}" style="width: 650px"/>
+                                <span class="fa fa-edit" />
+
+                                <h:outputLabel for="lastNameUpdate" value="Last Name:"/> 
+                                <p:inputText maxlength="45" id="lastNameUpdate" value="#{userBean.selectedUser.lastName}" style="width: 650px"/>
+                                <span class="fa fa-edit" />
+
+                                <h:outputLabel for="genderUpdate" value="Gender:"/> 
+                                <p:selectOneMenu id="genderUpdate" value="#{userBean.selectedUser.gender}" style="width: 634px">
+                                    <f:selectItem itemLabel="" itemValue="null" />
+                                    <f:selectItem itemLabel="Female" itemValue="Female" />
+                                    <f:selectItem itemLabel="Male" itemValue="Male" />
+                                    <f:selectItem itemLabel="Unknown" itemValue="Unknown" />
+                                </p:selectOneMenu>
+                                <span class="fa fa-edit" />
+
+                                <h:outputLabel for="emailUpdate" value="Email:"/> 
+                                <p:inputText maxlength="45" id="emailUpdate" value="#{userBean.selectedUser.email}" style="width: 650px"/>
+                                <span class="fa fa-edit" />
+
+                                <h:outputLabel for="dateOfBirthUpdate" value="Date of Birth:"/> 
+                                <h:outputLabel id="dateOfBirthUpdate" value="#{userBean.selectedUser.dateOfBirth}"/>
+                                <h:outputLabel value=" "/> 
+
+                                <h:outputLabel for="remarkUpdate" value="Remark:"/> 
+                                <p:inputText maxlength="45" id="remarkUpdate" value="#{userBean.selectedUser.remark}" style="width: 650px"/>
+                                <span class="fa fa-edit" />
+
+                                <h:outputLabel for="isActiveUpdate" value="Status:" style="width:246px"/>
+                                <p:selectOneMenu id="isActiveUpdate" value="#{userBean.selectedUser.isActive}" style="width: 634px;" required="false">
+                                    <f:selectItem itemLabel="Active" itemValue="Active" />
+                                    <f:selectItem itemLabel="Inactive" itemValue="Inactive" />
+                                </p:selectOneMenu>
+                                <span class="fa fa-edit" />
+                            </p:panelGrid>
+
+                            <p:commandButton process="@form" action="#{userBean.updateUser}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate" value="Save User Information" icon="fa fa-save">
+                                <p:confirm header="Confirmation" message="User information fields will be updated with new values?" icon="ui-icon-alert" />
+                            </p:commandButton>
+                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                            </p:confirmDialog>
+
+                            <p:commandButton process="@form" action="#{userBean.cancel}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate" value="Cancel Editing" icon="fa fa-mail-forward"/>
+                        </p:panel>
+
+                    </p:outputPanel>
+                </h:form>
+            </div>
+        </div>
+
+        <script>
+            $(function () {
+                $('a').each(function () {
+                    if ($(this).prop('href') == window.location.href) {
+                        $(this).addClass('active');
+                        $(this).parents('li').addClass('active');
+                    }
+                });
+            });
+        </script>
+    </h:body>
+</html>

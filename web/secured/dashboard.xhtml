@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Dashboard</title>
+        <link rel="shorcut icon" type="image/x-icon" href="#{resource['images/i.png']}"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        <link href="../resources/css/myTokens.css" rel="stylesheet" type="text/css"/>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"/>
+
+        <script src="../resources/js/animationCounter.js" type="text/javascript"></script>
+        <script src="../resources/js/animationCounter.min.js" type="text/javascript"></script>
+
+        <style>
+            /*Background Pattern*/
+            /*            .ui-widget-content {
+                            background-image: url("img/topography.png") !important;
+                        }*/
+            /*Additional styling for centered layoutunit fonts*/
+            root {
+                font-family: 'Montserrat';
+            }
+            .ui-widget {
+                font-family: 'Montserrat';
+            }   
+
+
+            /*Coloring Statistics Panels*/ 
+            .ui-panel .ui-panel-content {
+                background-color: #B5E8E1 !important;
+                background-image: none !important;
+            }
+
+            .ui-panelgrid .ui-panelgrid-cell {
+                background-color: #B5E8E1 !important;
+                background-image: none !important;
+            }
+
+        </style>
+
+    </h:head>
+    <h:body>
+        <ui:insert name="sidemenu">
+            <ui:include src="templates/sidemenu.xhtml"/>
+        </ui:insert>
+
+        <div style="margin-left:20%;padding:0px 0px;height:1000px;">
+
+            <ui:insert name="navbar">
+                <ui:include src="templates/navbar.xhtml"/>
+            </ui:insert>
+
+            <div style="margin: 15px 15px 15px 15px;">
+                <ui:insert name="sidebarBottom">
+                    <ui:include src="templates/sidebarBottom.xhtml"/>
+                </ui:insert>
+                <h:form>
+                    <p:growl id="dash" showDetail="true" style="font-size:12px;"/>
+                    <div class="ui-g">
+                        <div class="ui-g-3">
+                            <p:panel id="departmentCount">
+                                <p:panelGrid columns="3" width="100%" styleClass="ui-noborder">
+                                    <p:column style="width: 50%; text-align: left;">
+                                        <p:row>
+                                            <h:outputText value="Department" styleClass="infoText"/>
+                                            <br></br>
+                                            <span class="departmentCount" style="font-size: 44px; font-weight: bold; color: #7a7a7a;"></span>
+                                        </p:row>
+                                    </p:column>
+                                    <p:column style="width: 25%; text-align: center;">
+                                        <p:spacer width="15"/>
+                                    </p:column>
+                                    <p:column style="width: 25%; text-align: center;">
+                                        <h:graphicImage value="/departmentCount.png" styleClass="infoImg"/>
+                                    </p:column>
+                                </p:panelGrid>
+                            </p:panel>
+                        </div>
+
+                        <div class="ui-g-3">
+                            <p:panel id="instructorCount">
+                                <p:panelGrid columns="3" width="100%" styleClass="ui-noborder">
+                                    <p:column style="width: 50%; text-align: left;">
+                                        <p:row>
+                                            <h:outputText value="Instructor" styleClass="infoText"/>
+                                            <br></br>
+                                            <span class="instructorCount" style="font-size: 44px; font-weight: bold; color: #7a7a7a;"></span>
+                                        </p:row>
+                                    </p:column>
+                                    <p:column style="width: 25%; text-align: center;">
+                                        <p:spacer width="30"/>
+                                    </p:column>
+                                    <p:column style="width: 25%; text-align: center;">
+                                        <h:graphicImage value="/instructorCount.png" styleClass="infoImg"/>
+                                    </p:column>
+                                </p:panelGrid>
+                            </p:panel>
+                        </div>
+
+                        <div class="ui-g-3">
+                            <p:panel id="studentCount">
+                                <p:panelGrid columns="3" width="100%" styleClass="ui-noborder">
+                                    <p:column style="width: 50%; text-align: left;">
+                                        <p:row>
+                                            <h:outputText value="Student" styleClass="infoText"/>
+                                            <br></br>
+                                            <span class="studentCount" style="font-size: 44px; font-weight: bold; color: #7a7a7a;"></span>
+                                        </p:row>
+                                    </p:column>
+                                    <p:column style="width: 25%; text-align: center;">
+                                        <p:spacer width="30"/>
+                                    </p:column>
+                                    <p:column style="width: 25%; text-align: center;">
+                                        <h:graphicImage value="/studentCount.png" styleClass="infoImg"/>
+                                    </p:column>
+                                </p:panelGrid>
+                            </p:panel>
+                        </div>
+
+                        <div class="ui-g-3">
+                            <p:panel id="subjectCount">
+                                <p:panelGrid columns="3" width="100%" styleClass="ui-noborder">
+                                    <p:column style="width: 50%; text-align: left;">
+                                        <p:row>
+                                            <h:outputText value="Subject" styleClass="infoText"/>
+                                            <br></br>
+                                            <span class="subjectCount" style="font-size: 44px; font-weight: bold; color: #7a7a7a;"></span>
+                                        </p:row>
+                                    </p:column>
+                                    <p:column style="width: 25%; text-align: center;">
+                                        <p:spacer width="30"/>
+                                    </p:column>
+                                    <p:column style="width: 25%; text-align: center;">
+                                        <h:graphicImage value="/subjectCount.png" styleClass="infoImg"/>
+                                    </p:column>
+                                </p:panelGrid>
+                            </p:panel>
+                        </div>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            var departmentCount = "#{dashboard.departmentCount}";
+            var instructorCount = "#{dashboard.instructorCount}";
+            var studentCount = "#{dashboard.studentCount}";
+            var subjectCount = "#{dashboard.subjectCount}";
+
+            $('.departmentCount').animationCounter({
+                start: 0,
+                end: departmentCount,
+                step: 1,
+                delay: 90
+            });
+            $('.instructorCount').animationCounter({
+                start: 0,
+                end: instructorCount,
+                step: 1,
+                delay: 75
+            });
+
+            $('.studentCount').animationCounter({
+                start: 0,
+                end: studentCount,
+                step: 1,
+                delay: 50
+            });
+
+            $('.subjectCount').animationCounter({
+                start: 0,
+                end: subjectCount,
+                step: 1,
+                delay: 60
+            });
+        </script>
+
+        <script>
+            $(function () {
+                $('a').each(function () {
+                    if ($(this).prop('href') == window.location.href) {
+                        $(this).addClass('active');
+                        $(this).parents('li').addClass('active');
+                    }
+                });
+            });
+        </script>
+    </h:body>
+</html>

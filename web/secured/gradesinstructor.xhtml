@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Grades of Courses Given</title>
+        <link rel="shorcut icon" type="image/x-icon" href="#{resource['images/i.png']}"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        <link href="../resources/css/myTokens.css" rel="stylesheet" type="text/css"/>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"/>
+
+        <style>
+            /*            .ui-widget-content {
+                            background-image: url("img/topography.png");
+                        }*/
+        </style>
+    </h:head>
+    <h:body>
+        <ui:insert name="sidemenu">
+            <ui:include src="templates/sidemenu.xhtml"/>
+        </ui:insert>
+        <div style="margin-left:20%;padding:0px 0px;height:1000px;">
+            <ui:insert name="navbar">
+                <ui:include src="templates/navbar.xhtml"/>
+            </ui:insert>
+            <div style="margin: 15px 15px 15px 15px;">
+                <p:breadCrumb>
+                    <p:menuitem value="Dashboard" url="dashboard.xhtml"/>
+                    <p:menuitem value="Grades of Courses Given" url="gradesinstructor.xhtml"/>
+                </p:breadCrumb>
+                
+                <ui:insert name="sidebarBottom">
+                    <ui:include src="templates/sidebarBottom.xhtml"/>
+                </ui:insert>
+
+                <h:form id="form">
+                    <p:outputPanel id="courseSelectionToUpdate">
+                        <p:panel id="courseSelection" header="Course Selection" rendered="#{gradesInstructorBean.isRenderedP1}" toggleable="true" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{gradesInstructorBean.isCollapsedP1}" style="margin-bottom:10px; font-size: 12px;">
+                            <h:panelGrid columns="2" cellpadding="10">
+                                <h:outputLabel for="selectedCourse" value="Course Name: *" />
+
+                                <p:selectOneMenu id="selectedCourse" value="#{gradesInstructorBean.subjectInfoId}" style="font-size: 12px;" >
+                                    <f:selectItem itemValue="#{null}" itemLabel="-- Select a Course --" noSelectionOption="true"/>
+                                    <f:selectItems value="#{gradesInstructorBean.coursesGiven}" var="subject" itemLabel="#{subject.name}" itemValue="#{subject.subjectInfoId}"/>
+                                </p:selectOneMenu>
+
+                                <h:outputText value=""/>
+                                <p:commandButton process="@form" action="#{gradesInstructorBean.fillTableWithData}" update=":form:editGradesToUpdate, :form:courseSelectionToUpdate, :form:selectStudentToUpdate" value="List Registered Students" icon="fa fa-save" />
+
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:outputPanel>
+                    <p:growl id="msgs" showDetail="true"/>
+
+                    <p:outputPanel id="selectStudentToUpdate">
+                        <p:panel id="selectStudent" rendered="#{gradesInstructorBean.isRenderedP2}" header="Select Student" toggleable="true" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{gradesInstructorBean.isCollapsedP2}" style="margin-bottom:10px; font-size: 12px;">
+                            <h:panelGrid columns="2" cellpadding="10">
+
+                                <p:dataTable id="dt" var="_gradesList" 
+                                             value="#{gradesInstructorBean.getGradingList()}" 
+                                             style="font-size: 12px; text-align: center;" 
+                                             selectionMode="single"
+                                             selection="#{gradesInstructorBean.selectedCourse}"
+                                             rowKey="#{_gradesList.id}"
+                                             rowIndexVar="rowIndex">
+
+                                    <f:facet name="header">
+                                        Grade Informations of Course Selected
+                                    </f:facet>
+                                    <p:column headerText="#" style="width: 10px;" >
+                                        <h:outputText value="#{rowIndex+1}"/>
+                                    </p:column>
+                                    <p:column headerText="Student Citizenship Number" groupRow="true">
+                                        <h:outputText value="#{_gradesList.id.studentCitizenshipNumber}"/>
+                                    </p:column>
+                                    <p:column headerText="Student Name" groupRow="true">
+                                        <h:outputText value="#{_gradesList.userinfo.firstName} #{_gradesList.userinfo.middleName} #{_gradesList.userinfo.lastName}"/>
+                                    </p:column>
+                                    <p:column headerText="Midterm Note">
+                                        <h:outputText value="#{_gradesList.midtermNote}"/>
+                                    </p:column>
+                                    <p:column headerText="Finale Note">
+                                        <h:outputText value="#{_gradesList.finaleNote}"/>
+                                    </p:column>
+                                    <p:column headerText="Grade">
+                                        <h:outputText value="#{_gradesList.grade}"/>
+                                    </p:column>
+
+                                    <f:facet name="footer">
+                                        <p:commandButton process="@form" action="#{gradesInstructorBean.fillStudentGradeInformation}" update=":form:editGradesToUpdate, :form:courseSelectionToUpdate, :form:selectStudentToUpdate, :form:dt" value="Edit Selected Student's Grade" icon="fa fa-pencil"/>
+                                    </f:facet>
+                                </p:dataTable>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:outputPanel>
+
+                    <p:outputPanel id="editGradesToUpdate">
+                        <p:panel id="editGrades" header="Edit Grades of Selected Student" rendered="#{gradesInstructorBean.isRenderedP3}" toggleable="false" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{gradesInstructorBean.isCollapsedP3}" style="margin-bottom:10px; font-size: 12px;">
+                            <p:panelGrid columns="2" cellpadding="2">
+
+                                <h:outputLabel for="name" value="Subject Name:"/> 
+                                <h:outputLabel id="name" value="#{gradesInstructorBean.selectedCourse.subjectinfo.name}"/> 
+
+                                <h:outputLabel for="studentCitizenshipNumber" value="Selected Student's Citizenship Number:"/> 
+                                <h:outputLabel id="studentCitizenshipNumber" value="#{gradesInstructorBean.selectedCourse.getId().getStudentCitizenshipNumber()}"/> 
+
+                                <h:outputLabel for="studentName" value="Selected Student's Name:"/> 
+                                <h:outputLabel id="studentName" value="#{gradesInstructorBean.selectedCourse.userinfo.firstName} #{gradesInstructorBean.selectedCourse.userinfo.middleName} #{gradesInstructorBean.selectedCourse.userinfo.lastName}"/> 
+
+                                <h:outputLabel for="midtermNote" value="Midterm Note:"/> 
+                                <p:inputText maxlength="45" id="midtermNote" required="false" value="#{gradesInstructorBean.selectedCourse.midtermNote}" style="width:200px"/>
+
+                                <h:outputLabel for="finaleNote" value="Finale Note:"/> 
+                                <p:inputText maxlength="45" id="finaleNote" required="false" value="#{gradesInstructorBean.selectedCourse.finaleNote}" style="width:200px"/>
+
+                                <h:outputLabel for="grade" value="Grade:"/> 
+                                <h:outputLabel maxlength="45" id="grade" required="false" value="#{gradesInstructorBean.selectedCourse.grade}" style="width:200px"/>
+
+                                <p:commandButton process="@form" action="#{gradesInstructorBean.updateGrade}" update=":form:editGradesToUpdate, :form:courseSelectionToUpdate, :form:selectStudentToUpdate" value="Save Grade" icon="fa fa-save"/>
+                                <p:commandButton process="@form" action="#{gradesInstructorBean.cancel}" update=":form:editGradesToUpdate, :form:courseSelectionToUpdate, :form:selectStudentToUpdate" value="Cancel" icon="fa fa-mail-forward"/>
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:outputPanel>
+                </h:form>
+            </div>
+        </div>
+
+        <script>
+            $(function () {
+                $('a').each(function () {
+                    if ($(this).prop('href') == window.location.href) {
+                        $(this).addClass('active');
+                        $(this).parents('li').addClass('active');
+                    }
+                });
+            });
+        </script>
+    </h:body>
+</html>

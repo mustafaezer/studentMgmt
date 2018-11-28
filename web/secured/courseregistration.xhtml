@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Course Registration</title>
+        <link rel="shorcut icon" type="image/x-icon" href="#{resource['images/i.png']}"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        <link href="../resources/css/myTokens.css" rel="stylesheet" type="text/css"/>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"/>
+
+        <style>
+            /*            .ui-widget-content {
+                            background-image: url("img/topography.png");
+                        }*/
+        </style>
+    </h:head>
+    <h:body>
+        <ui:insert name="sidemenu">
+            <ui:include src="templates/sidemenu.xhtml"/>
+        </ui:insert>
+        <div style="margin-left:20%;padding:0px 0px;height:1000px;">
+            <ui:insert name="navbar">
+                <ui:include src="templates/navbar.xhtml"/>
+            </ui:insert>
+
+            <div style="margin: 15px 15px 15px 15px;">
+                <p:breadCrumb>
+                    <p:menuitem value="Dashboard" url="dashboard.xhtml"/>
+                    <p:menuitem value="Course Registration" url="courseregistration.xhtml"/>
+                </p:breadCrumb>
+                
+                <ui:insert name="sidebarBottom">
+                    <ui:include src="templates/sidebarBottom.xhtml"/>
+                </ui:insert>
+
+
+
+                <h:form id="form">
+                    <p:panel header="Status" toggleable="true" closable="false" collapsed="#{courseRegistrationBean.isCollapsedP1}" rendered="#{courseRegistrationBean.isRenderedP1}" style="font-size: 12px" toggleableHeader="true">
+                        <p:commandButton action="#{courseRegistrationStatus.enableCourseRegistration}" process="@form" value="Enable Course Registration" style="margin-top:5px; font-size: 12px;" update="form:registeredToUpdate, form:toRegisterToUpdate" icon="fa fa-toggle-on"/>
+                        <p:commandButton action="#{courseRegistrationStatus.disableCourseRegistration}" process="@form" value="Disable Course Registration" style="margin-top:5px; font-size: 12px;" update="form:registeredToUpdate, form:toRegisterToUpdate" icon="fa fa-toggle-off"/>
+                    </p:panel>    
+                    <p:outputPanel id="registeredToUpdate">
+                        <p:growl id="registrationStatus" showDetail="true"/>
+                        <p:panel id="registered" header="Courses Taken" toggleable="false" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{courseRegistrationBean.isCollapsedP2}" rendered="#{courseRegistrationBean.isRenderedP2}" style="margin-bottom:10px; font-size: 12px;">
+                            <h:panelGrid columns="2" cellpadding="10">
+                                <p:dataTable var="_registeredSubject" 
+                                             value="#{courseRegistrationBean.registeredSubjects}" 
+                                             selectionMode="single"
+                                             selection="#{courseRegistrationBean.selectedSubject}"
+                                             rowKey="#{_registeredSubject.subjectInfoId}"
+                                             style="font-size: 12px; text-align: center;" 
+                                             rowIndexVar="rowIndex">
+                                    <f:facet name="header">
+                                        Registered Subjects
+                                    </f:facet>
+                                    <p:column headerText="#" style="width: 10px;" >
+                                        <h:outputText value="#{rowIndex+1}"/>
+                                    </p:column>
+                                    <p:column headerText="Subject Name" groupRow="true">
+                                        <h:outputText value="#{_registeredSubject.name}"/>
+                                    </p:column>
+                                    <p:column headerText="Quota">
+                                        <h:outputText value="#{_registeredSubject.quota}"/>
+                                    </p:column>
+                                    <f:facet name="footer">
+                                        <p:commandButton action="#{courseRegistrationBean.resign}" process="@form" value="Resign from Course" disabled="#{courseRegistrationStatus.isDisabled}" style="margin-top:5px; font-size: 12px;" update="form:registeredToUpdate, form:toRegisterToUpdate" icon="fa fa-toggle-on"/>
+                                    </f:facet>
+                                </p:dataTable>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:outputPanel>
+
+
+                    <p:outputPanel id="toRegisterToUpdate">
+                        <p:panel id="toRegister" header="Course Registration" toggleable="false" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="toRegister" collapsed="#{courseRegistrationBean.isCollapsedP3}" rendered="#{courseRegistrationBean.isRenderedP3}" style="font-size: 12px;">
+                            <p:pickList converter="primeFacesPickListConverter"
+                                        id="PojoPickList" 
+                                        value="#{courseRegistrationBean.subjectListDual}"
+                                        var="subjectListDual" 
+                                        effect="clip"
+                                        itemValue="#{subjectListDual}" 
+                                        itemLabel="#{subjectListDual.name}"  
+                                        showCheckbox="false" 
+                                        responsive="true"
+                                        showSourceFilter="true" 
+                                        showTargetFilter="false" 
+                                        filterMatchMode="contains" 
+                                        showSourceControls="false" 
+                                        showTargetControls="false"
+                                        style="font-size: 12px;"
+                                        rowIndexVar="rowIndex"
+                                        disabled="#{courseRegistrationStatus.isDisabled}">
+                                <f:facet name="sourceCaption">Courses Available</f:facet>
+                                <f:facet name="targetCaption">Courses To Register</f:facet>
+                                <p:ajax event="transfer" listener="#{courseRegistrationBean.onTransfer}"/>
+                                <p:column style="width:60%">
+                                    <h:outputText value="#{subjectListDual.name}"/>
+                                </p:column>
+                                <p:column style="width:16%">
+                                    <h:outputText value="#{subjectListDual.year}"/>
+                                </p:column>
+                                <p:column style="width:12%">
+                                    <h:outputText value="#{subjectListDual.season}"/>
+                                </p:column>
+                                <p:column style="width:12%">
+                                    <h:outputText value="#{subjectListDual.quota}"/>
+                                </p:column>
+                            </p:pickList>
+                            <p:commandButton process="@form" action="#{courseRegistrationBean.register()}" disabled="#{courseRegistrationStatus.isDisabled}" value="Register" style="margin-top:5px; font-size: 12px;" update="form:registeredToUpdate,form:toRegisterToUpdate"/>
+                        </p:panel>
+                    </p:outputPanel>
+                </h:form>
+            </div>
+        </div>
+
+        <script>
+            $(function () {
+                $('a').each(function () {
+                    if ($(this).prop('href') == window.location.href) {
+                        $(this).addClass('active');
+                        $(this).parents('li').addClass('active');
+                    }
+                });
+            });
+        </script>
+    </h:body>
+</html>

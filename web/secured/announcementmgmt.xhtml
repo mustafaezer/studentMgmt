@@ -1,0 +1,224 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Announcement Management</title>
+        <link rel="shorcut icon" type="image/x-icon" href="#{resource['images/i.png']}"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        <link href="../resources/css/myTokens.css" rel="stylesheet" type="text/css"/>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"/>
+
+
+        <style>
+            /*Background Pattern*/
+            /*            .ui-widget-content {
+                            background-image: url("img/topography.png") !important;
+                        }*/
+        </style>
+    </h:head>
+    <h:body>
+
+        <ui:insert name="sidemenu">
+            <ui:include src="templates/sidemenu.xhtml"/>
+        </ui:insert>
+
+        <div style="margin-left:20%;padding:0px 0px;height:1000px;">
+            <ui:insert name="navbar">
+                <ui:include src="templates/navbar.xhtml"/>
+            </ui:insert>
+
+            <div style="margin: 15px 15px 15px 15px;">
+                <p:breadCrumb>
+                    <p:menuitem value="Dashboard" url="dashboard.xhtml"/>
+                    <p:menuitem value="Announcement Management" url="announcementmgmt.xhtml"/>
+                </p:breadCrumb>
+
+                <ui:insert name="sidebarBottom">
+                    <ui:include src="templates/sidebarBottom.xhtml"/>
+                </ui:insert>
+
+                <h:form id="form">
+                    <p:outputPanel id="createNewAnnouncementToUpdate">
+                        <p:panel id="createNewAnnouncement" header="Create New Announcement" toggleable="true" closable="false" style="font-size: 12px" toggleableHeader="true" rendered="#{announcementBean.isRenderedP0}" collapsed="#{announcementBean.isCollapsedP0}">
+                            <p:growl id="createGrowl" showDetail="true" style="font-size:12px;"/>
+                            <h:panelGrid columns="2" cellpadding="6" style="width: 50%;">
+
+                                <h:outputLabel for="departmentInfoId" value="Department:*"/>
+                                <p:selectOneMenu id="departmentInfoId" value="#{announcementBean.departmentinfo.departmentInfoId}" required="false" style="width: 96%;">
+                                    <f:selectItem itemValue="#{null}" itemLabel="-- Select Department --" noSelectionOption="true"/>
+                                    <f:selectItems value="#{announcementBean.departmentList}" var="department" itemLabel="#{department.name}" itemValue="#{department.departmentInfoId}"/>
+                                </p:selectOneMenu>
+
+                                <h:outputLabel for="type" value="Type:*"/>
+                                <p:selectOneMenu id="type" value="#{announcementBean.type}" style="width: 96%;" required="false">
+                                    <f:selectItem itemValue="#{null}" itemLabel="-- Select Type --" noSelectionOption="true"/>
+                                    <f:selectItem itemLabel="Announcement" itemValue="Announcement"/>
+                                    <f:selectItem itemLabel="Event" itemValue="Event"/>
+                                    <f:selectItem itemLabel="Exam" itemValue="Exam"/>
+                                </p:selectOneMenu>
+
+                                <h:outputLabel for="importance" value="Importance:*"/>
+                                <p:selectOneMenu id="importance" value="#{announcementBean.importance}" style="width: 96%;" required="false">
+                                    <f:selectItem itemValue="#{null}" itemLabel="-- Select Importance Level --" noSelectionOption="true"/>
+                                    <f:selectItem itemLabel="Low" itemValue="Low"/>
+                                    <f:selectItem itemLabel="Medium" itemValue="Medium"/>
+                                    <f:selectItem itemLabel="High" itemValue="High"/>
+                                </p:selectOneMenu>
+
+                                <h:outputLabel for="header" value="Header:*"/>
+                                <p:inputText maxlength="100" id="header" required="false" value="#{announcementBean.header}" style="width: 100%;" placeholder="e.g. Late Registration"/>
+
+                                <h:outputLabel for="context" value="Context:*"/>
+                                <p:inputTextarea id="context" value="#{announcementBean.context}" rows="10" cols="33" style="width: 100%;" maxlength="500" minQueryLength="0" counterTemplate="{0} characters left." counter="cOutput" placeholder="e.g. The system for the late registration will be open until November 28, 2018 for students who fail to complete the registration process."/>
+                                <h:outputLabel value=""/>
+                                <h:outputLabel id="cOutput"/>
+
+                                <p:outputLabel for="startDate" value="Start Date:*" />
+                                <p:calendar id="startDate" value="#{announcementBean.startDate}" styleClass="calendarClass"/>
+
+                                <p:outputLabel for="endDate" value="End Date:" />
+                                <p:calendar id="endDate" value="#{announcementBean.endDate}" styleClass="calendarClass"/>
+
+                                <h:outputLabel for="isActive" value="Status:*"/>
+                                <p:selectOneMenu id="isActive" value="#{announcementBean.isActive}" style="width: 96%;" required="false">
+                                    <f:selectItem itemLabel="Active" itemValue="Active"/>
+                                    <f:selectItem itemLabel="Inactive" itemValue="Inactive"/>
+                                </p:selectOneMenu>
+
+                                <h:outputLabel value=""/>
+                                <h:panelGrid columns="2">
+                                    <p:commandButton process="@form" action="#{announcementBean.createAnnouncement}" update=":form:createNewAnnouncementToUpdate, :form:announcementListToUpdate, :form:editAnnouncementToUpdate" value="Save Announcement" style="width: 100%;">
+                                        <p:confirm header="Confirmation" message="New department will be created by the informations given?" icon="ui-icon-alert" />
+                                    </p:commandButton>
+
+                                    <p:commandButton process="@form" action="#{announcementBean.cancel}" update=":form:createNewAnnouncementToUpdate, :form:announcementListToUpdate, :form:editAnnouncementToUpdate" value="Cancel" style="width: 100%;"/>
+
+                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                    </p:confirmDialog>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:outputPanel>
+
+                    <p:growl id="listGrowl" showDetail="true" style="font-size:12px;"/>
+                    <p:outputPanel id="announcementListToUpdate">
+                        <p:panel id="announcementList" header="List of Announcements" toggleable="true" closable="false" style="font-size: 12px" toggleableHeader="true" rendered="#{announcementBean.isRenderedP1}" collapsed="#{announcementBean.isCollapsedP1}">
+                            <p:dataTable var="announcement" 
+                                         value="#{announcementBean.announcementList}"
+                                         rowIndexVar="rowIndex">
+                                <p:column headerText="#" style="width: 10px;">
+                                    <h:outputText value="#{rowIndex+1}" />
+                                </p:column>
+                                <p:column style="width:16px">
+                                    <p:rowToggler />
+                                </p:column>
+
+                                <p:column headerText="Header">
+                                    <h:outputText value="#{announcement.header}" />
+                                </p:column>
+                                <p:column headerText="Department Name">
+                                    <h:outputText value="#{announcement.departmentinfo.name}" />
+                                </p:column>
+                                <p:rowExpansion>
+                                    <p:panelGrid> 
+                                        <f:facet name="header">
+                                            <p:row>
+                                                <p:column colspan="9">Detailed Information of <em>#{announcement.header}</em></p:column>
+                                            </p:row>
+                                        </f:facet>
+                                        <p:row>
+                                            <p:column colspan="2">
+                                                <strong>
+                                                    <h:outputText value="Department: "/>
+                                                </strong>
+                                                <h:outputText value="#{announcement.departmentinfo.name}" />
+                                            </p:column>
+                                            <p:column colspan="3">    
+                                                <strong>
+                                                    <h:outputText value="Author: " />
+                                                </strong>
+                                                <h:outputText value="#{announcement.userinfo.firstName} #{announcement.userinfo.middleName} #{announcement.userinfo.lastName}" />
+                                            </p:column>
+                                            <p:column colspan="2">
+                                                <strong>
+                                                    <h:outputText value="Type: "/>
+                                                </strong>
+                                                <h:outputText value="#{announcement.type}" />
+                                            </p:column>
+                                            <p:column colspan="2">
+                                                <strong>
+                                                    <h:outputText value="Importance: "/>
+                                                </strong>
+                                                <h:outputText value="#{announcement.importance}" />
+                                            </p:column>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column colspan="2">
+                                                <strong>
+                                                    <h:outputText value="Header: "/>
+                                                </strong>
+                                                <h:outputText value="#{announcement.header}"/>
+                                            </p:column>
+                                            <p:column colspan="7">
+                                                <strong>
+                                                    <h:outputText value="Context: "/>
+                                                </strong>
+                                                <h:outputText value="#{announcement.context}" />
+                                            </p:column>
+
+                                            <p:row>
+                                                <p:column colspan="3">
+                                                    <strong>
+                                                        <h:outputText value="Start Date: "/>
+                                                    </strong>
+                                                    <h:outputText value="#{announcement.startDate}" />
+                                                </p:column>
+                                                <p:column colspan="3">
+                                                    <strong>
+                                                        <h:outputText value="End Date:  "/>
+                                                    </strong>
+                                                    <h:outputText value="#{announcement.endDate}" />
+                                                </p:column>
+                                                <p:column colspan="3">
+                                                    <strong>
+                                                        <h:outputText value="Status: "/>
+                                                    </strong>
+                                                    <h:outputText value="#{announcement.isActive}"/>
+                                                </p:column>
+                                            </p:row>
+                                        </p:row>
+                                    </p:panelGrid>
+                                </p:rowExpansion>
+                            </p:dataTable>
+                        </p:panel>
+                    </p:outputPanel>
+
+                    <p:growl id="editGrowl" showDetail="true" style="font-size:12px;"/>
+                    <p:outputPanel id="editAnnouncementToUpdate">
+                        <p:panel id="editAnnouncement" header="Edit Announcement Information" toggleable="true" closable="false" style="font-size: 12px" toggleableHeader="true" rendered="#{announcementBean.isRenderedP2}" collapsed="#{announcementBean.isCollapsedP2}">
+
+                        </p:panel>
+                    </p:outputPanel>
+
+                </h:form>
+            </div>
+        </div>
+
+        <script>
+            $(function () {
+                $('a').each(function () {
+                    if ($(this).prop('href') == window.location.href) {
+                        $(this).addClass('active');
+                        $(this).parents('li').addClass('active');
+                    }
+                });
+            });
+        </script>
+    </h:body>
+</html>

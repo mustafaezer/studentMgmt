@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Nov 14, 2018 4:08:12 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.pojos.Userinfo" table="userinfo" catalog="mgmt" optimistic-lock="version">
+        <id name="citizenshipNumber" type="string">
+            <column name="citizenshipNumber" length="11" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="departmentinfo" class="com.pojos.Departmentinfo" fetch="select">
+            <column name="departmentInfoId" not-null="true" />
+        </many-to-one>
+        <property name="userType" type="string">
+            <column name="userType" length="13" not-null="true" />
+        </property>
+        <property name="firstName" type="string">
+            <column name="firstName" length="45" not-null="true" />
+        </property>
+        <property name="middleName" type="string">
+            <column name="middleName" length="45" />
+        </property>
+        <property name="lastName" type="string">
+            <column name="lastName" length="45" not-null="true" />
+        </property>
+        <property name="gender" type="string">
+            <column name="gender" length="7" not-null="true" />
+        </property>
+        <property name="email" type="string">
+            <column name="email" length="45" not-null="true" />
+        </property>
+        <property name="password" type="string">
+            <column name="password" not-null="true" />
+        </property>
+        <property name="dateOfBirth" type="date">
+            <column name="dateOfBirth" length="10" not-null="true" />
+        </property>
+        <property name="remark" type="string">
+            <column name="remark" length="180" not-null="true" />
+        </property>
+        <property name="isActive" type="string">
+            <column name="isActive" length="8" not-null="true" />
+        </property>
+        <set name="subjectinfos" table="subjectinfo" inverse="true" lazy="false" fetch="select">
+            <key>
+                <column name="instructorCitizenshipNumber" length="11" not-null="true" />
+            </key>
+            <one-to-many class="com.pojos.Subjectinfo" />
+        </set>
+        <set name="gradings" table="grading" inverse="true" lazy="false" fetch="select">
+            <key>
+                <column name="studentCitizenshipNumber" length="11" not-null="true" />
+            </key>
+            <one-to-many class="com.pojos.Grading" />
+        </set>
+        <set name="announcementinfos" table="announcementinfo" inverse="true" lazy="false" fetch="select">
+            <key>
+                <column name="authorCitizenshipNumber" length="11" not-null="true" />
+            </key>
+            <one-to-many class="com.pojos.Announcementinfo" />
+        </set>
+    </class>
+</hibernate-mapping>
