@@ -38,7 +38,7 @@
 
                 <h:form id="form">
                     <p:outputPanel id="courseSelectionToUpdate">
-                        <p:panel id="courseSelection" header="Course Selection" rendered="#{gradesInstructorBean.isRenderedP1}" toggleable="true" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{gradesInstructorBean.isCollapsedP1}" style="margin-bottom:10px; font-size: 12px;">
+                        <p:panel id="courseSelection" header="Course Selection" rendered="#{gradesInstructorBean.isRenderedP1}" toggleable="true" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{gradesInstructorBean.isCollapsedP1}" footer="Select a course to view its registered students and grades." style="margin-bottom:10px; font-size: 12px;">
                             <h:panelGrid columns="2" cellpadding="10">
                                 <h:outputLabel for="selectedCourse" value="Course Name: *" />
 
@@ -48,7 +48,7 @@
                                 </p:selectOneMenu>
 
                                 <h:outputText value=""/>
-                                <p:commandButton process="@form" action="#{gradesInstructorBean.fillTableWithData}" update=":form:editGradesToUpdate, :form:courseSelectionToUpdate, :form:selectStudentToUpdate" value="List Registered Students" icon="fa fa-save" />
+                                <p:commandButton process="@form" action="#{gradesInstructorBean.fillTableWithData}" update=":form:editGradesToUpdate, :form:courseSelectionToUpdate, :form:selectStudentToUpdate" value="List Registered Students" icon="fa fa-th-list" />
 
                             </h:panelGrid>
                         </p:panel>
@@ -56,7 +56,7 @@
                     <p:growl id="msgs" showDetail="true"/>
 
                     <p:outputPanel id="selectStudentToUpdate">
-                        <p:panel id="selectStudent" rendered="#{gradesInstructorBean.isRenderedP2}" header="Select Student" toggleable="true" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{gradesInstructorBean.isCollapsedP2}" style="margin-bottom:10px; font-size: 12px;">
+                        <p:panel id="selectStudent" rendered="#{gradesInstructorBean.isRenderedP2}" header="Select Student" toggleable="true" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{gradesInstructorBean.isCollapsedP2}" footer="Select a student to view its detailed information about this course." style="margin-bottom:10px; font-size: 12px;">
                             <h:panelGrid columns="2" cellpadding="10">
 
                                 <p:dataTable id="dt" var="_gradesList" 

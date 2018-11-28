@@ -101,6 +101,11 @@
                     <p:growl id="listGrowl" showDetail="true" style="font-size:12px;"/>
                     <p:outputPanel id="announcementListToUpdate">
                         <p:panel id="announcementList" header="List of Announcements" toggleable="true" closable="false" style="font-size: 12px" toggleableHeader="true" rendered="#{announcementBean.isRenderedP1}" collapsed="#{announcementBean.isCollapsedP1}">
+                            <f:facet name="footer" >
+                                <div class="ui-helper-clearfix ui-corner-all">
+                                    Expand rows to view detailed informations of specific announcement, by clicking <i class="fa fa-play-circle"></i> button.
+                                </div>
+                            </f:facet>
                             <p:dataTable var="announcement" 
                                          value="#{announcementBean.announcementList}"
                                          rowIndexVar="rowIndex">
