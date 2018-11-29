@@ -194,29 +194,29 @@ public class AnnouncementBean {
 
     public void editAnnouncement() {
         try {
-            if (selectedAnnouncement.getHeader() != "" && selectedAnnouncement.getContext() != "" && selectedAnnouncement.getStartDate() != null && selectedAnnouncement.getEndDate() != null) {
-                ses.beginTransaction();
+            ses.beginTransaction();
 
-                Announcementinfo editedAnnouncement = new Announcementinfo();
-                editedAnnouncement.setAnnouncementId(selectedAnnouncement.getAnnouncementId());
-                editedAnnouncement.setDepartmentinfo(selectedAnnouncement.getDepartmentinfo());
+            if (selectedAnnouncement.getHeader() != "" && selectedAnnouncement.getContext() != "" && selectedAnnouncement.getStartDate() != null && selectedAnnouncement.getEndDate() != null) {
+
+                selectedAnnouncement.setAnnouncementId(selectedAnnouncement.getAnnouncementId());
+                selectedAnnouncement.setDepartmentinfo(selectedAnnouncement.getDepartmentinfo());
 
                 String citizenshipNumber = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("citizenshipNumber");
                 Criteria getUserinfoCr = ses.createCriteria(Userinfo.class);
                 getUserinfoCr.add(Restrictions.eq("citizenshipNumber", citizenshipNumber));
                 List<Userinfo> temp = getUserinfoCr.list();
                 Userinfo userinfoTemp = temp.get(0);
-                editedAnnouncement.setUserinfo(userinfoTemp);
+                selectedAnnouncement.setUserinfo(userinfoTemp);
 
-                editedAnnouncement.setType(selectedAnnouncement.getType());
-                editedAnnouncement.setImportance(selectedAnnouncement.getImportance());
-                editedAnnouncement.setHeader(selectedAnnouncement.getHeader());
-                editedAnnouncement.setContext(selectedAnnouncement.getContext());
-                editedAnnouncement.setStartDate(selectedAnnouncement.getStartDate());
-                editedAnnouncement.setEndDate(selectedAnnouncement.getEndDate());
-                editedAnnouncement.setIsActive(selectedAnnouncement.getIsActive());
+                selectedAnnouncement.setType(selectedAnnouncement.getType());
+                selectedAnnouncement.setImportance(selectedAnnouncement.getImportance());
+                selectedAnnouncement.setHeader(selectedAnnouncement.getHeader());
+                selectedAnnouncement.setContext(selectedAnnouncement.getContext());
+                selectedAnnouncement.setStartDate(selectedAnnouncement.getStartDate());
+                selectedAnnouncement.setEndDate(selectedAnnouncement.getEndDate());
+                selectedAnnouncement.setIsActive(selectedAnnouncement.getIsActive());
 
-                ses.saveOrUpdate(editedAnnouncement);
+                ses.update(selectedAnnouncement);
 
                 FacesContext context = FacesContext.getCurrentInstance();
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Announcement Updated", "Selected announcement has been successfully updated."));
@@ -226,7 +226,7 @@ public class AnnouncementBean {
                 isRenderedP2 = "false";
                 isCollapsedP2 = "false";
                 isCollapsedP1 = "false";
-                
+
                 announcementList = listAllAnnouncements();
             } else {
                 FacesContext context = FacesContext.getCurrentInstance();
