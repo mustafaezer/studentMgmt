@@ -22,6 +22,8 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 
 /**
  *
@@ -68,6 +70,8 @@ public class AnnouncementBean {
 
     private List<Departmentinfo> departmentList;
     private List<Announcementinfo> announcementList;
+
+    private Announcementinfo selectedAnnouncement;
 
     private Integer announcementId;
     private Departmentinfo departmentinfo;
@@ -174,6 +178,16 @@ public class AnnouncementBean {
         }
 
         return departmentList;
+    }
+
+    public void onRowSelect(SelectEvent event) {
+        isRenderedP2 = "true";
+        isCollapsedP2 = "false";
+    }
+
+    public void onRowUnselect(UnselectEvent event) {
+        isRenderedP2 = "false";
+        isCollapsedP2 = "false";
     }
 
     public String getIsRenderedP0() {
@@ -323,6 +337,14 @@ public class AnnouncementBean {
 
     public void setAnnouncementList(List<Announcementinfo> announcementList) {
         this.announcementList = announcementList;
+    }
+
+    public Announcementinfo getSelectedAnnouncement() {
+        return selectedAnnouncement;
+    }
+
+    public void setSelectedAnnouncement(Announcementinfo selectedAnnouncement) {
+        this.selectedAnnouncement = selectedAnnouncement;
     }
 
 }

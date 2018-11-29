@@ -103,12 +103,25 @@
                         <p:panel id="announcementList" header="List of Announcements" toggleable="true" closable="false" style="font-size: 12px" toggleableHeader="true" rendered="#{announcementBean.isRenderedP1}" collapsed="#{announcementBean.isCollapsedP1}">
                             <f:facet name="footer" >
                                 <div class="ui-helper-clearfix ui-corner-all">
-                                    Expand rows to view detailed informations of specific announcement, by clicking <i class="fa fa-play-circle"></i> button.
+                                    <ul>
+                                        <li>
+                                            Expand rows to view detailed informations of specific announcement, by clicking "<i class="fa fa-play-circle"></i>" button.<br></br>
+                                        </li>                                        
+                                        <li>
+                                            Select rows to edit informations of specific announcement, by clicking lines.
+                                        </li>
+                                    </ul>
                                 </div>
                             </f:facet>
                             <p:dataTable var="announcement" 
                                          value="#{announcementBean.announcementList}"
-                                         rowIndexVar="rowIndex">
+                                         rowIndexVar="rowIndex"
+                                         selectionMode="single" 
+                                         selection="#{announcementBean.selectedAnnouncement}" 
+                                         rowKey="#{announcement.announcementId}">
+                                <p:ajax event="rowSelect" listener="#{announcementBean.onRowSelect}" update=":form:createNewAnnouncementToUpdate, :form:announcementListToUpdate, :form:editAnnouncementToUpdate"/>
+                                <p:ajax event="rowUnselect" listener="#{announcementBean.onRowUnselect}" update=":form:createNewAnnouncementToUpdate, :form:announcementListToUpdate, :form:editAnnouncementToUpdate" />
+
                                 <p:column headerText="#" style="width: 10px;">
                                     <h:outputText value="#{rowIndex+1}" />
                                 </p:column>
@@ -196,10 +209,51 @@
                         </p:panel>
                     </p:outputPanel>
 
-                    <p:growl id="editGrowl" showDetail="true" style="font-size:12px;"/>
                     <p:outputPanel id="editAnnouncementToUpdate">
                         <p:panel id="editAnnouncement" header="Edit Announcement Information" toggleable="true" closable="false" style="font-size: 12px" toggleableHeader="true" rendered="#{announcementBean.isRenderedP2}" collapsed="#{announcementBean.isCollapsedP2}">
+                            <a id="anchorToScroll"/>
 
+                            <h:panelGrid columns="2" cellpadding="6" style="width: 50%; font-weight: bold;">
+
+                                <h:outputLabel for="departmentInfoIdEdit" value="Department:"/>
+                                <p:selectOneMenu id="departmentInfoIdEdit" value="#{announcementBean.selectedAnnouncement.departmentinfo.departmentInfoId}" required="false" style="width: 250px;">
+                                    <f:selectItems value="#{announcementBean.departmentList}" var="department" itemLabel="#{department.name}" itemValue="#{department.departmentInfoId}"/>
+                                </p:selectOneMenu>
+
+                                <h:outputLabel for="typeToEdit" value="Type:" style="width: 50%; font-weight: bold;"/>
+                                <p:selectOneMenu id="typeToEdit" value="#{announcementBean.selectedAnnouncement.type}" required="false" style="width: 250px;">
+                                    <f:selectItem itemLabel="Announcement" itemValue="Announcement"/>
+                                    <f:selectItem itemLabel="Event" itemValue="Event"/>
+                                    <f:selectItem itemLabel="Exam" itemValue="Exam"/>
+                                </p:selectOneMenu>
+
+                                <h:outputLabel for="importanceEdit" value="Importance:" style="width: 50%; font-weight: bold;"/>
+                                <p:selectOneMenu id="importanceEdit" value="#{announcementBean.selectedAnnouncement.importance}" style="width: 250px;" required="false">
+                                    <f:selectItem itemLabel="Low" itemValue="Low"/>
+                                    <f:selectItem itemLabel="Medium" itemValue="Medium"/>
+                                    <f:selectItem itemLabel="High" itemValue="High"/>
+                                </p:selectOneMenu>
+
+                                <h:outputLabel for="headerEdit" value="Header:*"/>
+                                <p:inputText maxlength="100" id="headerEdit" required="false" value="#{announcementBean.selectedAnnouncement.header}" style="width: 265px;" />
+
+                                <h:outputLabel for="contextEdit" value="Context:*"/>
+                                <p:inputTextarea id="contextEdit" value="#{announcementBean.selectedAnnouncement.context}" rows="10" cols="33" style="width: 265px;" maxlength="500" minQueryLength="0" counterTemplate="{0} characters left." counter="cOutput1"/>
+                                <h:outputLabel value=""/>
+                                <h:outputLabel id="cOutput1" style="font-weight: normal;"/>
+
+                                <p:outputLabel for="startDateEdit" value="Start Date:*" />
+                                <p:calendar id="startDateEdit" value="#{announcementBean.selectedAnnouncement.startDate}" styleClass="calendarClass"/>
+
+                                <p:outputLabel for="endDateEdit" value="End Date:" />
+                                <p:calendar id="endDateEdit" value="#{announcementBean.selectedAnnouncement.endDate}" styleClass="calendarClass"/>
+
+                                <h:outputLabel for="isActiveEdit" value="Status:*"/>
+                                <p:selectOneMenu id="isActiveEdit" value="#{announcementBean.selectedAnnouncement.isActive}" style="width: 250px;" required="false">
+                                    <f:selectItem itemLabel="Active" itemValue="Active"/>
+                                    <f:selectItem itemLabel="Inactive" itemValue="Inactive"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
                         </p:panel>
                     </p:outputPanel>
 
