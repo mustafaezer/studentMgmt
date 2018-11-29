@@ -12,13 +12,45 @@
         <link href="../resources/css/myTokens.css" rel="stylesheet" type="text/css"/>
         <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"/>
 
+        <style>
+            #scroll {
+                position:fixed;
+                right:10px;
+                bottom:10px;
+                cursor:pointer;
+                width:50px;
+                height:50px;
+                background-color:#3498db;
+                text-indent:-9999px;
+                display:none;
+                -webkit-border-radius:60px;
+                -moz-border-radius:60px;
+                border-radius:60px
+            }
+            #scroll span {
+                position:absolute;
+                top:50%;
+                left:50%;
+                margin-left:-8px;
+                margin-top:-12px;
+                height:0;
+                width:0;
+                border:8px solid transparent;
+                border-bottom-color:#ffffff;
+            }
+            #scroll:hover {
+                background-color:#e74c3c;
+                opacity:1;filter:"alpha(opacity=100)";
+                -ms-filter:"alpha(opacity=100)";
+            }
+        </style>
     </h:head>
     <h:body>
         <ui:insert name="sidemenu">
             <ui:include src="templates/sidemenu.xhtml"/>
         </ui:insert>
 
-        <div style="margin-left:20%;padding:0px 0px;height:1000px;">
+        <div style="margin-left:20%;padding:0px 0px;">
             <ui:insert name="navbar">
                 <ui:include src="templates/navbar.xhtml"/>
             </ui:insert>
@@ -84,7 +116,7 @@
                                 <h:outputLabel value=""/>
                                 <h:panelGrid columns="2">
                                     <p:commandButton process="@form" action="#{announcementBean.createAnnouncement}" update=":form:createNewAnnouncementToUpdate, :form:announcementListToUpdate, :form:editAnnouncementToUpdate" value="Save Announcement" style="width: 100%;">
-                                        <p:confirm header="Confirmation" message="New department will be created by the informations given?" icon="ui-icon-alert" />
+                                        <p:confirm header="Confirmation" message="New announcement will be created by the informations given?" icon="ui-icon-alert" />
                                     </p:commandButton>
 
                                     <p:commandButton process="@form" action="#{announcementBean.cancel}" update=":form:createNewAnnouncementToUpdate, :form:announcementListToUpdate, :form:editAnnouncementToUpdate" value="Cancel" style="width: 100%;"/>
@@ -110,6 +142,9 @@
                                         <li>
                                             Select rows to edit informations of specific announcement, by clicking lines.
                                         </li>
+                                        <!--                                        <li>
+                                                                                    Unselect rows to close edit panel, by clicking on specific line with 'CTRL + Left Mouse Button' key combination. Or save announcement with the new values by clicking 'Save Announcement' button.
+                                                                                </li>-->
                                     </ul>
                                 </div>
                             </f:facet>
@@ -253,6 +288,20 @@
                                     <f:selectItem itemLabel="Active" itemValue="Active"/>
                                     <f:selectItem itemLabel="Inactive" itemValue="Inactive"/>
                                 </p:selectOneMenu>
+
+                                <h:outputText value=""/>
+                                <h:panelGrid columns="2">
+                                    <p:commandButton process="@form" action="#{announcementBean.editAnnouncement}" update=":form:createNewAnnouncementToUpdate, :form:announcementListToUpdate, :form:editAnnouncementToUpdate" value="Save Announcement" style="width: 100%;">
+                                        <p:confirm header="Confirmation" message="Selected announcement will be updated by the informations given?" icon="ui-icon-alert" />
+                                    </p:commandButton>
+
+                                    <p:commandButton process="@form" action="#{announcementBean.cancel}" update=":form:createNewAnnouncementToUpdate, :form:announcementListToUpdate, :form:editAnnouncementToUpdate" value="Cancel" style="width: 100%;"/>
+
+                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                    </p:confirmDialog>
+                                </h:panelGrid>
                             </h:panelGrid>
                         </p:panel>
                     </p:outputPanel>
@@ -260,7 +309,7 @@
                 </h:form>
             </div>
         </div>
-
+        <a href="#" id="scroll" style="display: none;"><span></span></a>
         <script>
             $(function () {
                 $('a').each(function () {
@@ -268,6 +317,22 @@
                         $(this).addClass('active');
                         $(this).parents('li').addClass('active');
                     }
+                });
+            });
+        </script>
+
+        <script>
+            $(document).ready(function () {
+                $(window).scroll(function () {
+                    if ($(this).scrollTop() > 100) {
+                        $('#scroll').fadeIn();
+                    } else {
+                        $('#scroll').fadeOut();
+                    }
+                });
+                $('#scroll').click(function () {
+                    $("html, body").animate({scrollTop: 0}, 600);
+                    return false;
                 });
             });
         </script>

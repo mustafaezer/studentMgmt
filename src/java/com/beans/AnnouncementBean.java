@@ -183,11 +183,61 @@ public class AnnouncementBean {
     public void onRowSelect(SelectEvent event) {
         isRenderedP2 = "true";
         isCollapsedP2 = "false";
+        isCollapsedP1 = "true";
     }
 
     public void onRowUnselect(UnselectEvent event) {
         isRenderedP2 = "false";
         isCollapsedP2 = "false";
+        isCollapsedP1 = "false";
+    }
+
+    public void editAnnouncement() {
+        try {
+            if (selectedAnnouncement.getHeader() != "" && selectedAnnouncement.getContext() != "" && selectedAnnouncement.getStartDate() != null && selectedAnnouncement.getEndDate() != null) {
+                ses.beginTransaction();
+
+                Announcementinfo editedAnnouncement = new Announcementinfo();
+                editedAnnouncement.setAnnouncementId(selectedAnnouncement.getAnnouncementId());
+                editedAnnouncement.setDepartmentinfo(selectedAnnouncement.getDepartmentinfo());
+
+                String citizenshipNumber = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("citizenshipNumber");
+                Criteria getUserinfoCr = ses.createCriteria(Userinfo.class);
+                getUserinfoCr.add(Restrictions.eq("citizenshipNumber", citizenshipNumber));
+                List<Userinfo> temp = getUserinfoCr.list();
+                Userinfo userinfoTemp = temp.get(0);
+                editedAnnouncement.setUserinfo(userinfoTemp);
+
+                editedAnnouncement.setType(selectedAnnouncement.getType());
+                editedAnnouncement.setImportance(selectedAnnouncement.getImportance());
+                editedAnnouncement.setHeader(selectedAnnouncement.getHeader());
+                editedAnnouncement.setContext(selectedAnnouncement.getContext());
+                editedAnnouncement.setStartDate(selectedAnnouncement.getStartDate());
+                editedAnnouncement.setEndDate(selectedAnnouncement.getEndDate());
+                editedAnnouncement.setIsActive(selectedAnnouncement.getIsActive());
+
+                ses.saveOrUpdate(editedAnnouncement);
+
+                FacesContext context = FacesContext.getCurrentInstance();
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Announcement Updated", "Selected announcement has been successfully updated."));
+
+                ses.getTransaction().commit();
+
+                isRenderedP2 = "false";
+                isCollapsedP2 = "false";
+                isCollapsedP1 = "false";
+                
+                announcementList = listAllAnnouncements();
+            } else {
+                FacesContext context = FacesContext.getCurrentInstance();
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Update Error", "Please fill all the required fields for an announcement."));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Announcement Update Error", "Selected announcement couldn't updated."));
+        }
     }
 
     public String getIsRenderedP0() {
