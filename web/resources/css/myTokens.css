@@ -257,3 +257,8 @@ body .topbarDiv .active {
     opacity:1;filter:"alpha(opacity=100)";
     -ms-filter:"alpha(opacity=100)";
 }
+
+/*Panel Padding*/
+.ui-panel.ui-widget {
+    margin-bottom: 15px;
+}
