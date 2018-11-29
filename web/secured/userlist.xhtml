@@ -32,7 +32,7 @@
                     <p:menuitem value="Dashboard" url="dashboard.xhtml"/>
                     <p:menuitem value="User Management" url="userlist.xhtml"/>
                 </p:breadCrumb>
-                
+
                 <ui:insert name="sidebarBottom">
                     <ui:include src="templates/sidebarBottom.xhtml"/>
                 </ui:insert>
@@ -164,35 +164,24 @@
                     <p:outputPanel id="editUserInformationToUpdate">
                         <p:growl id="editUserInformationGrowl" showDetail="true"/>
                         <p:panel id="editUserInformation" header="Edit User Information" rendered="#{userBean.isRenderedP3}" toggleable="false" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{userBean.isCollapsedP3}" style="margin-bottom:10px; font-size: 12px;">
-                            <p:panelGrid  columns="3" rendered="#{not empty userBean.selectedUser}" columnClasses="label,value" style="width= 100px;">
-                                <f:facet name="header">
-                                    Editable fields are highlighted with an edit icon next to them. Please click to the value field that you want to change. After editing the value, hit the button below for changes to be made.
-                                </f:facet> 
-
-
+                            <p:panelGrid  columns="2" rendered="#{not empty userBean.selectedUser}" columnClasses="label,value" styleClass="ui-noborder" style="width= 100px;">
                                 <h:outputLabel for="citizenshipNumberUpdate" value="Citizenship Number:"/> 
                                 <h:outputLabel id="citizenshipNumberUpdate" value="#{userBean.selectedUser.citizenshipNumber}"/> 
-                                <h:outputLabel value=" "/> 
 
                                 <h:outputLabel for="departmentInfoIdUpdate" value="Department:"/> 
                                 <h:outputLabel id="departmentInfoIdUpdate" value="#{userBean.selectedUser.departmentinfo.name}"/>
-                                <h:outputLabel value=" "/> 
 
                                 <h:outputLabel for="userTypeUpdate" value="User Type:"/> 
                                 <h:outputLabel id="userTypeUpdate" value="#{userBean.selectedUser.userType}"/> 
-                                <h:outputLabel value=" "/> 
 
                                 <h:outputLabel for="firstNameUpdate" value="First Name:"/> 
                                 <p:inputText maxlength="45" id="firstNameUpdate" required="false" value="#{userBean.selectedUser.firstName}"  style="width: 650px;"/>
-                                <span class="fa fa-edit" />
 
                                 <h:outputLabel for="middleNameUpdate" value="Middle Name:"/> 
                                 <p:inputText maxlength="45" id="middleNameUpdate" required="false" value="#{userBean.selectedUser.middleName}" style="width: 650px"/>
-                                <span class="fa fa-edit" />
 
                                 <h:outputLabel for="lastNameUpdate" value="Last Name:"/> 
                                 <p:inputText maxlength="45" id="lastNameUpdate" value="#{userBean.selectedUser.lastName}" style="width: 650px"/>
-                                <span class="fa fa-edit" />
 
                                 <h:outputLabel for="genderUpdate" value="Gender:"/> 
                                 <p:selectOneMenu id="genderUpdate" value="#{userBean.selectedUser.gender}" style="width: 634px">
@@ -201,37 +190,36 @@
                                     <f:selectItem itemLabel="Male" itemValue="Male" />
                                     <f:selectItem itemLabel="Unknown" itemValue="Unknown" />
                                 </p:selectOneMenu>
-                                <span class="fa fa-edit" />
 
                                 <h:outputLabel for="emailUpdate" value="Email:"/> 
                                 <p:inputText maxlength="45" id="emailUpdate" value="#{userBean.selectedUser.email}" style="width: 650px"/>
-                                <span class="fa fa-edit" />
 
                                 <h:outputLabel for="dateOfBirthUpdate" value="Date of Birth:"/> 
                                 <h:outputLabel id="dateOfBirthUpdate" value="#{userBean.selectedUser.dateOfBirth}"/>
-                                <h:outputLabel value=" "/> 
 
                                 <h:outputLabel for="remarkUpdate" value="Remark:"/> 
                                 <p:inputText maxlength="45" id="remarkUpdate" value="#{userBean.selectedUser.remark}" style="width: 650px"/>
-                                <span class="fa fa-edit" />
 
                                 <h:outputLabel for="isActiveUpdate" value="Status:" style="width:246px"/>
                                 <p:selectOneMenu id="isActiveUpdate" value="#{userBean.selectedUser.isActive}" style="width: 634px;" required="false">
                                     <f:selectItem itemLabel="Active" itemValue="Active" />
                                     <f:selectItem itemLabel="Inactive" itemValue="Inactive" />
                                 </p:selectOneMenu>
-                                <span class="fa fa-edit" />
+
+                                <h:outputLabel value=""/>
+                                <h:panelGrid columns="2">
+                                    <p:commandButton process="@form" action="#{userBean.updateUser}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate" value="Save User Information" icon="fa fa-save">
+                                        <p:confirm header="Confirmation" message="User information fields will be updated with new values?" icon="ui-icon-alert" />
+                                    </p:commandButton>
+                                    <p:commandButton process="@form" action="#{userBean.cancel}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate" value="Cancel" icon="fa fa-mail-forward"/>
+                                </h:panelGrid>
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                </p:confirmDialog>
                             </p:panelGrid>
 
-                            <p:commandButton process="@form" action="#{userBean.updateUser}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate" value="Save User Information" icon="fa fa-save">
-                                <p:confirm header="Confirmation" message="User information fields will be updated with new values?" icon="ui-icon-alert" />
-                            </p:commandButton>
-                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                            </p:confirmDialog>
 
-                            <p:commandButton process="@form" action="#{userBean.cancel}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate" value="Cancel Editing" icon="fa fa-mail-forward"/>
                         </p:panel>
 
                     </p:outputPanel>
@@ -249,7 +237,7 @@
                 });
             });
         </script>
-        
+
         <a href="#" id="scroll" style="display: none;"><span></span></a>
         <script>
             $(document).ready(function () {

@@ -157,16 +157,11 @@ body .sidemenuDiv ul {
     margin: 0;
     padding: 0;
     width: 20%;
-    /*background-color: #f1f1f1;*/
     position: fixed;
     height: 100%;
     overflow: auto;
-    /*background-color: #F1F1F1;*/
-    background: rgb(241,241,241);
-    background: -moz-linear-gradient(-45deg, rgba(241,241,241,1) 67%, rgba(181,232,225,1) 100%);
-    background: -webkit-linear-gradient(-45deg, rgba(241,241,241,1) 67%,rgba(181,232,225,1) 100%);
-    background: linear-gradient(135deg, rgba(241,241,241,1) 67%,rgba(181,232,225,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f1f1f1', endColorstr='#b5e8e1',GradientType=1 );
+    background-color: #F1F1F1;
+    
 }
 
 body .sidemenuDiv ul li a {
@@ -231,7 +226,7 @@ body .topbarDiv .active {
     font-family: 'latoregular'; 
     text-decoration: none; 
     font-size: 12px;
-    color: #99bfb9;
+    /*color: #99bfb9;*/
 }
 
 /*Scroll To Top Button*/
@@ -270,13 +265,3 @@ body .topbarDiv .active {
 .ui-panel.ui-widget {
     margin-bottom: 15px;
 }
-
-/*Primefaces Confirm Dialog*/
-@media screen and (max-width: 40em) {
-    .ui-confirmdialog {
-        width: 90%;
-    }
-
-    .ui-confirmdialog {
-        width: 30em;
-    }
