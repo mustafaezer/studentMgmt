@@ -216,6 +216,7 @@ body .topbarDiv .active {
     background-color: #ffffff;
     margin-bottom: 1em;
     color: #99bfb9;
+    background: transparent!important;
 }
 
 .ui-breadcrumb ul li .ui-menuitem-link {
