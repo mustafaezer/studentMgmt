@@ -14,12 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 
 /**
  *
@@ -59,6 +63,12 @@ public class GradesInstructorBean {
     private String isCollapsedP2 = "false";
     private String isRenderedP3 = "false";
     private String isCollapsedP3 = "false";
+    private String isRenderedP4 = "false";
+    private String isCollapsedP4 = "true";
+    private String isRenderedMidtermButton = "false";
+    private String isRenderedFinaleButton = "false";
+
+    Transaction tx = null;
 
     @PostConstruct
     public void init() {
@@ -93,121 +103,186 @@ public class GradesInstructorBean {
     }
 
     public List<Grading> fillTableWithData() {
-        gradingList = new ArrayList<Grading>();
-        try {
-            ses.beginTransaction();
+        if (subjectInfoId != null) {
+            gradingList = new ArrayList<Grading>();
+            try {
+                ses.beginTransaction();
 
-            Criteria getGradingList = ses.createCriteria(Grading.class);
-            getGradingList.add(Restrictions.eq("id.subjectInfoId", subjectInfoId));
-            gradingList = getGradingList.list();
+                Criteria getGradingList = ses.createCriteria(Grading.class);
+                getGradingList.add(Restrictions.eq("id.subjectInfoId", subjectInfoId));
+                gradingList = getGradingList.list();
 
-            ses.getTransaction().commit();
-            isRenderedP2 = "true";
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return gradingList;
-    }
-
-    public void fillStudentGradeInformation() {
-        isCollapsedP1 = "true";
-        isRenderedP1 = "true";
-        isCollapsedP2 = "false";
-        isRenderedP3 = "true";
-        isCollapsedP3 = "false";
-    }
-
-    public void updateGrade() {
-        isRenderedP3 = "false";
-        isCollapsedP1 = "false";
-        isCollapsedP2 = "false";
-        try {
-            ses.beginTransaction();
-            
-            GradingId idInstance = new GradingId();
-            idInstance.setStudentCitizenshipNumber(selectedCourse.getId().getStudentCitizenshipNumber());
-            idInstance.setSubjectInfoId(selectedCourse.getId().getSubjectInfoId());
-
-            Grading gradingInstance = new Grading();
-            
-            Criteria getGradingToUpdate = ses.createCriteria(Grading.class);
-            getGradingToUpdate.add(Restrictions.eq("id", idInstance));
-            List<Grading> tempListToHoldGradingObject = getGradingToUpdate.list();
-            gradingInstance = tempListToHoldGradingObject.get(0);
-            
-            gradingInstance.setMidtermNote(selectedCourse.getMidtermNote());
-            gradingInstance.setFinaleNote(selectedCourse.getFinaleNote());
-            gradingInstance.setGrade(calculateGrade(selectedCourse.getMidtermNote(),selectedCourse.getFinaleNote()));
-
-            ses.saveOrUpdate(gradingInstance);
-            ses.getTransaction().commit();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+                ses.getTransaction().commit();
+                isRenderedP2 = "true";
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return gradingList;
+        } else {
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Selection Warning", "Please select a course first to proceed this event."));
+            return null;
         }
     }
 
-//    public void calculatedGrade() {
-//        isCollapsedP2 = "true";
-//        if (selectedCourse.getMidtermNote() != 0.0 && selectedCourse.getFinaleNote() != 0.0) {
-//            gradeInline = calculateGrade(selectedCourse.getMidtermNote(), selectedCourse.getFinaleNote());
-//            ses.beginTransaction();
-//            try {
-//                Criteria calculationUpdate = ses.createCriteria(Grading.class);
-//                calculationUpdate.add(Restrictions.eq("id.subjectInfoId", selectedCourse.getId().getSubjectInfoId()));
-//                calculationUpdate.add(Restrictions.eq("id.studentCitizenshipNumber", selectedCourse.getId().getStudentCitizenshipNumber()));
-//                List<Grading> tempListToHoldGradingObject = calculationUpdate.list();
-//                
-//                Grading gradingToCalculate = new Grading();
-//                gradingToCalculate = tempListToHoldGradingObject.get(0);
-//                
-//                gradingToCalculate.setGrade(gradeInline);
-//                        
-//                ses.saveOrUpdate(gradingToCalculate);
-//                
-//                ses.getTransaction().commit();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        isRenderedP3 = "false";
-//        isCollapsedP1 = "false";
-//        isCollapsedP2 = "false";
-//    }
+    public void midtermPanelInitializer() {
+        if (selectedCourse != null) {
+            isCollapsedP1 = "true";
+            isRenderedP1 = "true";
+            isCollapsedP2 = "false";
+            isRenderedP3 = "true";
+            isCollapsedP3 = "false";
+            isRenderedP4 = "false";
+            isCollapsedP4 = "true";
+        } else {
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Selection Warning", "Please select a student first to proceed this event."));
+        }
+    }
 
-    public String calculateGrade(double midtermNote, double finaleNote) {
-        String gradeTemp;
-        if (midtermNote != 0.0 && finaleNote != 0.0) {
-            double gradeDouble = (((midtermNote) * 0.4) + ((finaleNote) * 0.6));
-            if (gradeDouble <= 20) {
-                gradeTemp = "FF";
-            } else if (gradeDouble > 20 && gradeDouble <= 30) {
-                gradeTemp = "FD";
-            } else if (gradeDouble > 30 && gradeDouble <= 40) {
-                gradeTemp = "DD";
-            } else if (gradeDouble > 40 && gradeDouble <= 50) {
-                gradeTemp = "DC";
-            } else if (gradeDouble > 50 && gradeDouble <= 60) {
-                gradeTemp = "CC";
-            } else if (gradeDouble > 60 && gradeDouble <= 70) {
-                gradeTemp = "CB";
-            } else if (gradeDouble > 70 && gradeDouble <= 80) {
-                gradeTemp = "BB";
-            } else if (gradeDouble > 80 && gradeDouble <= 90) {
-                gradeTemp = "BA";
-            } else {
-                gradeTemp = "AA";
+    public void finalePanelInitializer() {
+        if (selectedCourse.getMidtermNote() != null) {
+            isCollapsedP1 = "true";
+            isRenderedP1 = "true";
+            isCollapsedP2 = "false";
+            isRenderedP3 = "false";
+            isCollapsedP3 = "true";
+            isRenderedP4 = "true";
+            isCollapsedP4 = "false";
+        } else {
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Edit Finale Note Error", "Please first insert midterm note of student to proceed this event."));
+        }
+    }
+
+    public void insertMidterm() {
+        if (selectedCourse.getMidtermNote() != null) {
+            try {
+                tx = ses.beginTransaction();
+
+                selectedCourse.setMidtermNote(selectedCourse.getMidtermNote());
+                ses.update(selectedCourse);
+
+                tx.commit();
+
+                if (!selectedCourse.getMidtermNote().equals(null) && !selectedCourse.getFinaleNote().equals(null)) {
+                    calculateGrade(selectedCourse.getMidtermNote(), selectedCourse.getFinaleNote());
+                }
+
+                gradingList = fillTableWithData();
+
+                isRenderedP3 = "false";
+                isRenderedP4 = "false";
+                isCollapsedP1 = "false";
+                isCollapsedP2 = "false";
+
+                FacesContext context = FacesContext.getCurrentInstance();
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Midterm has been successfully updated."));
+            } catch (Exception e) {
+                if (tx != null) {
+                    tx.rollback();
+                }
+                e.printStackTrace();
             }
         } else {
-            gradeTemp = null;
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Edit Midterm Error", "Please type a valid value for midterm note. Notes must be in range of 0-100."));
         }
-        return gradeTemp;
+    }
+
+    public void insertFinale() {
+        if (selectedCourse.getMidtermNote() != null) {
+            try {
+                tx = ses.beginTransaction();
+
+                selectedCourse.setFinaleNote(selectedCourse.getFinaleNote());
+                ses.update(selectedCourse);
+
+                tx.commit();
+
+                calculateGrade(selectedCourse.getMidtermNote(), selectedCourse.getFinaleNote());
+
+                gradingList = fillTableWithData();
+
+                isRenderedP3 = "false";
+                isRenderedP4 = "false";
+                isCollapsedP1 = "false";
+                isCollapsedP2 = "false";
+
+                FacesContext context = FacesContext.getCurrentInstance();
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Finale has been successfully updated."));
+
+            } catch (Exception e) {
+                if (tx != null) {
+                    tx.rollback();
+                }
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    public void calculateGrade(double midtermNote, double finaleNote) {
+        try {
+            tx = ses.beginTransaction();
+
+            String gradeTemp;
+            if (midtermNote != 0.0 && finaleNote != 0.0) {
+                double gradeDouble = (((midtermNote) * 0.4) + ((finaleNote) * 0.6));
+                if (gradeDouble <= 20) {
+                    gradeTemp = "FF";
+                } else if (gradeDouble > 20 && gradeDouble <= 30) {
+                    gradeTemp = "FD";
+                } else if (gradeDouble > 30 && gradeDouble <= 40) {
+                    gradeTemp = "DD";
+                } else if (gradeDouble > 40 && gradeDouble <= 50) {
+                    gradeTemp = "DC";
+                } else if (gradeDouble > 50 && gradeDouble <= 60) {
+                    gradeTemp = "CC";
+                } else if (gradeDouble > 60 && gradeDouble <= 70) {
+                    gradeTemp = "CB";
+                } else if (gradeDouble > 70 && gradeDouble <= 80) {
+                    gradeTemp = "BB";
+                } else if (gradeDouble > 80 && gradeDouble <= 90) {
+                    gradeTemp = "BA";
+                } else {
+                    gradeTemp = "AA";
+                }
+            } else {
+                gradeTemp = null;
+            }
+
+            selectedCourse.setGrade(gradeTemp);
+            ses.update(selectedCourse);
+
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        }
+
     }
 
     public void cancel() {
         isRenderedP3 = "false";
+        isRenderedP4 = "false";
         isCollapsedP1 = "false";
         isCollapsedP2 = "false";
+    }
+
+    public void onRowSelect(SelectEvent event) {
+        isRenderedFinaleButton = "true";
+        isRenderedMidtermButton = "true";
+    }
+
+    public void onRowUnselect(UnselectEvent event) {
+        isRenderedMidtermButton = "false";
+        isRenderedFinaleButton = "false";
+        isCollapsedP1 = "false";
+        isRenderedP3 = "false";
+        isRenderedP4 = "false";
     }
 
     //getters & setters
@@ -357,6 +432,46 @@ public class GradesInstructorBean {
 
     public void setGradeInline(String gradeInline) {
         this.gradeInline = gradeInline;
+    }
+
+    public String getIsRenderedP4() {
+        return isRenderedP4;
+    }
+
+    public void setIsRenderedP4(String isRenderedP4) {
+        this.isRenderedP4 = isRenderedP4;
+    }
+
+    public String getIsCollapsedP4() {
+        return isCollapsedP4;
+    }
+
+    public void setIsCollapsedP4(String isCollapsedP4) {
+        this.isCollapsedP4 = isCollapsedP4;
+    }
+
+    public Transaction getTx() {
+        return tx;
+    }
+
+    public void setTx(Transaction tx) {
+        this.tx = tx;
+    }
+
+    public String getIsRenderedMidtermButton() {
+        return isRenderedMidtermButton;
+    }
+
+    public void setIsRenderedMidtermButton(String isRenderedMidtermButton) {
+        this.isRenderedMidtermButton = isRenderedMidtermButton;
+    }
+
+    public String getIsRenderedFinaleButton() {
+        return isRenderedFinaleButton;
+    }
+
+    public void setIsRenderedFinaleButton(String isRenderedFinaleButton) {
+        this.isRenderedFinaleButton = isRenderedFinaleButton;
     }
 
 }

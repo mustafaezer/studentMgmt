@@ -12,11 +12,6 @@
         <link href="../resources/css/myTokens.css" rel="stylesheet" type="text/css"/>
         <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"/>
 
-        <style>
-            /*            .ui-widget-content {
-                            background-image: url("img/topography.png");
-                        }*/
-        </style>
     </h:head>
     <h:body>
         <ui:insert name="sidemenu">
@@ -31,7 +26,7 @@
                     <p:menuitem value="Dashboard" url="dashboard.xhtml"/>
                     <p:menuitem value="Grades of Courses Given" url="gradesinstructor.xhtml"/>
                 </p:breadCrumb>
-                
+
                 <ui:insert name="sidebarBottom">
                     <ui:include src="templates/sidebarBottom.xhtml"/>
                 </ui:insert>
@@ -48,16 +43,15 @@
                                 </p:selectOneMenu>
 
                                 <h:outputText value=""/>
-                                <p:commandButton process="@form" action="#{gradesInstructorBean.fillTableWithData}" update=":form:editGradesToUpdate, :form:courseSelectionToUpdate, :form:selectStudentToUpdate" value="List Registered Students" icon="fa fa-th-list" />
+                                <p:commandButton process="@form" action="#{gradesInstructorBean.fillTableWithData}" update=":form:selectStudentToUpdate, :form:courseSelectionToUpdate, :form:editMidtermToUpdate, :form:editFinaleToUpdate" value="List Registered Students" icon="fa fa-th-list" />
 
                             </h:panelGrid>
                         </p:panel>
                     </p:outputPanel>
-                    <p:growl id="msgs" showDetail="true"/>
 
                     <p:outputPanel id="selectStudentToUpdate">
                         <p:panel id="selectStudent" rendered="#{gradesInstructorBean.isRenderedP2}" header="Select Student" toggleable="true" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{gradesInstructorBean.isCollapsedP2}" footer="Select a student to view its detailed information about this course." style="margin-bottom:10px; font-size: 12px;">
-                            <h:panelGrid columns="2" cellpadding="10">
+                            <h:panelGrid columns="1" cellpadding="10">
 
                                 <p:dataTable id="dt" var="_gradesList" 
                                              value="#{gradesInstructorBean.getGradingList()}" 
@@ -66,7 +60,8 @@
                                              selection="#{gradesInstructorBean.selectedCourse}"
                                              rowKey="#{_gradesList.id}"
                                              rowIndexVar="rowIndex">
-
+                                    <p:ajax event="rowSelect" listener="#{gradesInstructorBean.onRowSelect}" update=":form:selectStudentToUpdate, :form:courseSelectionToUpdate, :form:editMidtermToUpdate, :form:editFinaleToUpdate"/>
+                                    <p:ajax event="rowUnselect" listener="#{gradesInstructorBean.onRowUnselect}" update=":form:selectStudentToUpdate, :form:courseSelectionToUpdate, :form:editMidtermToUpdate, :form:editFinaleToUpdate" />
                                     <f:facet name="header">
                                         Grade Informations of Course Selected
                                     </f:facet>
@@ -88,40 +83,86 @@
                                     <p:column headerText="Grade">
                                         <h:outputText value="#{_gradesList.grade}"/>
                                     </p:column>
-
-                                    <f:facet name="footer">
-                                        <p:commandButton process="@form" action="#{gradesInstructorBean.fillStudentGradeInformation}" update=":form:editGradesToUpdate, :form:courseSelectionToUpdate, :form:selectStudentToUpdate, :form:dt" value="Edit Selected Student's Grade" icon="fa fa-pencil"/>
-                                    </f:facet>
                                 </p:dataTable>
+                                <h:panelGrid columns="2">
+                                    <p:commandButton process="@form" action="#{gradesInstructorBean.midtermPanelInitializer}" rendered="#{gradesInstructorBean.isRenderedMidtermButton}" update=":form:selectStudentToUpdate, :form:courseSelectionToUpdate, :form:editMidtermToUpdate, :form:editFinaleToUpdate, :form:dt" value="Edit Selected Student's Midterm" icon="fa fa-send-o"/>
+                                    <p:commandButton process="@form" action="#{gradesInstructorBean.finalePanelInitializer}" rendered="#{gradesInstructorBean.isRenderedFinaleButton}" update=":form:selectStudentToUpdate, :form:courseSelectionToUpdate, :form:editMidtermToUpdate, :form:editFinaleToUpdate, :form:dt" value="Edit Selected Student's Finale" icon="fa fa-send"/>
+                                </h:panelGrid>
                             </h:panelGrid>
                         </p:panel>
                     </p:outputPanel>
 
-                    <p:outputPanel id="editGradesToUpdate">
-                        <p:panel id="editGrades" header="Edit Grades of Selected Student" rendered="#{gradesInstructorBean.isRenderedP3}" toggleable="false" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{gradesInstructorBean.isCollapsedP3}" style="margin-bottom:10px; font-size: 12px;">
-                            <p:panelGrid columns="2" cellpadding="2">
+                    <p:outputPanel id="editMidtermToUpdate">
+                        <p:growl id="editMidtermGrowl" showDetail="true" severity="info, warn"/>
+                        <p:panel id="editMidterm" header="Edit Midterm Note of Selected Student" rendered="#{gradesInstructorBean.isRenderedP3}" toggleable="false" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{gradesInstructorBean.isCollapsedP3}" style="margin-bottom:10px; font-size: 12px;">
+                            <p:messages>
+                                <p:autoUpdate />
+                            </p:messages>
 
-                                <h:outputLabel for="name" value="Subject Name:"/> 
-                                <h:outputLabel id="name" value="#{gradesInstructorBean.selectedCourse.subjectinfo.name}"/> 
+                            <h:panelGrid columns="2" cellpadding="5" style="width: 50%;">
+                                <h:outputLabel for="nameMidterm" value="Subject Name:" style="font-weight: bold;"/> 
+                                <h:outputLabel id="nameMidterm" value="#{gradesInstructorBean.selectedCourse.subjectinfo.name}"/> 
 
-                                <h:outputLabel for="studentCitizenshipNumber" value="Selected Student's Citizenship Number:"/> 
-                                <h:outputLabel id="studentCitizenshipNumber" value="#{gradesInstructorBean.selectedCourse.getId().getStudentCitizenshipNumber()}"/> 
+                                <h:outputLabel for="studentCitizenshipNumberMidterm" value="Student Citizenship Number:" style="font-weight: bold;"/> 
+                                <h:outputLabel id="studentCitizenshipNumberMidterm" value="#{gradesInstructorBean.selectedCourse.getId().getStudentCitizenshipNumber()}"/> 
 
-                                <h:outputLabel for="studentName" value="Selected Student's Name:"/> 
-                                <h:outputLabel id="studentName" value="#{gradesInstructorBean.selectedCourse.userinfo.firstName} #{gradesInstructorBean.selectedCourse.userinfo.middleName} #{gradesInstructorBean.selectedCourse.userinfo.lastName}"/> 
+                                <h:outputLabel for="studentNameMidterm" value="Student Name:" style="font-weight: bold;"/> 
+                                <h:outputLabel id="studentNameMidterm" value="#{gradesInstructorBean.selectedCourse.userinfo.firstName} #{gradesInstructorBean.selectedCourse.userinfo.middleName} #{gradesInstructorBean.selectedCourse.userinfo.lastName}"/> 
 
-                                <h:outputLabel for="midtermNote" value="Midterm Note:"/> 
-                                <p:inputText maxlength="45" id="midtermNote" required="false" value="#{gradesInstructorBean.selectedCourse.midtermNote}" style="width:200px"/>
+                                <h:outputLabel for="midtermNoteMidterm" value="Midterm Note:" style="font-weight: bold;"/>
+                                <p:inputText maxlength="45" id="midtermNoteMidterm" type="number" label="Midterm Note" required="false" value="#{gradesInstructorBean.selectedCourse.midtermNote}" style="width:100%">
+                                    <f:validateDoubleRange minimum="0" maximum="100" />
+                                </p:inputText>
 
-                                <h:outputLabel for="finaleNote" value="Finale Note:"/> 
-                                <p:inputText maxlength="45" id="finaleNote" required="false" value="#{gradesInstructorBean.selectedCourse.finaleNote}" style="width:200px"/>
+                                <h:outputText value="Finale Note:" style="font-weight: bold;"/> 
+                                <h:outputText value="#{gradesInstructorBean.selectedCourse.finaleNote}" style="width:200px"/>
 
-                                <h:outputLabel for="grade" value="Grade:"/> 
-                                <h:outputLabel maxlength="45" id="grade" required="false" value="#{gradesInstructorBean.selectedCourse.grade}" style="width:200px"/>
+                                <h:outputLabel for="gradeMidterm" value="Grade:" style="font-weight: bold;"/> 
+                                <h:outputLabel maxlength="45" id="gradeMidterm" required="false" value="#{gradesInstructorBean.selectedCourse.grade}" style="width:200px"/>
 
-                                <p:commandButton process="@form" action="#{gradesInstructorBean.updateGrade}" update=":form:editGradesToUpdate, :form:courseSelectionToUpdate, :form:selectStudentToUpdate" value="Save Grade" icon="fa fa-save"/>
-                                <p:commandButton process="@form" action="#{gradesInstructorBean.cancel}" update=":form:editGradesToUpdate, :form:courseSelectionToUpdate, :form:selectStudentToUpdate" value="Cancel" icon="fa fa-mail-forward"/>
-                            </p:panelGrid>
+                                <h:outputText value=""/>
+                                <h:panelGrid columns="2" cellpadding="2">
+                                    <p:commandButton process="@form" action="#{gradesInstructorBean.insertMidterm}" update=":form:selectStudentToUpdate, :form:courseSelectionToUpdate, :form:editMidtermToUpdate, :form:editFinaleToUpdate" value="Save Midterm" icon="fa fa-save"/>
+                                    <p:commandButton process="@form" action="#{gradesInstructorBean.cancel}" update=":form:selectStudentToUpdate, :form:courseSelectionToUpdate, :form:editMidtermToUpdate, :form:editFinaleToUpdate" value="Cancel" icon="fa fa-mail-forward"/>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:outputPanel>
+
+                    <p:outputPanel id="editFinaleToUpdate">
+
+                        <p:panel id="editFinale" header="Edit Finale Note of Selected Student" rendered="#{gradesInstructorBean.isRenderedP4}" toggleable="false" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{gradesInstructorBean.isCollapsedP4}" style="margin-bottom:10px; font-size: 12px;">
+                            <p:messages>
+                                <p:autoUpdate />
+                            </p:messages>
+
+                            <h:panelGrid columns="2" cellpadding="5" style="width: 50%;">
+                                <h:outputLabel for="nameFinale" value="Subject Name:" style="font-weight: bold;"/> 
+                                <h:outputLabel id="nameFinale" value="#{gradesInstructorBean.selectedCourse.subjectinfo.name}"/> 
+
+                                <h:outputLabel for="studentCitizenshipNumberFinale" value="Student Citizenship Number:" style="font-weight: bold;"/> 
+                                <h:outputLabel id="studentCitizenshipNumberFinale" value="#{gradesInstructorBean.selectedCourse.getId().getStudentCitizenshipNumber()}"/> 
+
+                                <h:outputLabel for="studentNameFinale" value="Student Name:" style="font-weight: bold;"/> 
+                                <h:outputLabel id="studentNameFinale" value="#{gradesInstructorBean.selectedCourse.userinfo.firstName} #{gradesInstructorBean.selectedCourse.userinfo.middleName} #{gradesInstructorBean.selectedCourse.userinfo.lastName}"/> 
+
+                                <h:outputLabel value="Midterm Note:" style="font-weight: bold;"/>
+                                <h:outputText value="#{gradesInstructorBean.selectedCourse.midtermNote}" style="width:200px"/>
+
+                                <h:outputText for="finaleNoteFinale" value="Finale Note:" style="font-weight: bold;"/> 
+                                <p:inputText maxlength="45" id="finaleNoteFinale" type="number" label="Midterm Note" required="false" value="#{gradesInstructorBean.selectedCourse.finaleNote}" style="width:100%">
+                                    <f:validateDoubleRange minimum="0" maximum="100" />
+                                </p:inputText>
+
+                                <h:outputLabel for="gradeFinale" value="Grade:" style="font-weight: bold;"/> 
+                                <h:outputLabel maxlength="45" id="gradeFinale" required="false" value="#{gradesInstructorBean.selectedCourse.grade}" style="width:200px"/>
+
+                                <h:outputText value=""/>
+                                <h:panelGrid columns="2" cellpadding="2">
+                                    <p:commandButton process="@form" action="#{gradesInstructorBean.insertFinale}" update=":form:selectStudentToUpdate, :form:courseSelectionToUpdate, :form:editMidtermToUpdate, :form:editFinaleToUpdate" value="Save Midterm" icon="fa fa-save"/>
+                                    <p:commandButton process="@form" action="#{gradesInstructorBean.cancel}" update=":form:selectStudentToUpdate, :form:courseSelectionToUpdate, :form:editMidtermToUpdate, :form:editFinaleToUpdate" value="Cancel" icon="fa fa-mail-forward"/>
+                                </h:panelGrid>
+                            </h:panelGrid>
                         </p:panel>
                     </p:outputPanel>
                 </h:form>
@@ -138,7 +179,7 @@
                 });
             });
         </script>
-        
+
         <a href="#" id="scroll" style="display: none;"><span></span></a>
         <script>
             $(document).ready(function () {
