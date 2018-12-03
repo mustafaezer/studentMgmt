@@ -78,7 +78,7 @@
                                         <h:outputText value="#{_registeredSubject.quota}"/>
                                     </p:column>
                                     <f:facet name="footer">
-                                        <p:commandButton action="#{courseRegistrationBean.resign}" process="@form" value="Resign from Course" disabled="#{courseRegistrationStatus.isDisabled}" style="margin-top:5px; font-size: 12px;" update="form:registeredToUpdate, form:toRegisterToUpdate" icon="fa fa-toggle-on"/>
+                                        <p:commandButton action="#{courseRegistrationBean.resign}" process="@form" value="Drop Course" disabled="#{courseRegistrationStatus.isDisabled}" style="margin-top:5px; font-size: 12px;" update="form:registeredToUpdate, form:toRegisterToUpdate" icon="fa fa-minus-square"/>
                                     </f:facet>
                                 </p:dataTable>
                             </h:panelGrid>
@@ -121,7 +121,7 @@
                                     <h:outputText value="#{subjectListDual.quota}"/>
                                 </p:column>
                             </p:pickList>
-                            <p:commandButton process="@form" action="#{courseRegistrationBean.register()}" disabled="#{courseRegistrationStatus.isDisabled}" value="Register" style="margin-top:5px; font-size: 12px;" update="form:registeredToUpdate,form:toRegisterToUpdate"/>
+                            <p:commandButton process="@form" action="#{courseRegistrationBean.register()}" disabled="#{courseRegistrationStatus.isDisabled}" value="Add Course" style="margin-top:5px; font-size: 12px;" update="form:registeredToUpdate,form:toRegisterToUpdate" icon="fa fa-plus-square"/>
                         </p:panel>
                     </p:outputPanel>
                 </h:form>
