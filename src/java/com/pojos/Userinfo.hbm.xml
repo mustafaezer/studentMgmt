@@ -41,19 +41,19 @@
         <property name="isActive" type="string">
             <column name="isActive" length="8" not-null="true" />
         </property>
-        <set name="subjectinfos" table="subjectinfo" inverse="true" lazy="false" fetch="select">
+        <set name="subjectinfos" table="subjectinfo" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="instructorCitizenshipNumber" length="11" not-null="true" />
             </key>
             <one-to-many class="com.pojos.Subjectinfo" />
         </set>
-        <set name="gradings" table="grading" inverse="true" lazy="false" fetch="select">
+        <set name="gradings" table="grading" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="studentCitizenshipNumber" length="11" not-null="true" />
             </key>
             <one-to-many class="com.pojos.Grading" />
         </set>
-        <set name="announcementinfos" table="announcementinfo" inverse="true" lazy="false" fetch="select">
+        <set name="announcementinfos" table="announcementinfo" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="authorCitizenshipNumber" length="11" not-null="true" />
             </key>

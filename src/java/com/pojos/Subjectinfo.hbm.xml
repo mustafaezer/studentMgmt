@@ -29,7 +29,7 @@
         <property name="isActive" type="string">
             <column name="isActive" length="8" not-null="true" />
         </property>
-        <set name="gradings" table="grading" inverse="true" lazy="false" fetch="select">
+        <set name="gradings" table="grading" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="subjectInfoId" not-null="true" />
             </key>
