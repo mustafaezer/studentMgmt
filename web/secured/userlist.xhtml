@@ -93,7 +93,7 @@
                     <p:outputPanel id="createNewUserToUpdate">
                         <p:growl id="createNewUserGrowl" showDetail="true"/>
                         <p:panel id="createNewUser" header="Create New User" rendered="#{userBean.isRenderedP2}" toggleable="false" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{userBean.isCollapsedP2}" style="margin-bottom:10px; font-size: 12px;">
-                            <h:panelGrid columns="2" cellpadding="2">
+                            <h:panelGrid columns="2" cellpadding="5">
 
                                 <h:outputLabel for="citizenshipNumber" value="Citizenship Number:*"/> 
                                 <p:inputText maxlength="11" id="citizenshipNumber" required="false" value="#{userBean.citizenshipNumber}" style="width:246px"/>
@@ -147,15 +147,17 @@
                                     <f:selectItem itemLabel="Inactive" itemValue="Inactive" />
                                 </p:selectOneMenu>
 
-                                <p:commandButton process="@form" action="#{userBean.createNewUser}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate" value="Save User Information" icon="fa fa-save">
-                                    <p:confirm header="Confirmation" message="New user will be created by the informations given?" icon="ui-icon-alert" />
-                                </p:commandButton>
+                                <h:outputText value=""/>
+                                <h:panelGrid columns="2">
+                                    <p:commandButton process="@form" action="#{userBean.createNewUser}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate" value="Save User" icon="fa fa-save">
+                                        <p:confirm header="Confirmation" message="New user will be created by the informations given?" icon="ui-icon-alert" />
+                                    </p:commandButton>
+                                    <p:commandButton process="@form" action="#{userBean.cancel}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate" value="Cancel" icon="fa fa-remove"/>
+                                </h:panelGrid>
                                 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                                     <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                                     <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                                 </p:confirmDialog>
-
-                                <p:commandButton process="@form" action="#{userBean.cancel}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate" value="Cancel Editing" icon="fa fa-mail-forward"/>
                             </h:panelGrid>
                         </p:panel>
                     </p:outputPanel>
@@ -208,10 +210,10 @@
 
                                 <h:outputLabel value=""/>
                                 <h:panelGrid columns="2">
-                                    <p:commandButton process="@form" action="#{userBean.updateUser}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate" value="Save User Information" icon="fa fa-save">
+                                    <p:commandButton process="@form" action="#{userBean.updateUser}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate" value="Update User" icon="fa fa-refresh">
                                         <p:confirm header="Confirmation" message="User information fields will be updated with new values?" icon="ui-icon-alert" />
                                     </p:commandButton>
-                                    <p:commandButton process="@form" action="#{userBean.cancel}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate" value="Cancel" icon="fa fa-mail-forward"/>
+                                    <p:commandButton process="@form" action="#{userBean.cancel}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate" value="Cancel" icon="fa fa-remove"/>
                                 </h:panelGrid>
                                 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                                     <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />

@@ -83,11 +83,11 @@
 
                                 <h:outputLabel value=""/>
                                 <h:panelGrid columns="2">
-                                    <p:commandButton process="@form" action="#{announcementBean.createAnnouncement}" update=":form:createNewAnnouncementToUpdate, :form:announcementListToUpdate, :form:editAnnouncementToUpdate" value="Save Announcement" style="width: 100%;">
+                                    <p:commandButton process="@form" action="#{announcementBean.createAnnouncement}" update=":form:createNewAnnouncementToUpdate, :form:announcementListToUpdate, :form:editAnnouncementToUpdate" value="Save Announcement" style="width: 100%;" icon="fa fa-save">
                                         <p:confirm header="Confirmation" message="New announcement will be created by the informations given?" icon="ui-icon-alert" />
                                     </p:commandButton>
 
-                                    <p:commandButton process="@form" action="#{announcementBean.cancel}" update=":form:createNewAnnouncementToUpdate, :form:announcementListToUpdate, :form:editAnnouncementToUpdate" value="Cancel" style="width: 100%;"/>
+                                    <p:commandButton process="@form" action="#{announcementBean.cancel}" update=":form:createNewAnnouncementToUpdate, :form:announcementListToUpdate, :form:editAnnouncementToUpdate" value="Cancel" style="width: 100%;" icon="fa fa-remove"/>
 
                                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                                         <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
@@ -259,11 +259,11 @@
 
                                 <h:outputText value=""/>
                                 <h:panelGrid columns="2">
-                                    <p:commandButton process="@form" action="#{announcementBean.editAnnouncement}" update=":form:createNewAnnouncementToUpdate, :form:announcementListToUpdate, :form:editAnnouncementToUpdate" value="Save Announcement" style="width: 100%;">
+                                    <p:commandButton process="@form" action="#{announcementBean.editAnnouncement}" update=":form:createNewAnnouncementToUpdate, :form:announcementListToUpdate, :form:editAnnouncementToUpdate" value="Update Announcement" style="width: 100%;" icon="fa fa-refresh">
                                         <p:confirm header="Confirmation" message="Selected announcement will be updated by the informations given?" icon="ui-icon-alert" />
                                     </p:commandButton>
 
-                                    <p:commandButton process="@form" action="#{announcementBean.cancel}" update=":form:createNewAnnouncementToUpdate, :form:announcementListToUpdate, :form:editAnnouncementToUpdate" value="Cancel" style="width: 100%;"/>
+                                    <p:commandButton process="@form" action="#{announcementBean.cancel}" update=":form:createNewAnnouncementToUpdate, :form:announcementListToUpdate, :form:editAnnouncementToUpdate" value="Cancel" style="width: 100%;" icon="fa fa-remove"/>
 
 
                                 </h:panelGrid>
