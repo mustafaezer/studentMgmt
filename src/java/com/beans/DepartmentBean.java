@@ -21,6 +21,8 @@ import javax.faces.context.FacesContext;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 
 /**
  *
@@ -49,6 +51,7 @@ public class DepartmentBean {
     private String isRenderedP2;
     private String isRenderedP3;
     private String isRenderedP4;
+    private String isRenderedCommandButton = "false";
 
     private String isCollapsedP0;
     private String isCollapsedP1;
@@ -320,6 +323,17 @@ public class DepartmentBean {
         return subjectList;
     }
 
+    public void onRowSelect(SelectEvent event) {
+        isRenderedCommandButton = "true";
+    }
+
+    public void onRowUnselect(UnselectEvent event) {
+        isRenderedCommandButton = "false";
+        isRenderedP2 = "false";
+        isRenderedP3 = "false";
+        isRenderedP4 = "false";
+    }
+
     public DepartmentBean() {
     }
 
@@ -466,4 +480,13 @@ public class DepartmentBean {
     public void setSubjectList(List<Subjectinfo> subjectList) {
         this.subjectList = subjectList;
     }
+
+    public String getIsRenderedCommandButton() {
+        return isRenderedCommandButton;
+    }
+
+    public void setIsRenderedCommandButton(String isRenderedCommandButton) {
+        this.isRenderedCommandButton = isRenderedCommandButton;
+    }
+
 }

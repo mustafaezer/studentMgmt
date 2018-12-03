@@ -11,13 +11,8 @@
 
         <link href="../resources/css/myTokens.css" rel="stylesheet" type="text/css"/>
         <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"/>
-
-        <style>
-            /*            .ui-widget-content {
-                            background-image: url("img/topography.png");
-                        }*/
-        </style>
     </h:head>
+
     <h:body>
         <ui:insert name="sidemenu">
             <ui:include src="templates/sidemenu.xhtml"/>
@@ -33,7 +28,7 @@
                     <p:menuitem value="Dashboard" url="dashboard.xhtml"/>
                     <p:menuitem value="Department Management" url="departmentlist.xhtml"/>
                 </p:breadCrumb>
-                
+
                 <ui:insert name="sidebarBottom">
                     <ui:include src="templates/sidebarBottom.xhtml"/>
                 </ui:insert>
@@ -64,7 +59,7 @@
                     <!--Department Selection DT-->
                     <p:outputPanel id="departmentDTToUpdate">
                         <p:panel id="departmentDT" header="Department List" rendered="#{departmentBean.isRenderedP1}" footer="Select a department and click one of the actions in the datatable's footer, to view its informations." toggleable="false" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{departmentBean.isCollapsedP1}" style="margin-bottom:10px; font-size: 12px;">
-                            <h:panelGrid columns="2" cellpadding="10">
+                            <h:panelGrid columns="1" cellpadding="10">
                                 <p:dataTable id="singleDT" 
                                              var="_departmentList" 
                                              value="#{departmentBean.departmentList}" 
@@ -76,22 +71,24 @@
                                              rows="10" 
                                              paginator="true" 
                                              paginatorPosition="bottom">
-
-                                    <!--                                    <f:facet name="header">
-                                                                            All Departments
-                                                                        </f:facet>-->
+                                    <p:ajax event="rowSelect" listener="#{departmentBean.onRowSelect}" update=":form:createNewDepartmentToUpdate, :form:departmentDTToUpdate, :form:departmentInstructorsToUpdate, :form:departmentStudentsToUpdate, :form:departmentSubjectsToUpdate"/>
+                                    <p:ajax event="rowUnselect" listener="#{departmentBean.onRowUnselect}" update=":form:createNewDepartmentToUpdate, :form:departmentDTToUpdate, :form:departmentInstructorsToUpdate, :form:departmentStudentsToUpdate, :form:departmentSubjectsToUpdate" />
+                                    <f:facet name="header">
+                                        All Departments
+                                    </f:facet>
                                     <p:column headerText="#" style="width: 10px;">
                                         <h:outputText value="#{rowIndex+1}" />
                                     </p:column>
                                     <p:column headerText="Department Name">
                                         <h:outputText value="#{_departmentList.name}" />
                                     </p:column>
-                                    <f:facet name="header">
-                                        <p:commandButton process="@form" action="#{departmentBean.listDepartmentInstructors}" update=":form:createNewDepartmentToUpdate, :form:departmentDTToUpdate, :form:departmentInstructorsToUpdate, :form:departmentStudentsToUpdate, :form:departmentSubjectsToUpdate" value="Show Instructor Members" icon="fa fa-group" />
-                                        <p:commandButton process="@form" action="#{departmentBean.listDepartmentStudents}" update=":form:createNewDepartmentToUpdate, :form:departmentDTToUpdate, :form:departmentInstructorsToUpdate, :form:departmentStudentsToUpdate, :form:departmentSubjectsToUpdate" value="Show Student Members" icon="fa fa-graduation-cap" />
-                                        <p:commandButton process="@form" action="#{departmentBean.listDepartmentSubjects}" update=":form:createNewDepartmentToUpdate, :form:departmentDTToUpdate, :form:departmentInstructorsToUpdate, :form:departmentStudentsToUpdate, :form:departmentSubjectsToUpdate" value="Show Subjects Given By Department" icon="fa fa-file-text-o" />
-                                    </f:facet>
+
                                 </p:dataTable>
+                            </h:panelGrid>
+                            <h:panelGrid columns="3">
+                                <p:commandButton process="@form" action="#{departmentBean.listDepartmentInstructors}" update=":form:createNewDepartmentToUpdate, :form:departmentDTToUpdate, :form:departmentInstructorsToUpdate, :form:departmentStudentsToUpdate, :form:departmentSubjectsToUpdate" value="Show Instructor Members" icon="fa fa-group" rendered="#{departmentBean.isRenderedCommandButton}"/>
+                                <p:commandButton process="@form" action="#{departmentBean.listDepartmentStudents}" update=":form:createNewDepartmentToUpdate, :form:departmentDTToUpdate, :form:departmentInstructorsToUpdate, :form:departmentStudentsToUpdate, :form:departmentSubjectsToUpdate" value="Show Student Members" icon="fa fa-graduation-cap" rendered="#{departmentBean.isRenderedCommandButton}"/>
+                                <p:commandButton process="@form" action="#{departmentBean.listDepartmentSubjects}" update=":form:createNewDepartmentToUpdate, :form:departmentDTToUpdate, :form:departmentInstructorsToUpdate, :form:departmentStudentsToUpdate, :form:departmentSubjectsToUpdate" value="Show Subjects Given By Department" icon="fa fa-file-text-o" rendered="#{departmentBean.isRenderedCommandButton}"/>
                             </h:panelGrid>
                         </p:panel>
                     </p:outputPanel>
@@ -220,7 +217,7 @@
                 });
             });
         </script>
-        
+
         <a href="#" id="scroll" style="display: none;"><span></span></a>
         <script>
             $(document).ready(function () {
