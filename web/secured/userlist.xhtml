@@ -41,6 +41,10 @@
                     <p:outputPanel id="userListToUpdate">
                         <p:growl id="userListGrowl" showDetail="true"/>
                         <p:panel id="userList" header="User List" rendered="#{userBean.isRenderedP1}" footer="If you want to edit a user's information, select the user from table and hit 'Edit User Information' button." toggleable="false" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{userBean.isCollapsedP1}" style="margin-bottom:10px; font-size: 12px;">
+                            <h:panelGrid columns="2" cellspacing="5">
+                                <p:commandButton process="@form" action="#{userBean.createNewUserPanelInitializer}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate" value="Create New User" icon="fa fa-user-plus" />
+                                <p:commandButton process="@form" action="#{userBean.updateUserPanelInitializer}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate" value="Edit User Information" icon="fa fa-edit" rendered="#{userBean.isRenderedEditUserButton}"/>
+                            </h:panelGrid>
                             <p:dataTable id="singleDT"
                                          var="_user" 
                                          value="#{userBean.userList}" 
@@ -52,9 +56,11 @@
                                          paginatorPosition="bottom"
                                          style="font-size: 12px; text-align: center;" 
                                          rowIndexVar="rowIndex"> 
+                                <p:ajax event="rowSelect" listener="#{userBean.onRowSelect}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate"/>
+                                <p:ajax event="rowUnselect" listener="#{userBean.onRowUnselect}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate" />
+                                
                                 <f:facet name="header">
-                                    <p:commandButton process="@form" action="#{userBean.createNewUserPanelInitializer}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate" value="Create New User" icon="fa fa-user-plus" />
-                                    <p:commandButton process="@form" action="#{userBean.updateUserPanelInitializer}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate" value="Edit User Information" icon="fa fa-edit"/>
+                                    Informations of Users
                                 </f:facet>
                                 <p:column headerText="#" style="width: 10px; height: 25px;">
                                     <h:outputText value="#{rowIndex+1}"/>
@@ -95,10 +101,10 @@
                         <p:panel id="createNewUser" header="Create New User" rendered="#{userBean.isRenderedP2}" toggleable="false" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{userBean.isCollapsedP2}" style="margin-bottom:10px; font-size: 12px;">
                             <h:panelGrid columns="2" cellpadding="5">
 
-                                <h:outputLabel for="citizenshipNumber" value="Citizenship Number:*"/> 
-                                <p:inputText maxlength="11" id="citizenshipNumber" required="false" value="#{userBean.citizenshipNumber}" style="width:246px"/>
+                                <h:outputLabel for="citizenshipNumber" value="Citizenship Number:*" style="font-weight: bold;"/> 
+                                <p:inputText maxlength="11" id="citizenshipNumber" required="false" value="#{userBean.citizenshipNumber}" style="width:246px;"/>
 
-                                <h:outputLabel for="userType" value="User Type:*"/>
+                                <h:outputLabel for="userType" value="User Type:*" style="font-weight: bold;"/>
                                 <p:selectOneMenu id="userType" value="#{userBean.userType}" required="false" style="width:230px">
                                     <f:selectItem itemLabel="" itemValue="null" />
                                     <f:selectItem itemLabel="Instructor" itemValue="Instructor" />
@@ -106,22 +112,22 @@
                                     <f:selectItem itemLabel="Administrator" itemValue="Administrator" />
                                 </p:selectOneMenu>
 
-                                <h:outputLabel for="departmentInfoId" value="Department:*"/>
+                                <h:outputLabel for="departmentInfoId" value="Department:*" style="font-weight: bold;"/>
                                 <p:selectOneMenu id="departmentInfoId" value="#{userBean.departmentinfo.departmentInfoId}" required="false" style="width:230px">
                                     <f:selectItem itemValue="#{null}" itemLabel="-- Select a Department --" noSelectionOption="true"/>
                                     <f:selectItems value="#{userBean.departmentList}" var="department" itemLabel="#{department.name}" itemValue="#{department.departmentInfoId}"/>
                                 </p:selectOneMenu>
 
-                                <h:outputLabel for="firstName" value="First Name:*"/>
+                                <h:outputLabel for="firstName" value="First Name:*" style="font-weight: bold;"/>
                                 <p:inputText maxlength="45" id="firstName" required="false" value="#{userBean.firstName}" style="width:246px"/>
 
-                                <h:outputLabel for="middleName" value="Middle Name:"/>
+                                <h:outputLabel for="middleName" value="Middle Name:" style="font-weight: bold;"/>
                                 <p:inputText maxlength="45" id="middleName" value="#{userBean.middleName}" style="width:246px"/>
 
-                                <h:outputLabel for="lastName" value="Last Name:*"/>
+                                <h:outputLabel for="lastName" value="Last Name:*" style="font-weight: bold;"/>
                                 <p:inputText maxlength="45" id="lastName" required="false" value="#{userBean.lastName}" style="width:246px"/>
 
-                                <h:outputLabel for="gender" value="Gender:*"/>
+                                <h:outputLabel for="gender" value="Gender:*" style="font-weight: bold;"/>
                                 <p:selectOneMenu id="gender" value="#{userBean.gender}" style="width:230px">
                                     <f:selectItem itemLabel="" itemValue="null" />
                                     <f:selectItem itemLabel="Female" itemValue="Female" />
@@ -129,19 +135,19 @@
                                     <f:selectItem itemLabel="Unknown" itemValue="Unknown" />
                                 </p:selectOneMenu>
 
-                                <h:outputLabel for="email" value="Email:*"/>
+                                <h:outputLabel for="email" value="Email:*" style="font-weight: bold;"/>
                                 <p:inputText maxlength="45" id="email" required="false" value="#{userBean.email}" style="width:246px"/>
 
-                                <h:outputLabel for="password" value="Password:*" />
+                                <h:outputLabel for="password" value="Password:*" style="font-weight: bold;"/>
                                 <p:password id="password" value="#{userBean.password}" style="width:246px" />
 
-                                <h:outputLabel for="dateOfBirth" value="Date of Birth:*"/>
+                                <h:outputLabel for="dateOfBirth" value="Date of Birth:*" style="font-weight: bold;"/>
                                 <p:calendar id="dateOfBirth" value="#{userBean.dateOfBirth}" required="false" pattern="yyyy-MM-dd" style="width:246px"/>
 
-                                <h:outputLabel for="remark" value="Remark:"/>
+                                <h:outputLabel for="remark" value="Remark:" style="font-weight: bold;"/>
                                 <p:inputText maxlength="180" id="remark" required="false" value="#{userBean.remark}" style="width:246px"/>
 
-                                <h:outputLabel for="isActive" value="Status:*" style="width:246px"/>
+                                <h:outputLabel for="isActive" value="Status:*" style="width:246px; font-weight: bold;"/>
                                 <p:selectOneMenu id="isActive" value="#{userBean.isActive}" style="width:230px" required="false">
                                     <f:selectItem itemLabel="Active" itemValue="Active" />
                                     <f:selectItem itemLabel="Inactive" itemValue="Inactive" />
@@ -167,25 +173,25 @@
                         <p:growl id="editUserInformationGrowl" showDetail="true"/>
                         <p:panel id="editUserInformation" header="Edit User Information" rendered="#{userBean.isRenderedP3}" toggleable="false" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{userBean.isCollapsedP3}" style="margin-bottom:10px; font-size: 12px;">
                             <p:panelGrid  columns="2" rendered="#{not empty userBean.selectedUser}" columnClasses="label,value" styleClass="ui-noborder" style="width= 100px;">
-                                <h:outputLabel for="citizenshipNumberUpdate" value="Citizenship Number:"/> 
+                                <h:outputLabel for="citizenshipNumberUpdate" value="Citizenship Number:" style="font-weight: bold;"/> 
                                 <h:outputLabel id="citizenshipNumberUpdate" value="#{userBean.selectedUser.citizenshipNumber}"/> 
 
-                                <h:outputLabel for="departmentInfoIdUpdate" value="Department:"/> 
+                                <h:outputLabel for="departmentInfoIdUpdate" value="Department:" style="font-weight: bold;"/> 
                                 <h:outputLabel id="departmentInfoIdUpdate" value="#{userBean.selectedUser.departmentinfo.name}"/>
 
-                                <h:outputLabel for="userTypeUpdate" value="User Type:"/> 
+                                <h:outputLabel for="userTypeUpdate" value="User Type:" style="font-weight: bold;"/> 
                                 <h:outputLabel id="userTypeUpdate" value="#{userBean.selectedUser.userType}"/> 
 
-                                <h:outputLabel for="firstNameUpdate" value="First Name:"/> 
+                                <h:outputLabel for="firstNameUpdate" value="First Name:" style="font-weight: bold;"/> 
                                 <p:inputText maxlength="45" id="firstNameUpdate" required="false" value="#{userBean.selectedUser.firstName}"  style="width: 650px;"/>
 
-                                <h:outputLabel for="middleNameUpdate" value="Middle Name:"/> 
+                                <h:outputLabel for="middleNameUpdate" value="Middle Name:" style="font-weight: bold;"/> 
                                 <p:inputText maxlength="45" id="middleNameUpdate" required="false" value="#{userBean.selectedUser.middleName}" style="width: 650px"/>
 
-                                <h:outputLabel for="lastNameUpdate" value="Last Name:"/> 
+                                <h:outputLabel for="lastNameUpdate" value="Last Name:" style="font-weight: bold;"/> 
                                 <p:inputText maxlength="45" id="lastNameUpdate" value="#{userBean.selectedUser.lastName}" style="width: 650px"/>
 
-                                <h:outputLabel for="genderUpdate" value="Gender:"/> 
+                                <h:outputLabel for="genderUpdate" value="Gender:" style="font-weight: bold;"/> 
                                 <p:selectOneMenu id="genderUpdate" value="#{userBean.selectedUser.gender}" style="width: 634px">
                                     <f:selectItem itemLabel="" itemValue="null" />
                                     <f:selectItem itemLabel="Female" itemValue="Female" />
@@ -193,16 +199,16 @@
                                     <f:selectItem itemLabel="Unknown" itemValue="Unknown" />
                                 </p:selectOneMenu>
 
-                                <h:outputLabel for="emailUpdate" value="Email:"/> 
+                                <h:outputLabel for="emailUpdate" value="Email:" style="font-weight: bold;"/> 
                                 <p:inputText maxlength="45" id="emailUpdate" value="#{userBean.selectedUser.email}" style="width: 650px"/>
 
-                                <h:outputLabel for="dateOfBirthUpdate" value="Date of Birth:"/> 
+                                <h:outputLabel for="dateOfBirthUpdate" value="Date of Birth:" style="font-weight: bold;"/> 
                                 <h:outputLabel id="dateOfBirthUpdate" value="#{userBean.selectedUser.dateOfBirth}"/>
 
-                                <h:outputLabel for="remarkUpdate" value="Remark:"/> 
+                                <h:outputLabel for="remarkUpdate" value="Remark:" style="font-weight: bold;"/> 
                                 <p:inputText maxlength="45" id="remarkUpdate" value="#{userBean.selectedUser.remark}" style="width: 650px"/>
 
-                                <h:outputLabel for="isActiveUpdate" value="Status:" style="width:246px"/>
+                                <h:outputLabel for="isActiveUpdate" value="Status:" style="width:246px; font-weight: bold;"/>
                                 <p:selectOneMenu id="isActiveUpdate" value="#{userBean.selectedUser.isActive}" style="width: 634px;" required="false">
                                     <f:selectItem itemLabel="Active" itemValue="Active" />
                                     <f:selectItem itemLabel="Inactive" itemValue="Inactive" />

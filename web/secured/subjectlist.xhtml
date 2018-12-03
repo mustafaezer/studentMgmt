@@ -41,6 +41,10 @@
                     <p:outputPanel id="subjectListToUpdate">
                         <p:growl id="subjectListGrowl" showDetail="true"/>
                         <p:panel id="subjectList" header="Subject List" rendered="#{subjectBean.isRenderedP1}" toggleable="false" closable="false" toggleSpeed="500" closeSpeed="500" collapsed="#{subjectBean.isCollapsedP1}" style="margin-bottom:10px; font-size: 12px;">
+                            <h:panelGrid columns="2" cellspacing="5">
+                                <p:commandButton process="@form" action="#{subjectBean.createNewSubjectPanelInitializer}" update=":form:subjectListToUpdate, :form:createNewSubjectToUpdate, :form:editSubjectToUpdate" value="Create New Subject" icon="fa fa-book" style="font-size: 12px;"/>
+                                <p:commandButton process="@form" action="#{subjectBean.editSubjectPanelInitializer}" update=":form:subjectListToUpdate, :form:createNewSubjectToUpdate, :form:editSubjectToUpdate" value="Edit Subject Information" icon="fa fa-edit" style="font-size: 12px;" rendered="#{subjectBean.isRenderedEditUserButton}"/>
+                            </h:panelGrid>
                             <p:dataTable var="_subject" 
                                          value="#{subjectBean.subjectList}" 
                                          rows="10" 
@@ -53,9 +57,12 @@
                                          rowKey="#{_subject.subjectInfoId}"
                                          >
                                 <f:facet name="header">
-                                    <p:commandButton process="@form" action="#{subjectBean.createNewSubjectPanelInitializer}" update=":form:subjectListToUpdate, :form:createNewSubjectToUpdate, :form:editSubjectToUpdate" value="Create New Subject" icon="fa fa-book" style="font-size: 12px;"/>
-                                    <p:commandButton process="@form" action="#{subjectBean.editSubjectPanelInitializer}" update=":form:subjectListToUpdate, :form:createNewSubjectToUpdate, :form:editSubjectToUpdate" value="Edit Subject Information" icon="fa fa-edit" style="font-size: 12px;"/>
+                                    Informations of Subjects
                                 </f:facet>
+
+                                <p:ajax event="rowSelect" listener="#{subjectBean.onRowSelect}" update=":form:subjectListToUpdate, :form:createNewSubjectToUpdate, :form:editSubjectToUpdate"/>
+                                <p:ajax event="rowUnselect" listener="#{subjectBean.onRowUnselect}" update=":form:subjectListToUpdate, :form:createNewSubjectToUpdate, :form:editSubjectToUpdate" />
+
                                 <p:column headerText="#" style="width: 10px;" >
                                     <h:outputText value="#{rowIndex+1}"/>
                                 </p:column>

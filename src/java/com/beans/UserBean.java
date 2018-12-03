@@ -22,6 +22,8 @@ import javax.faces.context.FacesContext;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 
 /**
  *
@@ -58,6 +60,7 @@ public class UserBean implements Serializable {
     private String isRenderedP1;
     private String isRenderedP2;
     private String isRenderedP3;
+    private String isRenderedEditUserButton = "false";
 
     public UserBean() {
     }
@@ -243,6 +246,14 @@ public class UserBean implements Serializable {
 
         return departmentList;
     }
+    
+    public void onRowSelect(SelectEvent event) {
+        isRenderedEditUserButton = "true";
+    }
+
+    public void onRowUnselect(UnselectEvent event) {
+        isRenderedEditUserButton = "false";
+    }
 
     public Userinfo getSelectedUser() {
         return selectedUser;
@@ -424,4 +435,14 @@ public class UserBean implements Serializable {
     public void setDepartmentList(List<Departmentinfo> departmentList) {
         this.departmentList = departmentList;
     }
+
+    public String getIsRenderedEditUserButton() {
+        return isRenderedEditUserButton;
+    }
+
+    public void setIsRenderedEditUserButton(String isRenderedEditUserButton) {
+        this.isRenderedEditUserButton = isRenderedEditUserButton;
+    }
+    
+    
 }
