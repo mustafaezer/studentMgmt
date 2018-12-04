@@ -6,9 +6,6 @@
                 xmlns:p="http://primefaces.org/ui">
     <div class="topbarDiv">
         <ul>
-<!--            <li style="float:center">
-                    <h:graphicImage value="/i.png" height="56px"/>
-            </li>-->
             <li style="float:right">  
                 <a>
                     <p:commandButton value="Dear. #{navbarBean.loggedUserList.get(0).firstName} #{navbarBean.loggedUserList.get(0).middleName} #{navbarBean.loggedUserList.get(0).lastName}" icon="fa fa-user" style="width: 100%" oncomplete="PF('sidebar2').show()" />
