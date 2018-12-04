@@ -70,7 +70,7 @@
                                     <h:outputText value="#{_subject.isActive}"/>
                                 </p:column>
                                 <p:column headerText="Department" style="width: 100px;">
-                                    <h:outputText value="#{_subject.departmentinfo.name}"/>
+                                    <h:outputText value="#{_subject.departmentInfoId.name}"/>
                                 </p:column>
                                 <p:column headerText="Year" style="width: 100px; text-align: center;">
                                     <h:outputText value="#{_subject.year}"/>
@@ -79,7 +79,7 @@
                                     <h:outputText value="#{_subject.season}"/>
                                 </p:column>
                                 <p:column headerText="Instructor Name" style="width: 100px;" >
-                                    <h:outputText value="#{_subject.userinfo.firstName} #{_subject.userinfo.middleName} #{_subject.userinfo.lastName}"/>
+                                    <h:outputText value="#{_subject.instructorCitizenshipNumber.firstName} #{_subject.instructorCitizenshipNumber.middleName} #{_subject.instructorCitizenshipNumber.lastName}"/>
                                 </p:column>
                                 <p:column headerText="Subject Name" style="width: 200px;">
                                     <h:outputText value="#{_subject.name}"/>
@@ -147,7 +147,7 @@
                                 </p:selectOneMenu>
 
                                 <h:outputLabel for="departmentInfoIdUpdate" value="Department:" style="font-weight: bold;"/>
-                                <p:selectOneMenu id="departmentInfoIdUpdate" value="#{subjectBean.selectedSubject.departmentinfo.departmentInfoId}" required="false" style="width:230px">
+                                <p:selectOneMenu id="departmentInfoIdUpdate" value="#{subjectBean.selectedSubject.departmentInfoId.departmentInfoId}" required="false" style="width:230px">
                                     <f:selectItem itemValue="#{null}" itemLabel="-- Select a Department --" noSelectionOption="true"/>
                                     <f:selectItems value="#{userBean.departmentList}" var="department" itemLabel="#{department.name}" itemValue="#{department.departmentInfoId}"/>
                                 </p:selectOneMenu>
@@ -163,7 +163,7 @@
 
 
                                 <h:outputLabel for="citizenshipNumberUpdate" value="Instructor Citizenship Number:*" style="font-weight: bold;"/>
-                                <p:inputText maxlength="11" id="citizenshipNumberUpdate" required="false" value="#{subjectBean.selectedSubject.userinfo.citizenshipNumber}" style="width:245px"/>
+                                <p:inputText maxlength="11" id="citizenshipNumberUpdate" required="false" value="#{subjectBean.selectedSubject.instructorCitizenshipNumber.citizenshipNumber}" style="width:245px"/>
 
                                 <h:outputLabel for="nameUpdate" value="Subject Name:*" style="font-weight: bold;"/>
                                 <p:inputText maxlength="135" id="nameUpdate" required="false" value="#{subjectBean.selectedSubject.name}" style="width:245px"/>

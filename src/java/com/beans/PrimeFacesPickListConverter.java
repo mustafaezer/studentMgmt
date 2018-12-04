@@ -5,7 +5,7 @@
  */
 package com.beans;
 
-import com.pojos.Subjectinfo;
+import com.entity.Subjectinfo;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;

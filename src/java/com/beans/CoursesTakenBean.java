@@ -5,7 +5,7 @@
  */
 package com.beans;
 
-import com.pojos.Grading;
+import com.entity.Grading;
 import com.util.HibernateUtil;
 import java.util.ArrayList;
 import java.util.List;

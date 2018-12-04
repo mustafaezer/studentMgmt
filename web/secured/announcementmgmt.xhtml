@@ -110,9 +110,6 @@
                                         <li>
                                             Select rows to edit informations of specific announcement, by clicking lines.
                                         </li>
-                                        <!--                                        <li>
-                                                                                    Unselect rows to close edit panel, by clicking on specific line with 'CTRL + Left Mouse Button' key combination. Or save announcement with the new values by clicking 'Save Announcement' button.
-                                                                                </li>-->
                                     </ul>
                                 </div>
                             </f:facet>
@@ -136,7 +133,7 @@
                                     <h:outputText value="#{announcement.header}" />
                                 </p:column>
                                 <p:column headerText="Department Name">
-                                    <h:outputText value="#{announcement.departmentinfo.name}" />
+                                    <h:outputText value="#{announcement.departmentInfoId.name}" />
                                 </p:column>
                                 <p:rowExpansion>
                                     <p:panelGrid> 
@@ -150,13 +147,13 @@
                                                 <strong>
                                                     <h:outputText value="Department: "/>
                                                 </strong>
-                                                <h:outputText value="#{announcement.departmentinfo.name}" />
+                                                <h:outputText value="#{announcement.departmentInfoId.name}" />
                                             </p:column>
                                             <p:column colspan="3">    
                                                 <strong>
                                                     <h:outputText value="Author: " />
                                                 </strong>
-                                                <h:outputText value="#{announcement.userinfo.firstName} #{announcement.userinfo.middleName} #{announcement.userinfo.lastName}" />
+                                                <h:outputText value="#{announcement.authorCitizenshipNumber.firstName} #{announcement.authorCitizenshipNumber.middleName} #{announcement.authorCitizenshipNumber.lastName}" />
                                             </p:column>
                                             <p:column colspan="2">
                                                 <strong>
@@ -219,7 +216,7 @@
                             <h:panelGrid columns="2" cellpadding="6" style="width: 50%; font-weight: bold;">
 
                                 <h:outputLabel for="departmentInfoIdEdit" value="Department:"/>
-                                <p:selectOneMenu id="departmentInfoIdEdit" value="#{announcementBean.selectedAnnouncement.departmentinfo.departmentInfoId}" required="false" style="width: 250px;">
+                                <p:selectOneMenu id="departmentInfoIdEdit" value="#{announcementBean.selectedAnnouncement.departmentInfoId.departmentInfoId}" required="false" style="width: 250px;">
                                     <f:selectItems value="#{announcementBean.departmentList}" var="department" itemLabel="#{department.name}" itemValue="#{department.departmentInfoId}"/>
                                 </p:selectOneMenu>
 

@@ -69,7 +69,7 @@
                                     <h:outputText value="#{_user.isActive}"/>
                                 </p:column>
                                 <p:column headerText="Department">
-                                    <h:outputText value="#{_user.departmentinfo.name}"/>
+                                    <h:outputText value="#{_user.departmentInfoId.name}"/>
                                 </p:column>
                                 <p:column headerText="User Type" style="width: 70px;">
                                     <h:outputText value="#{_user.userType}"/>
@@ -177,7 +177,7 @@
                                 <h:outputLabel id="citizenshipNumberUpdate" value="#{userBean.selectedUser.citizenshipNumber}"/> 
 
                                 <h:outputLabel for="departmentInfoIdUpdate" value="Department:" style="font-weight: bold;"/> 
-                                <h:outputLabel id="departmentInfoIdUpdate" value="#{userBean.selectedUser.departmentinfo.name}"/>
+                                <h:outputLabel id="departmentInfoIdUpdate" value="#{userBean.selectedUser.departmentInfoId.name}"/>
 
                                 <h:outputLabel for="userTypeUpdate" value="User Type:" style="font-weight: bold;"/> 
                                 <h:outputLabel id="userTypeUpdate" value="#{userBean.selectedUser.userType}"/> 

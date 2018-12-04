@@ -5,9 +5,9 @@
  */
 package com.beans;
 
-import com.pojos.Departmentinfo;
-import com.pojos.Subjectinfo;
-import com.pojos.Userinfo;
+import com.entity.Departmentinfo;
+import com.entity.Subjectinfo;
+import com.entity.Userinfo;
 import com.util.HibernateUtil;
 import java.util.ArrayList;
 import javax.faces.bean.ManagedBean;
@@ -147,7 +147,7 @@ public class DepartmentBean {
                 ses.beginTransaction();
                 String type = "Instructor";
                 Criteria cr = ses.createCriteria(Userinfo.class);
-                cr.add(Restrictions.eq("departmentinfo.departmentInfoId", selectedDepartment.getDepartmentInfoId()));
+                cr.add(Restrictions.eq("departmentInfoId.departmentInfoId", selectedDepartment.getDepartmentInfoId()));
                 cr.add(Restrictions.eq("userType", type));
                 cr.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
                 instructorList = cr.list();
@@ -214,7 +214,7 @@ public class DepartmentBean {
                 ses.beginTransaction();
                 String type = "Student";
                 Criteria cr = ses.createCriteria(Userinfo.class);
-                cr.add(Restrictions.eq("departmentinfo.departmentInfoId", selectedDepartment.getDepartmentInfoId()));
+                cr.add(Restrictions.eq("departmentInfoId.departmentInfoId", selectedDepartment.getDepartmentInfoId()));
                 cr.add(Restrictions.eq("userType", type));
                 cr.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
                 studentList = cr.list();
@@ -280,7 +280,7 @@ public class DepartmentBean {
             try {
                 ses.beginTransaction();
                 Criteria cr = ses.createCriteria(Subjectinfo.class);
-                cr.add(Restrictions.eq("departmentinfo.departmentInfoId", selectedDepartment.getDepartmentInfoId()));
+                cr.add(Restrictions.eq("departmentInfoId.departmentInfoId", selectedDepartment.getDepartmentInfoId()));
                 cr.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
                 subjectList = cr.list();
                 ses.getTransaction().commit();

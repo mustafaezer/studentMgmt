@@ -5,9 +5,9 @@
  */
 package com.beans;
 
-import com.pojos.Announcementinfo;
-import com.pojos.Departmentinfo;
-import com.pojos.Userinfo;
+import com.entity.Announcementinfo;
+import com.entity.Departmentinfo;
+import com.entity.Userinfo;
 import com.util.HibernateUtil;
 import java.util.ArrayList;
 import java.util.Date;
@@ -95,14 +95,14 @@ public class AnnouncementBean {
             if (departmentinfo != null && type != null && importance != null && header != "" && context != "" && startDate != null && endDate != null) {
                 Announcementinfo newAnnouncement = new Announcementinfo();
 
-                newAnnouncement.setDepartmentinfo(departmentinfo);
+                newAnnouncement.setDepartmentInfoId(departmentinfo);
 
                 String citizenshipNumber = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("citizenshipNumber");
                 Criteria getUserinfoCr = ses.createCriteria(Userinfo.class);
                 getUserinfoCr.add(Restrictions.eq("citizenshipNumber", citizenshipNumber));
                 List<Userinfo> temp = getUserinfoCr.list();
                 Userinfo userinfoTemp = temp.get(0);
-                newAnnouncement.setUserinfo(userinfoTemp);
+                newAnnouncement.setAuthorCitizenshipNumber(userinfoTemp);
 
                 newAnnouncement.setType(type);
                 newAnnouncement.setImportance(importance);
@@ -199,14 +199,14 @@ public class AnnouncementBean {
             if (selectedAnnouncement.getHeader() != "" && selectedAnnouncement.getContext() != "" && selectedAnnouncement.getStartDate() != null && selectedAnnouncement.getEndDate() != null) {
 
                 selectedAnnouncement.setAnnouncementId(selectedAnnouncement.getAnnouncementId());
-                selectedAnnouncement.setDepartmentinfo(selectedAnnouncement.getDepartmentinfo());
+                selectedAnnouncement.setDepartmentInfoId(selectedAnnouncement.getDepartmentInfoId());
 
                 String citizenshipNumber = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("citizenshipNumber");
                 Criteria getUserinfoCr = ses.createCriteria(Userinfo.class);
                 getUserinfoCr.add(Restrictions.eq("citizenshipNumber", citizenshipNumber));
                 List<Userinfo> temp = getUserinfoCr.list();
                 Userinfo userinfoTemp = temp.get(0);
-                selectedAnnouncement.setUserinfo(userinfoTemp);
+                selectedAnnouncement.setAuthorCitizenshipNumber(userinfoTemp);
 
                 selectedAnnouncement.setType(selectedAnnouncement.getType());
                 selectedAnnouncement.setImportance(selectedAnnouncement.getImportance());

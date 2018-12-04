@@ -58,7 +58,7 @@
                                              style="font-size: 12px; text-align: center;" 
                                              selectionMode="single"
                                              selection="#{gradesInstructorBean.selectedCourse}"
-                                             rowKey="#{_gradesList.id}"
+                                             rowKey="#{_gradesList.gradingPK}"
                                              rowIndexVar="rowIndex">
                                     <p:ajax event="rowSelect" listener="#{gradesInstructorBean.onRowSelect}" update=":form:selectStudentToUpdate, :form:courseSelectionToUpdate, :form:editMidtermToUpdate, :form:editFinaleToUpdate"/>
                                     <p:ajax event="rowUnselect" listener="#{gradesInstructorBean.onRowUnselect}" update=":form:selectStudentToUpdate, :form:courseSelectionToUpdate, :form:editMidtermToUpdate, :form:editFinaleToUpdate" />
@@ -69,7 +69,7 @@
                                         <h:outputText value="#{rowIndex+1}"/>
                                     </p:column>
                                     <p:column headerText="Student Citizenship Number" groupRow="true">
-                                        <h:outputText value="#{_gradesList.id.studentCitizenshipNumber}"/>
+                                        <h:outputText value="#{_gradesList.gradingPK.studentCitizenshipNumber}"/>
                                     </p:column>
                                     <p:column headerText="Student Name" groupRow="true">
                                         <h:outputText value="#{_gradesList.userinfo.firstName} #{_gradesList.userinfo.middleName} #{_gradesList.userinfo.lastName}"/>
@@ -104,7 +104,7 @@
                                 <h:outputLabel id="nameMidterm" value="#{gradesInstructorBean.selectedCourse.subjectinfo.name}"/> 
 
                                 <h:outputLabel for="studentCitizenshipNumberMidterm" value="Student Citizenship Number:" style="font-weight: bold;"/> 
-                                <h:outputLabel id="studentCitizenshipNumberMidterm" value="#{gradesInstructorBean.selectedCourse.getId().getStudentCitizenshipNumber()}"/> 
+                                <h:outputLabel id="studentCitizenshipNumberMidterm" value="#{gradesInstructorBean.selectedCourse.gradingPK.studentCitizenshipNumber}"/> 
 
                                 <h:outputLabel for="studentNameMidterm" value="Student Name:" style="font-weight: bold;"/> 
                                 <h:outputLabel id="studentNameMidterm" value="#{gradesInstructorBean.selectedCourse.userinfo.firstName} #{gradesInstructorBean.selectedCourse.userinfo.middleName} #{gradesInstructorBean.selectedCourse.userinfo.lastName}"/> 
@@ -141,7 +141,7 @@
                                 <h:outputLabel id="nameFinale" value="#{gradesInstructorBean.selectedCourse.subjectinfo.name}"/> 
 
                                 <h:outputLabel for="studentCitizenshipNumberFinale" value="Student Citizenship Number:" style="font-weight: bold;"/> 
-                                <h:outputLabel id="studentCitizenshipNumberFinale" value="#{gradesInstructorBean.selectedCourse.getId().getStudentCitizenshipNumber()}"/> 
+                                <h:outputLabel id="studentCitizenshipNumberFinale" value="#{gradesInstructorBean.selectedCourse.gradingPK.studentCitizenshipNumber}"/> 
 
                                 <h:outputLabel for="studentNameFinale" value="Student Name:" style="font-weight: bold;"/> 
                                 <h:outputLabel id="studentNameFinale" value="#{gradesInstructorBean.selectedCourse.userinfo.firstName} #{gradesInstructorBean.selectedCourse.userinfo.middleName} #{gradesInstructorBean.selectedCourse.userinfo.lastName}"/> 

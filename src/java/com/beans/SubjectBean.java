@@ -5,9 +5,9 @@
  */
 package com.beans;
 
-import com.pojos.Departmentinfo;
-import com.pojos.Subjectinfo;
-import com.pojos.Userinfo;
+import com.entity.Departmentinfo;
+import com.entity.Subjectinfo;
+import com.entity.Userinfo;
 import com.util.HibernateUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -82,10 +82,10 @@ public class SubjectBean implements Serializable {
             Criteria cr = ses.createCriteria(Subjectinfo.class);
             cr.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
             cr.addOrder(Order.asc("isActive"));
-            cr.addOrder(Order.asc("departmentinfo.departmentInfoId"));
+            cr.addOrder(Order.asc("departmentInfoId.departmentInfoId"));
             cr.addOrder(Order.asc("year"));
             cr.addOrder(Order.asc("season"));
-            cr.addOrder(Order.asc("userinfo.citizenshipNumber"));
+            cr.addOrder(Order.asc("instructorCitizenshipNumber.citizenshipNumber"));
             cr.addOrder(Order.asc("name"));
             subjectList = cr.list();
             ses.getTransaction().commit();
@@ -110,8 +110,8 @@ public class SubjectBean implements Serializable {
             ses.beginTransaction();
             Subjectinfo newSubject = new Subjectinfo();
             newSubject.setSubjectInfoId(null);
-            newSubject.setDepartmentinfo(departmentinfo);
-            newSubject.setUserinfo(userinfo);
+            newSubject.setDepartmentInfoId(departmentinfo);
+            newSubject.setInstructorCitizenshipNumber(userinfo);
             newSubject.setName(name);
             newSubject.setQuota(quota);
             newSubject.setYear(year);
@@ -152,15 +152,15 @@ public class SubjectBean implements Serializable {
 
     public void updateSubject() {
         if (selectedSubject != null) {
-            if (selectedSubject.getIsActive() != "" && selectedSubject.getDepartmentinfo() != null && selectedSubject.getYear() != "" && selectedSubject.getSeason() != "" && selectedSubject.getUserinfo() != null && selectedSubject.getName() != "" && selectedSubject.getQuota() > 0) {
+            if (selectedSubject.getIsActive() != "" && selectedSubject.getDepartmentInfoId()!= null && selectedSubject.getYear() != "" && selectedSubject.getSeason() != "" && selectedSubject.getInstructorCitizenshipNumber()!= null && selectedSubject.getName() != "" && selectedSubject.getQuota() > 0) {
                 try {
                     ses.beginTransaction();
 
                     selectedSubject.setIsActive(selectedSubject.getIsActive());
-                    selectedSubject.setDepartmentinfo(selectedSubject.getDepartmentinfo());
+                    selectedSubject.setDepartmentInfoId(selectedSubject.getDepartmentInfoId());
                     selectedSubject.setYear(selectedSubject.getYear());
                     selectedSubject.setSeason(selectedSubject.getSeason());
-                    selectedSubject.setUserinfo(selectedSubject.getUserinfo());
+                    selectedSubject.setInstructorCitizenshipNumber(selectedSubject.getInstructorCitizenshipNumber());
                     selectedSubject.setName(selectedSubject.getName());
                     selectedSubject.setQuota(selectedSubject.getQuota());
                     ses.update(selectedSubject);

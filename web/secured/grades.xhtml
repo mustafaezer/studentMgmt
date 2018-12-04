@@ -48,11 +48,11 @@
                         <p:column headerText="#" style="width: 10px;" >
                             <h:outputText value="#{rowIndex+1}"/>
                         </p:column>
-                        <p:column headerText="Department" style="width: 150px;" sortBy="#{grading.subjectinfo.departmentinfo.departmentInfoId}">
-                            <h:outputText value="#{grading.subjectinfo.departmentinfo.name}"/>
+                        <p:column headerText="Department" style="width: 150px;" sortBy="#{grading.subjectinfo.departmentInfoId.departmentInfoId}">
+                            <h:outputText value="#{grading.subjectinfo.departmentInfoId.name}"/>
                         </p:column>
                         <p:column headerText="Instructor" >
-                            <h:outputText value="#{grading.subjectinfo.userinfo.firstName} #{grading.subjectinfo.userinfo.middleName} #{grading.subjectinfo.userinfo.lastName}"/>
+                            <h:outputText value="#{grading.subjectinfo.instructorCitizenshipNumber.firstName} #{grading.subjectinfo.instructorCitizenshipNumber.middleName} #{grading.subjectinfo.instructorCitizenshipNumber.lastName}"/>
                         </p:column>
                         <p:column headerText="Subject" style="width: 250px;">
                             <h:outputText value="#{grading.subjectinfo.name}"/>

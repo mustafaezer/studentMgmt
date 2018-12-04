@@ -5,11 +5,11 @@
  */
 package com.beans;
 
-import com.pojos.Departmentinfo;
-import com.pojos.Grading;
-import com.pojos.GradingId;
-import com.pojos.Subjectinfo;
-import com.pojos.Userinfo;
+import com.entity.Departmentinfo;
+import com.entity.Grading;
+import com.entity.GradingPK;
+import com.entity.Subjectinfo;
+import com.entity.Userinfo;
 import com.util.HibernateUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -107,7 +107,7 @@ public class CourseRegistrationBean implements Serializable {
             Criteria getDepartment = ses.createCriteria(Userinfo.class);
             getDepartment.add(Restrictions.eq("citizenshipNumber", studentCitizenshipNumber));
             List<Userinfo> tempListToHoldUserObject = getDepartment.list();
-            int departmentInfoId = tempListToHoldUserObject.get(0).getDepartmentinfo().getDepartmentInfoId();
+            int departmentInfoId = tempListToHoldUserObject.get(0).getDepartmentInfoId().getDepartmentInfoId();
 
             // Courses taken by student who is in active session.
             Criteria subQueryCriteriaForNotIn = ses.createCriteria(Grading.class);
@@ -118,7 +118,7 @@ public class CourseRegistrationBean implements Serializable {
             // IDs of taken courses by student who is in active session.
             notInListIDs = new ArrayList<Integer>();
             for (int i = 0; i < notInList.size(); i++) {
-                Integer ID = notInList.get(i).getId().getSubjectInfoId();
+                Integer ID = notInList.get(i).getGradingPK().getSubjectInfoId();
                 notInListIDs.add(ID);
             }
 
@@ -129,7 +129,7 @@ public class CourseRegistrationBean implements Serializable {
                             Restrictions.in("subjectInfoId", notInListIDs)
                     )
             );
-            mainCriteriaForDualSource.add(Restrictions.eq("departmentinfo.departmentInfoId", departmentInfoId));
+            mainCriteriaForDualSource.add(Restrictions.eq("departmentInfoId.departmentInfoId", departmentInfoId));
 
             subjectListDualSource = mainCriteriaForDualSource.list();
             ses.getTransaction().commit();
@@ -149,14 +149,14 @@ public class CourseRegistrationBean implements Serializable {
 
             // Courses taken by student who is in active session.
             Criteria subQueryCriteriaForNotIn = ses.createCriteria(Grading.class);
-            subQueryCriteriaForNotIn.add(Restrictions.eq("id.studentCitizenshipNumber", studentCitizenshipNumber));
+            subQueryCriteriaForNotIn.add(Restrictions.eq("gradingPK.studentCitizenshipNumber", studentCitizenshipNumber));
             subQueryCriteriaForNotIn.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
             registeredSubjects = subQueryCriteriaForNotIn.list();
 
             // IDs of taken courses by student who is in active session.
             registeredSubjectIDs = new ArrayList<Integer>();
             for (int i = 0; i < notInList.size(); i++) {
-                Integer ID = notInList.get(i).getId().getSubjectInfoId();
+                Integer ID = notInList.get(i).getGradingPK().getSubjectInfoId();
                 registeredSubjectIDs.add(ID);
             }
 
@@ -189,10 +189,10 @@ public class CourseRegistrationBean implements Serializable {
 
                     try {
                         Grading registerToCourse = new Grading();
-                        GradingId registerToCourseId = new GradingId();
+                        GradingPK registerToCourseId = new GradingPK();
                         registerToCourseId.setSubjectInfoId(ID);
                         registerToCourseId.setStudentCitizenshipNumber(studentCitizenshipNumber);
-                        registerToCourse.setId(registerToCourseId);
+                        registerToCourse.setGradingPK(registerToCourseId);
                         ses.save(registerToCourse);
 
                         try {
@@ -246,7 +246,7 @@ public class CourseRegistrationBean implements Serializable {
                 ses.beginTransaction();
                 String studentCitizenshipNumber = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("citizenshipNumber");
 
-                GradingId gradingIdToDelete = new GradingId();
+                GradingPK gradingIdToDelete = new GradingPK();
                 gradingIdToDelete.setSubjectInfoId(selectedSubject.getSubjectInfoId());
                 gradingIdToDelete.setStudentCitizenshipNumber(studentCitizenshipNumber);
 
@@ -301,7 +301,7 @@ public class CourseRegistrationBean implements Serializable {
         List<Subjectinfo> source = fetchSubjectListDualSource();
         List<Subjectinfo> target = new ArrayList<>();
         subjectListDual = new DualListModel<>(source, target);
-        
+
         registeredSubjects = listRegisteredSubjects();
     }
 

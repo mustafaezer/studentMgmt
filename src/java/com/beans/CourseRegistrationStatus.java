@@ -5,7 +5,7 @@
  */
 package com.beans;
 
-import com.pojos.Runtimeproperties;
+import com.entity.Runtimeproperties;
 import com.util.HibernateUtil;
 import java.util.ArrayList;
 import java.util.List;

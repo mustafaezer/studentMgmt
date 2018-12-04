@@ -6,6 +6,12 @@
     <class>com.entities.Userinfo</class>
     <class>com.entities.Subjectinfo</class>
     <class>com.entities.Departmentinfo</class>
+    <class>com.entity.Departmentinfo</class>
+    <class>com.entity.Runtimeproperties</class>
+    <class>com.entity.Userinfo</class>
+    <class>com.entity.Grading</class>
+    <class>com.entity.Subjectinfo</class>
+    <class>com.entity.Announcementinfo</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/mgmt?zeroDateTimeBehavior=convertToNull"/>

@@ -5,10 +5,10 @@
  */
 package com.beans;
 
-import com.pojos.Departmentinfo;
-import com.pojos.Grading;
-import com.pojos.Subjectinfo;
-import com.pojos.Userinfo;
+import com.entity.Departmentinfo;
+import com.entity.Grading;
+import com.entity.Subjectinfo;
+import com.entity.Userinfo;
 import com.util.HibernateUtil;
 import java.util.ArrayList;
 import java.util.Date;

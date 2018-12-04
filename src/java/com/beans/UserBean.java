@@ -5,8 +5,8 @@
  */
 package com.beans;
 
-import com.pojos.Departmentinfo;
-import com.pojos.Userinfo;
+import com.entity.Departmentinfo;
+import com.entity.Userinfo;
 import com.util.HibernateUtil;
 import java.io.Serializable;
 import java.security.MessageDigest;
@@ -93,7 +93,7 @@ public class UserBean implements Serializable {
             Criteria cr = ses.createCriteria(Userinfo.class);
             cr.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
             cr.addOrder(Order.asc("isActive"));
-            cr.addOrder(Order.asc("departmentinfo.departmentInfoId"));
+            cr.addOrder(Order.asc("departmentInfoId.departmentInfoId"));
             cr.addOrder(Order.asc("userType"));
             cr.addOrder(Order.asc("firstName"));
             cr.addOrder(Order.asc("middleName"));
@@ -126,7 +126,7 @@ public class UserBean implements Serializable {
                 Userinfo newUser = new Userinfo();
                 newUser.setCitizenshipNumber(citizenshipNumber);
                 newUser.setUserType(userType);
-                newUser.setDepartmentinfo(departmentinfo);
+                newUser.setDepartmentInfoId(departmentinfo);
                 newUser.setFirstName(firstName);
                 newUser.setMiddleName(middleName);
                 newUser.setLastName(lastName);

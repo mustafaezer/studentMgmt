@@ -5,10 +5,10 @@
  */
 package com.beans;
 
-import com.pojos.Grading;
-import com.pojos.GradingId;
-import com.pojos.Subjectinfo;
-import com.pojos.Userinfo;
+import com.entity.Grading;
+import com.entity.GradingPK;
+import com.entity.Subjectinfo;
+import com.entity.Userinfo;
 import com.util.HibernateUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ public class GradesInstructorBean {
     private String grade;
     private String gradeInline;
 
-    private GradingId id;
+    private GradingPK id;
     private Subjectinfo subjectinfo;
     private Userinfo userinfo;
     private Double midtermNote;
@@ -92,7 +92,7 @@ public class GradesInstructorBean {
             String instructorCitizenshipNumber = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("citizenshipNumber");
 
             Criteria getCoursesGiven = ses.createCriteria(Subjectinfo.class);
-            getCoursesGiven.add(Restrictions.eq("userinfo.citizenshipNumber", instructorCitizenshipNumber));
+            getCoursesGiven.add(Restrictions.eq("instructorCitizenshipNumber.citizenshipNumber", instructorCitizenshipNumber));
             coursesGiven = getCoursesGiven.list();
 
             ses.getTransaction().commit();
@@ -109,7 +109,7 @@ public class GradesInstructorBean {
                 ses.beginTransaction();
 
                 Criteria getGradingList = ses.createCriteria(Grading.class);
-                getGradingList.add(Restrictions.eq("id.subjectInfoId", subjectInfoId));
+                getGradingList.add(Restrictions.eq("gradingPK.subjectInfoId", subjectInfoId));
                 gradingList = getGradingList.list();
 
                 ses.getTransaction().commit();

@@ -5,7 +5,7 @@
  */
 package com.beans;
 
-import com.pojos.Userinfo;
+import com.entity.Userinfo;
 import java.io.Serializable;
 import com.util.HibernateUtil;
 import java.util.List;
