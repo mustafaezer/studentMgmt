@@ -96,31 +96,31 @@
                         <p:panel id="createNewSubject" header="Create New Subject" rendered="#{subjectBean.isRenderedP2}" toggleable="false" closable="false" toggleSpeed="500" closeSpeed="500" collapsed="#{subjectBean.isCollapsedP2}" style="margin-bottom:10px; font-size: 12px;">
                             <h:panelGrid columns="2" cellpadding="5">
 
-                                <h:outputLabel for="departmentInfoId" value="Department:*"/>
+                                <h:outputLabel for="departmentInfoId" value="Department:*" style="font-weight: bold;"/>
                                 <p:selectOneMenu id="departmentInfoId" value="#{subjectBean.departmentinfo.departmentInfoId}" required="false" style="width:230px">
                                     <f:selectItem itemValue="#{null}" itemLabel="-- Select a Department --" noSelectionOption="true"/>
                                     <f:selectItems value="#{userBean.departmentList}" var="department" itemLabel="#{department.name}" itemValue="#{department.departmentInfoId}"/>
                                 </p:selectOneMenu>
 
-                                <h:outputLabel for="name" value="Subject Name:*"/>
-                                <p:inputText maxlength="135" id="name" required="false" value="#{subjectBean.name}"/>
+                                <h:outputLabel for="name" value="Subject Name:*" style="font-weight: bold;"/>
+                                <p:inputText maxlength="135" id="name" required="false" value="#{subjectBean.name}" style="width:245px"/>
 
-                                <h:outputLabel for="citizenshipNumber" value="Instructor Citizenship Number:*"/>
-                                <p:inputText maxlength="11" id="citizenshipNumber" required="false" value="#{subjectBean.userinfo.citizenshipNumber}"/>
+                                <h:outputLabel for="citizenshipNumber" value="Instructor Citizenship Number:*" style="font-weight: bold;"/>
+                                <p:inputText maxlength="11" id="citizenshipNumber" required="false" value="#{subjectBean.userinfo.citizenshipNumber}" style="width:245px"/>
 
-                                <h:outputLabel for="quota" value="Quota:*"/>
-                                <p:inputText maxlength="11" id="quota" required="false" value="#{subjectBean.quota}"/>
+                                <h:outputLabel for="quota" value="Quota:*" style="font-weight: bold;"/>
+                                <p:inputText maxlength="11" id="quota" required="false" value="#{subjectBean.quota}" style="width:245px"/>
 
-                                <h:outputLabel for="year" value="Year:*"/>
-                                <p:inputText maxlength="4" id="year" required="false" value="#{subjectBean.year}"/>
+                                <h:outputLabel for="year" value="Year:*" style="font-weight: bold;"/>
+                                <p:inputText maxlength="4" id="year" required="false" value="#{subjectBean.year}" style="width:245px"/>
 
-                                <h:outputLabel for="season" value="Season:*"/>
+                                <h:outputLabel for="season" value="Season:*" style="font-weight: bold;"/>
                                 <p:selectOneMenu id="season" value="#{subjectBean.season}" style="width:230px" required="false">
                                     <f:selectItem itemLabel="Fall" itemValue="Fall" />
                                     <f:selectItem itemLabel="Spring" itemValue="Spring" />
                                 </p:selectOneMenu>
 
-                                <h:outputLabel for="isActive" value="Status:*"/>
+                                <h:outputLabel for="isActive" value="Status:*" style="font-weight: bold;"/>
                                 <p:selectOneMenu id="isActive" value="#{subjectBean.isActive}" style="width:230px" required="false">
                                     <f:selectItem itemLabel="Active" itemValue="Active" />
                                     <f:selectItem itemLabel="Inactive" itemValue="Inactive" />
@@ -140,35 +140,35 @@
                         <p:panel id="editSubject" header="Edit Subject" rendered="#{subjectBean.isRenderedP3}" toggleable="false" closable="false" toggleSpeed="500" closeSpeed="500" collapsed="#{subjectBean.isCollapsedP3}" style="margin-bottom:10px; font-size: 12px;">
                             <h:panelGrid  columns="2" rendered="#{not empty subjectBean.selectedSubject}" cellpadding="5" style="width= 500px;">
 
-                                <h:outputLabel for="isActiveUpdate" value="Status:*"/>
+                                <h:outputLabel for="isActiveUpdate" value="Status:*" style="font-weight: bold;"/>
                                 <p:selectOneMenu id="isActiveUpdate" value="#{subjectBean.isActive}" style="width:230px" required="false">
                                     <f:selectItem itemLabel="Active" itemValue="Active" />
                                     <f:selectItem itemLabel="Inactive" itemValue="Inactive" />
                                 </p:selectOneMenu>
 
-                                <h:outputLabel for="departmentInfoIdUpdate" value="Department:"/>
+                                <h:outputLabel for="departmentInfoIdUpdate" value="Department:" style="font-weight: bold;"/>
                                 <p:selectOneMenu id="departmentInfoIdUpdate" value="#{subjectBean.selectedSubject.departmentinfo.departmentInfoId}" required="false" style="width:230px">
                                     <f:selectItem itemValue="#{null}" itemLabel="-- Select a Department --" noSelectionOption="true"/>
                                     <f:selectItems value="#{userBean.departmentList}" var="department" itemLabel="#{department.name}" itemValue="#{department.departmentInfoId}"/>
                                 </p:selectOneMenu>
 
-                                <h:outputLabel for="yearUpdate" value="Year:*"/>
+                                <h:outputLabel for="yearUpdate" value="Year:*" style="font-weight: bold;"/>
                                 <p:inputText maxlength="4" id="yearUpdate" required="false" value="#{subjectBean.selectedSubject.year}" style="width:245px"/>
 
-                                <h:outputLabel for="seasonUpdate" value="Season:*"/>
+                                <h:outputLabel for="seasonUpdate" value="Season:*" style="font-weight: bold;"/>
                                 <p:selectOneMenu id="seasonUpdate" value="#{subjectBean.selectedSubject.season}" style="width:230px" required="false">
                                     <f:selectItem itemLabel="Fall" itemValue="Fall" />
                                     <f:selectItem itemLabel="Spring" itemValue="Spring" />
                                 </p:selectOneMenu>
 
 
-                                <h:outputLabel for="citizenshipNumberUpdate" value="Instructor Citizenship Number:*"/>
+                                <h:outputLabel for="citizenshipNumberUpdate" value="Instructor Citizenship Number:*" style="font-weight: bold;"/>
                                 <p:inputText maxlength="11" id="citizenshipNumberUpdate" required="false" value="#{subjectBean.selectedSubject.userinfo.citizenshipNumber}" style="width:245px"/>
 
-                                <h:outputLabel for="nameUpdate" value="Subject Name:*"/>
+                                <h:outputLabel for="nameUpdate" value="Subject Name:*" style="font-weight: bold;"/>
                                 <p:inputText maxlength="135" id="nameUpdate" required="false" value="#{subjectBean.selectedSubject.name}" style="width:245px"/>
 
-                                <h:outputLabel for="quotaUpdate" value="Quota:*"/>
+                                <h:outputLabel for="quotaUpdate" value="Quota:*" style="font-weight: bold;"/>
                                 <p:inputText maxlength="11" id="quotaUpdate" required="false" value="#{subjectBean.selectedSubject.quota}" style="width:245px"/>
 
 

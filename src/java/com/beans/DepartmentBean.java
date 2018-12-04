@@ -329,6 +329,7 @@ public class DepartmentBean {
 
     public void onRowUnselect(UnselectEvent event) {
         isRenderedCommandButton = "false";
+        isCollapsedP0 = "false";
         isRenderedP2 = "false";
         isRenderedP3 = "false";
         isRenderedP4 = "false";

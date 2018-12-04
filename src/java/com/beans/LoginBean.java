@@ -83,9 +83,8 @@ public class LoginBean implements Serializable {
 
                 return navigationBean.redirectToWelcome();
             } else {
-                FacesMessage msg = new FacesMessage("Login Error", "Check your citizenship number or password again.");
-                msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-                FacesContext.getCurrentInstance().addMessage(null, msg);
+                FacesContext context = FacesContext.getCurrentInstance();
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login Error", "Please check your citizenship number and password."));
 
                 return navigationBean.toLogin();
             }

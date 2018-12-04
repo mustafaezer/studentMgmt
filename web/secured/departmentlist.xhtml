@@ -64,33 +64,31 @@
                                 <p:commandButton process="@form" action="#{departmentBean.listDepartmentStudents}" update=":form:createNewDepartmentToUpdate, :form:departmentDTToUpdate, :form:departmentInstructorsToUpdate, :form:departmentStudentsToUpdate, :form:departmentSubjectsToUpdate" value="Show Student Members" icon="fa fa-graduation-cap" rendered="#{departmentBean.isRenderedCommandButton}"/>
                                 <p:commandButton process="@form" action="#{departmentBean.listDepartmentSubjects}" update=":form:createNewDepartmentToUpdate, :form:departmentDTToUpdate, :form:departmentInstructorsToUpdate, :form:departmentStudentsToUpdate, :form:departmentSubjectsToUpdate" value="Show Subjects Given By Department" icon="fa fa-file-text-o" rendered="#{departmentBean.isRenderedCommandButton}"/>
                             </h:panelGrid>
-                            <h:panelGrid columns="1" cellspacing="5">
 
-                                <p:dataTable id="singleDT" 
-                                             var="_departmentList" 
-                                             value="#{departmentBean.departmentList}" 
-                                             selectionMode="single" 
-                                             selection="#{departmentBean.selectedDepartment}" 
-                                             rowKey="#{_departmentList.departmentInfoId}"
-                                             rowIndexVar="rowIndex"
-                                             style="font-size:12px;"
-                                             rows="10" 
-                                             paginator="true" 
-                                             paginatorPosition="bottom">
-                                    <p:ajax event="rowSelect" listener="#{departmentBean.onRowSelect}" update=":form:createNewDepartmentToUpdate, :form:departmentDTToUpdate, :form:departmentInstructorsToUpdate, :form:departmentStudentsToUpdate, :form:departmentSubjectsToUpdate"/>
-                                    <p:ajax event="rowUnselect" listener="#{departmentBean.onRowUnselect}" update=":form:createNewDepartmentToUpdate, :form:departmentDTToUpdate, :form:departmentInstructorsToUpdate, :form:departmentStudentsToUpdate, :form:departmentSubjectsToUpdate" />
-                                    <f:facet name="header">
-                                        All Departments
-                                    </f:facet>
-                                    <p:column headerText="#" style="width: 10px;">
-                                        <h:outputText value="#{rowIndex+1}" />
-                                    </p:column>
-                                    <p:column headerText="Department Name">
-                                        <h:outputText value="#{_departmentList.name}" />
-                                    </p:column>
+                            <p:dataTable id="singleDT" 
+                                         var="_departmentList" 
+                                         value="#{departmentBean.departmentList}" 
+                                         selectionMode="single" 
+                                         selection="#{departmentBean.selectedDepartment}" 
+                                         rowKey="#{_departmentList.departmentInfoId}"
+                                         rowIndexVar="rowIndex"
+                                         style="font-size:12px;"
+                                         rows="10" 
+                                         paginator="true" 
+                                         paginatorPosition="bottom">
+                                <p:ajax event="rowSelect" listener="#{departmentBean.onRowSelect}" update=":form:createNewDepartmentToUpdate, :form:departmentDTToUpdate"/>
+                                <p:ajax event="rowUnselect" listener="#{departmentBean.onRowUnselect}" update=":form:createNewDepartmentToUpdate, :form:departmentDTToUpdate, :form:departmentInstructorsToUpdate, :form:departmentStudentsToUpdate, :form:departmentSubjectsToUpdate"/>
+                                <f:facet name="header">
+                                    All Departments
+                                </f:facet>
+                                <p:column headerText="#" style="width: 10px;">
+                                    <h:outputText value="#{rowIndex+1}" />
+                                </p:column>
+                                <p:column headerText="Department Name">
+                                    <h:outputText value="#{_departmentList.name}" />
+                                </p:column>
 
-                                </p:dataTable>
-                            </h:panelGrid>
+                            </p:dataTable>
 
                         </p:panel>
                     </p:outputPanel>
