@@ -46,15 +46,16 @@
                                         <p:commandButton process="@form" action="#{departmentBean.createNewDepartment}" update=":form:createNewDepartmentToUpdate, :form:departmentDTToUpdate, :form:departmentInstructorsToUpdate, :form:departmentStudentsToUpdate, :form:departmentSubjectsToUpdate" value="Create" style="border-radius: 0px !important;">
                                             <p:confirm header="Confirmation" message="New department will be created by the informations given?" icon="ui-icon-alert" />
                                         </p:commandButton>
-                                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                                        </p:confirmDialog>
                                     </div>
                                 </div>
                             </div>
                         </p:panel>
                     </p:outputPanel>
+                    
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
 
                     <!--Department Selection DT-->
                     <p:outputPanel id="departmentDTToUpdate">

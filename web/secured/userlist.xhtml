@@ -58,7 +58,7 @@
                                          rowIndexVar="rowIndex"> 
                                 <p:ajax event="rowSelect" listener="#{userBean.onRowSelect}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate"/>
                                 <p:ajax event="rowUnselect" listener="#{userBean.onRowUnselect}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate" />
-                                
+
                                 <f:facet name="header">
                                     Informations of Users
                                 </f:facet>
@@ -160,13 +160,14 @@
                                     </p:commandButton>
                                     <p:commandButton process="@form" action="#{userBean.cancel}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate" value="Cancel" icon="fa fa-remove"/>
                                 </h:panelGrid>
-                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                                </p:confirmDialog>
                             </h:panelGrid>
                         </p:panel>
                     </p:outputPanel>
+
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
 
 
                     <p:outputPanel id="editUserInformationToUpdate">
@@ -221,16 +222,13 @@
                                     </p:commandButton>
                                     <p:commandButton process="@form" action="#{userBean.cancel}" update=":form:userListToUpdate, :form:createNewUserToUpdate, :form:editUserInformationToUpdate" value="Cancel" icon="fa fa-remove"/>
                                 </h:panelGrid>
-                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                                </p:confirmDialog>
                             </p:panelGrid>
-
-
                         </p:panel>
-
                     </p:outputPanel>
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
                 </h:form>
             </div>
         </div>

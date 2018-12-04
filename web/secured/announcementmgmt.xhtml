@@ -88,15 +88,15 @@
                                     </p:commandButton>
 
                                     <p:commandButton process="@form" action="#{announcementBean.cancel}" update=":form:createNewAnnouncementToUpdate, :form:announcementListToUpdate, :form:editAnnouncementToUpdate" value="Cancel" style="width: 100%;" icon="fa fa-remove"/>
-
-                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                                    </p:confirmDialog>
                                 </h:panelGrid>
                             </h:panelGrid>
                         </p:panel>
                     </p:outputPanel>
+
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
 
                     <p:growl id="listGrowl" showDetail="true" style="font-size:12px;"/>
                     <p:outputPanel id="announcementListToUpdate">
@@ -259,15 +259,12 @@
                                     <p:commandButton process="@form" action="#{announcementBean.editAnnouncement}" update=":form:createNewAnnouncementToUpdate, :form:announcementListToUpdate, :form:editAnnouncementToUpdate" value="Update Announcement" style="width: 100%;" icon="fa fa-refresh">
                                         <p:confirm header="Confirmation" message="Selected announcement will be updated by the informations given?" icon="ui-icon-alert" />
                                     </p:commandButton>
-
                                     <p:commandButton process="@form" action="#{announcementBean.cancel}" update=":form:createNewAnnouncementToUpdate, :form:announcementListToUpdate, :form:editAnnouncementToUpdate" value="Cancel" style="width: 100%;" icon="fa fa-remove"/>
-
-
                                 </h:panelGrid>
                             </h:panelGrid>
                         </p:panel>
                     </p:outputPanel>
-                    
+
                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                         <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                         <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />

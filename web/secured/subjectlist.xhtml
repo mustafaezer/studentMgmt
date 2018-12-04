@@ -128,12 +128,19 @@
 
                                 <h:outputText value=""/>
                                 <h:panelGrid columns="2">
-                                    <p:commandButton process="@form" action="#{subjectBean.createNewSubject}" update=":form:subjectListToUpdate, :form:createNewSubjectToUpdate, :form:editSubjectToUpdate" value="Save Subject" icon="fa fa-save"/>
+                                    <p:commandButton process="@form" action="#{subjectBean.createNewSubject}" update=":form:subjectListToUpdate, :form:createNewSubjectToUpdate, :form:editSubjectToUpdate" value="Save Subject" icon="fa fa-save">
+                                        <p:confirm header="Confirmation" message="New subject will be created by the informations given?" icon="ui-icon-alert" />
+                                    </p:commandButton>
                                     <p:commandButton process="@form" action="#{subjectBean.cancel}" update=":form:subjectListToUpdate, :form:createNewSubjectToUpdate, :form:editSubjectToUpdate" value="Cancel" icon="fa fa-remove" />
                                 </h:panelGrid>
                             </h:panelGrid>
                         </p:panel>
                     </p:outputPanel>
+
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
 
                     <p:outputPanel id="editSubjectToUpdate">
                         <p:growl id="editSubjectGrowl" showDetail="true"/>
@@ -180,13 +187,13 @@
                                     </p:commandButton>
                                     <p:commandButton process="@form" action="#{subjectBean.cancel}" update=":form:subjectListToUpdate, :form:createNewSubjectToUpdate, :form:editSubjectToUpdate" value="Cancel" icon="fa fa-remove"/>
                                 </h:panelGrid>
-                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                                </p:confirmDialog>
                             </h:panelGrid>
                         </p:panel>
                     </p:outputPanel>
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
                 </h:form>
             </div>
         </div>
