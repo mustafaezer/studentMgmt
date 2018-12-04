@@ -227,7 +227,7 @@ public class GradesInstructorBean {
             tx = ses.beginTransaction();
 
             String gradeTemp;
-            if (midtermNote != 0.0 && finaleNote != 0.0) {
+            if (midtermNote >= 0.0 && finaleNote >= 0.0) {
                 double gradeDouble = (((midtermNote) * 0.4) + ((finaleNote) * 0.6));
                 if (gradeDouble <= 20) {
                     gradeTemp = "FF";
