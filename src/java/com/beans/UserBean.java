@@ -21,6 +21,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
@@ -62,13 +63,13 @@ public class UserBean implements Serializable {
     private String isRenderedP3;
     private String isRenderedEditUserButton = "false";
 
+    Transaction tx = null;
+
     public UserBean() {
     }
 
     @PostConstruct
     public void init() {
-        ses = HibernateUtil.getSessionFactory().openSession();
-
         isRenderedP1 = "true";
         isRenderedP2 = "false";
         isRenderedP3 = "false";
@@ -81,15 +82,12 @@ public class UserBean implements Serializable {
         listAllDepartments();
     }
 
-    @PreDestroy
-    public void destroy() {
-        ses.close();
-    }
-
     public List<Userinfo> listAllUsers() {
         userList = new ArrayList<>();
         try {
-            ses.beginTransaction();
+            ses = HibernateUtil.getSessionFactory().openSession();
+
+            tx = ses.beginTransaction();
             Criteria cr = ses.createCriteria(Userinfo.class);
             cr.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
             cr.addOrder(Order.asc("isActive"));
@@ -102,8 +100,15 @@ public class UserBean implements Serializable {
             cr.addOrder(Order.asc("gender"));
 
             userList = cr.list();
-            ses.getTransaction().commit();
+            tx.commit();
+            ses.close();
+
         } catch (Exception e) {
+            if (ses != null && ses.isOpen()) {
+                ses.close();
+                ses = null;
+            }
+            
             e.printStackTrace();
         }
         return userList;
@@ -122,7 +127,8 @@ public class UserBean implements Serializable {
     public void createNewUser() {
         try {
             if (citizenshipNumber != "" && userType != "" && departmentinfo != null && firstName != "" && lastName != "" && gender != "" && email != "" && password != "" && dateOfBirth != null && isActive != "") {
-                ses.beginTransaction();
+                ses = HibernateUtil.getSessionFactory().openSession();
+                tx = ses.beginTransaction();
                 Userinfo newUser = new Userinfo();
                 newUser.setCitizenshipNumber(citizenshipNumber);
                 newUser.setUserType(userType);
@@ -137,7 +143,8 @@ public class UserBean implements Serializable {
                 newUser.setRemark(remark);
                 newUser.setIsActive(isActive);
                 ses.save(newUser);
-                ses.getTransaction().commit();
+                tx.commit();
+                ses.close();
 
                 isCollapsedP1 = "false";
                 isCollapsedP2 = "true";
@@ -157,6 +164,15 @@ public class UserBean implements Serializable {
             }
 
         } catch (Exception e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+
+            if (ses != null && ses.isOpen()) {
+                ses.close();
+                ses = null;
+            }
+
             e.printStackTrace();
         }
     }
@@ -178,7 +194,9 @@ public class UserBean implements Serializable {
 
     public void updateUser() {
         try {
-            ses.beginTransaction();
+            ses = HibernateUtil.getSessionFactory().openSession();
+
+            tx = ses.beginTransaction();
             selectedUser.setFirstName(selectedUser.getFirstName());
             selectedUser.setMiddleName(selectedUser.getMiddleName());
             selectedUser.setLastName(selectedUser.getLastName());
@@ -188,7 +206,8 @@ public class UserBean implements Serializable {
             selectedUser.setRemark(selectedUser.getRemark());
             selectedUser.setIsActive(selectedUser.getIsActive());
             ses.update(selectedUser);
-            ses.getTransaction().commit();
+            tx.commit();
+            ses.close();
 
             isCollapsedP1 = "false";
             isCollapsedP2 = "true";
@@ -201,6 +220,15 @@ public class UserBean implements Serializable {
             FacesContext context = FacesContext.getCurrentInstance();
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Update Successful", "You have successfully updated informations of user with citizenship number: " + selectedUser.getCitizenshipNumber()));
         } catch (Exception e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+
+            if (ses != null && ses.isOpen()) {
+                ses.close();
+                ses = null;
+            }
+
             e.printStackTrace();
         }
     }
@@ -235,18 +263,26 @@ public class UserBean implements Serializable {
         departmentList = new ArrayList<>();
 
         try {
-            ses.beginTransaction();
+            ses = HibernateUtil.getSessionFactory().openSession();
+
+            tx = ses.beginTransaction();
             Criteria cr = ses.createCriteria(Departmentinfo.class);
             cr.addOrder(Order.asc("name"));
             departmentList = cr.list();
-            ses.getTransaction().commit();
+            tx.commit();
+            ses.close();
+
         } catch (Exception e) {
+            if (ses != null && ses.isOpen()) {
+                ses.close();
+                ses = null;
+            }
             e.printStackTrace();
         }
 
         return departmentList;
     }
-    
+
     public void onRowSelect(SelectEvent event) {
         isRenderedEditUserButton = "true";
     }
@@ -443,6 +479,5 @@ public class UserBean implements Serializable {
     public void setIsRenderedEditUserButton(String isRenderedEditUserButton) {
         this.isRenderedEditUserButton = isRenderedEditUserButton;
     }
-    
-    
+
 }
