@@ -19,6 +19,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -58,6 +59,8 @@ public class PersonalInfoBean {
     private String isCollapsedP1;
     private String isCollapsedP2;
 
+    Transaction tx = null;
+
     /**
      * Creates a new instance of PersonalInfo
      */
@@ -66,13 +69,6 @@ public class PersonalInfoBean {
     public void init() {
         isCollapsedP1 = "false";
         isCollapsedP2 = "false";
-
-        ses = HibernateUtil.getSessionFactory().openSession();
-    }
-
-    @PreDestroy
-    public void destroy() {
-        ses.close();
     }
 
     public PersonalInfoBean() {
@@ -80,21 +76,36 @@ public class PersonalInfoBean {
 
     public List<Userinfo> fetchPersonalInfo() {
         _userList = new ArrayList<>();
-        ses.beginTransaction();
-        String citizenshipNumber = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("citizenshipNumber");
 
-        Criteria getPerson = ses.createCriteria(Userinfo.class);
-        getPerson.add(Restrictions.eq("citizenshipNumber", citizenshipNumber));
-        _userList = getPerson.list();
+        try {
+            ses = HibernateUtil.getSessionFactory().openSession();
+            tx = ses.beginTransaction();
+            String citizenshipNumber = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("citizenshipNumber");
 
-        ses.getTransaction().commit();
+            Criteria getPerson = ses.createCriteria(Userinfo.class);
+            getPerson.add(Restrictions.eq("citizenshipNumber", citizenshipNumber));
+            _userList = getPerson.list();
+
+            tx.commit();
+            ses.close();
+
+        } catch (Exception e) {
+            if (ses != null && ses.isOpen()) {
+                ses.close();
+                ses = null;
+            }
+
+            e.printStackTrace();
+        }
 
         return _userList;
     }
 
     public void changePassword() {
         try {
-            ses.beginTransaction();
+            ses = HibernateUtil.getSessionFactory().openSession();
+
+            tx = ses.beginTransaction();
 
             String passwordCitizenshipNumber = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("citizenshipNumber");
 
@@ -102,11 +113,11 @@ public class PersonalInfoBean {
             getPasswordFromDB.add(Restrictions.eq("citizenshipNumber", passwordCitizenshipNumber));
             List<Userinfo> tempListToHoldUserObject = getPasswordFromDB.list();
             dbPassword = tempListToHoldUserObject.get(0).getPassword();
-            ses.getTransaction().commit();
+            tx.commit();
 
             if (UserBean.getSHA256(password).equals(dbPassword)) {
                 if (newPassword.equals(confirmPassword)) {
-                    ses.beginTransaction();
+                    tx = ses.beginTransaction();
 
                     String sessionCitizenshipNumber = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("citizenshipNumber");
                     Criteria updatePassword = ses.createCriteria(Userinfo.class);
@@ -116,7 +127,8 @@ public class PersonalInfoBean {
                     userToUpdate = tempListToHoldUser.get(0);
                     userToUpdate.setPassword(UserBean.getSHA256(newPassword));
                     ses.saveOrUpdate(userToUpdate);
-                    ses.getTransaction().commit();
+                    tx.commit();
+                    ses.close();
 
                     FacesContext context = FacesContext.getCurrentInstance();
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Password Updated", "Your password updated successfully."));
@@ -129,6 +141,15 @@ public class PersonalInfoBean {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to update password.", "Your current password is incorrect."));
             }
         } catch (Exception e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+
+            if (ses != null && ses.isOpen()) {
+                ses.close();
+                ses = null;
+            }
+
             e.printStackTrace();
         }
     }
@@ -283,6 +304,14 @@ public class PersonalInfoBean {
 
     public void setDbPassword(String dbPassword) {
         this.dbPassword = dbPassword;
+    }
+
+    public Transaction getTx() {
+        return tx;
+    }
+
+    public void setTx(Transaction tx) {
+        this.tx = tx;
     }
 
 }
