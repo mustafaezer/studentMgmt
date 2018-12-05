@@ -22,6 +22,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.primefaces.model.DualListModel;
 
@@ -72,10 +73,10 @@ public class CourseRegistrationBean implements Serializable {
 
     private DualListModel<Subjectinfo> subjectListDual;
 
+    Transaction tx = null;
+
     @PostConstruct
     public void init() {
-        ses = HibernateUtil.getSessionFactory().openSession();
-
         List<Subjectinfo> source = fetchSubjectListDualSource();
         List<Subjectinfo> target = new ArrayList<>();
 
@@ -91,16 +92,13 @@ public class CourseRegistrationBean implements Serializable {
         isCollapsedP3 = "false";
     }
 
-    @PreDestroy
-    public void destroy() {
-        ses.close();
-    }
-
     public List<Subjectinfo> fetchSubjectListDualSource() {
         subjectListDualSource = new ArrayList<>();
 
         try {
-            ses.beginTransaction();
+            ses = HibernateUtil.getSessionFactory().openSession();
+
+            tx = ses.beginTransaction();
             String studentCitizenshipNumber = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("citizenshipNumber");
 
             // Get department information ID of student who is in active session.
@@ -132,9 +130,15 @@ public class CourseRegistrationBean implements Serializable {
             mainCriteriaForDualSource.add(Restrictions.eq("departmentInfoId.departmentInfoId", departmentInfoId));
 
             subjectListDualSource = mainCriteriaForDualSource.list();
-            ses.getTransaction().commit();
+            tx.commit();
+            ses.close();
 
         } catch (Exception e) {
+            if (ses != null && ses.isOpen()) {
+                ses.close();
+                ses = null;
+            }
+
             e.printStackTrace();
         }
         return subjectListDualSource;
@@ -144,7 +148,9 @@ public class CourseRegistrationBean implements Serializable {
         registeredSubjects = new ArrayList<>();
 
         try {
-            ses.beginTransaction();
+            ses = HibernateUtil.getSessionFactory().openSession();
+
+            tx = ses.beginTransaction();
             String studentCitizenshipNumber = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("citizenshipNumber");
 
             // Courses taken by student who is in active session.
@@ -167,9 +173,15 @@ public class CourseRegistrationBean implements Serializable {
             );
 
             registeredSubjects = mainCriteriaForRegisteredSubjects.list();
-            ses.getTransaction().commit();
+            tx.commit();
+            ses.close();
 
         } catch (Exception e) {
+            if (ses != null && ses.isOpen()) {
+                ses.close();
+                ses = null;
+            }
+
             e.printStackTrace();
         }
         return registeredSubjects;
@@ -181,57 +193,60 @@ public class CourseRegistrationBean implements Serializable {
 
         if (!target.isEmpty()) {
             try {
-                ses.beginTransaction();
+                ses = HibernateUtil.getSessionFactory().openSession();
+                tx = ses.beginTransaction();
+
                 String studentCitizenshipNumber = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("citizenshipNumber");
 
                 for (int i = 0; i < target.size(); i++) {
                     Integer ID = target.get(i).getSubjectInfoId();
 
-                    try {
-                        Grading registerToCourse = new Grading();
-                        GradingPK registerToCourseId = new GradingPK();
-                        registerToCourseId.setSubjectInfoId(ID);
-                        registerToCourseId.setStudentCitizenshipNumber(studentCitizenshipNumber);
-                        registerToCourse.setGradingPK(registerToCourseId);
-                        ses.save(registerToCourse);
+                    Grading registerToCourse = new Grading();
+                    GradingPK registerToCourseId = new GradingPK();
+                    registerToCourseId.setSubjectInfoId(ID);
+                    registerToCourseId.setStudentCitizenshipNumber(studentCitizenshipNumber);
+                    registerToCourse.setGradingPK(registerToCourseId);
+                    ses.save(registerToCourse);
 
-                        try {
-                            Criteria getQuotaAsList = ses.createCriteria(Subjectinfo.class);
-                            getQuotaAsList.add(Restrictions.eq("subjectInfoId", ID));
-                            List<Subjectinfo> tempListForHoldTheSubjectObject = getQuotaAsList.list();
-                            int quota = tempListForHoldTheSubjectObject.get(0).getQuota();
+                    Criteria getQuotaAsList = ses.createCriteria(Subjectinfo.class);
+                    getQuotaAsList.add(Restrictions.eq("subjectInfoId", ID));
+                    List<Subjectinfo> tempListForHoldTheSubjectObject = getQuotaAsList.list();
+                    int quota = tempListForHoldTheSubjectObject.get(0).getQuota();
 
-                            quota = quota - 1;
+                    quota = quota - 1;
 
-                            Subjectinfo subjectToUpdate = new Subjectinfo();
-                            Criteria getSubjectToUpdate = ses.createCriteria(Subjectinfo.class);
-                            getSubjectToUpdate.add(Restrictions.eq("subjectInfoId", ID));
-                            List<Subjectinfo> tempListForHoldToSpecificSubjectObject = getSubjectToUpdate.list();
-                            subjectToUpdate = tempListForHoldToSpecificSubjectObject.get(0);
-                            subjectToUpdate.setQuota(quota);
-                            ses.update(subjectToUpdate);
-                            ses.getTransaction().commit();
-
-                            pageReset();
-
-                            isRenderedP1 = "true";
-                            isRenderedP2 = "true";
-                            isRenderedP3 = "true";
-                            isCollapsedP1 = "true";
-                            isCollapsedP2 = "false";
-                            isCollapsedP3 = "false";
-
-                            FacesContext context = FacesContext.getCurrentInstance();
-                            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Registration Successful", "You have successfully registered to courses in target list."));
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    Subjectinfo subjectToUpdate = new Subjectinfo();
+                    Criteria getSubjectToUpdate = ses.createCriteria(Subjectinfo.class);
+                    getSubjectToUpdate.add(Restrictions.eq("subjectInfoId", ID));
+                    List<Subjectinfo> tempListForHoldToSpecificSubjectObject = getSubjectToUpdate.list();
+                    subjectToUpdate = tempListForHoldToSpecificSubjectObject.get(0);
+                    subjectToUpdate.setQuota(quota);
+                    ses.update(subjectToUpdate);
+                    tx.commit();
+                    ses.close();
                 }
+
+                pageReset();
+
+                isRenderedP1 = "true";
+                isRenderedP2 = "true";
+                isRenderedP3 = "true";
+                isCollapsedP1 = "true";
+                isCollapsedP2 = "false";
+                isCollapsedP3 = "false";
+
+                FacesContext context = FacesContext.getCurrentInstance();
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Registration Successful", "You have successfully registered to courses in target list."));
             } catch (Exception e) {
+                if (tx != null && tx.isActive()) {
+                    tx.rollback();
+                }
+
+                if (ses != null && ses.isOpen()) {
+                    ses.close();
+                    ses = null;
+                }
+
                 e.printStackTrace();
             }
         } else {
@@ -243,7 +258,9 @@ public class CourseRegistrationBean implements Serializable {
     public void resign() {
         if (selectedSubject != null) {
             try {
-                ses.beginTransaction();
+                ses = HibernateUtil.getSessionFactory().openSession();
+
+                tx = ses.beginTransaction();
                 String studentCitizenshipNumber = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("citizenshipNumber");
 
                 GradingPK gradingIdToDelete = new GradingPK();
@@ -257,38 +274,45 @@ public class CourseRegistrationBean implements Serializable {
                 gradingToDelete = tempListToHoldGrading.get(0);
                 ses.delete(gradingToDelete);
 
-                try {
-                    Criteria getQuotaAsList = ses.createCriteria(Subjectinfo.class);
-                    getQuotaAsList.add(Restrictions.eq("subjectInfoId", selectedSubject.getSubjectInfoId()));
-                    List<Subjectinfo> tempListForHoldTheSubjectObject = getQuotaAsList.list();
-                    int quota = tempListForHoldTheSubjectObject.get(0).getQuota();
+                Criteria getQuotaAsList = ses.createCriteria(Subjectinfo.class);
+                getQuotaAsList.add(Restrictions.eq("subjectInfoId", selectedSubject.getSubjectInfoId()));
+                List<Subjectinfo> tempListForHoldTheSubjectObject = getQuotaAsList.list();
+                int quota = tempListForHoldTheSubjectObject.get(0).getQuota();
 
-                    quota = quota + 1;
+                quota = quota + 1;
 
-                    Subjectinfo subjectToUpdate = new Subjectinfo();
-                    Criteria getSubjectToUpdate = ses.createCriteria(Subjectinfo.class);
-                    getSubjectToUpdate.add(Restrictions.eq("subjectInfoId", selectedSubject.getSubjectInfoId()));
-                    List<Subjectinfo> tempListForHoldToSpecificSubjectObject = getSubjectToUpdate.list();
-                    subjectToUpdate = tempListForHoldToSpecificSubjectObject.get(0);
-                    subjectToUpdate.setQuota(quota);
-                    ses.update(subjectToUpdate);
-                    ses.getTransaction().commit();
+                Subjectinfo subjectToUpdate = new Subjectinfo();
+                Criteria getSubjectToUpdate = ses.createCriteria(Subjectinfo.class);
+                getSubjectToUpdate.add(Restrictions.eq("subjectInfoId", selectedSubject.getSubjectInfoId()));
+                List<Subjectinfo> tempListForHoldToSpecificSubjectObject = getSubjectToUpdate.list();
+                subjectToUpdate = tempListForHoldToSpecificSubjectObject.get(0);
+                subjectToUpdate.setQuota(quota);
+                ses.update(subjectToUpdate);
+                tx.commit();
+                ses.close();
 
-                    pageReset();
+                pageReset();
 
-                    isRenderedP1 = "true";
-                    isRenderedP2 = "true";
-                    isRenderedP3 = "true";
-                    isCollapsedP1 = "true";
-                    isCollapsedP2 = "false";
-                    isCollapsedP3 = "false";
+                isRenderedP1 = "true";
+                isRenderedP2 = "true";
+                isRenderedP3 = "true";
+                isCollapsedP1 = "true";
+                isCollapsedP2 = "false";
+                isCollapsedP3 = "false";
 
-                    FacesContext context = FacesContext.getCurrentInstance();
-                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Resignation Successful", "You have successfully resigned from " + selectedSubject.getName()));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                FacesContext context = FacesContext.getCurrentInstance();
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Resignation Successful", "You have successfully resigned from " + selectedSubject.getName()));
+
             } catch (Exception e) {
+                if (tx != null && tx.isActive()) {
+                    tx.rollback();
+                }
+
+                if (ses != null && ses.isOpen()) {
+                    ses.close();
+                    ses = null;
+                }
+
                 e.printStackTrace();
             }
         } else {
