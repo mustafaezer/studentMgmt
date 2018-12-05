@@ -41,40 +41,40 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Subjectinfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
-   
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "subjectInfoId")
     private Integer subjectInfoId;
-    
+
     @Basic(optional = false)
     @Column(name = "name")
     private String name;
-    
+
     @Basic(optional = false)
     @Column(name = "quota")
     private int quota;
-    
+
     @Basic(optional = false)
     @Column(name = "year")
     private String year;
-    
+
     @Basic(optional = false)
     @Column(name = "season")
     private String season;
-    
+
     @Basic(optional = false)
     @Column(name = "isActive")
     private String isActive;
-    
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "subjectinfo")
     private List<Grading> gradingList;
-    
+
     @JoinColumn(name = "departmentInfoId", referencedColumnName = "departmentInfoId")
     @ManyToOne(optional = false)
     private Departmentinfo departmentInfoId;
-    
+
     @JoinColumn(name = "instructorCitizenshipNumber", referencedColumnName = "citizenshipNumber")
     @ManyToOne(optional = false)
     private Userinfo instructorCitizenshipNumber;
@@ -192,5 +192,5 @@ public class Subjectinfo implements Serializable {
     public String toString() {
         return "com.entity.Subjectinfo[ subjectInfoId=" + subjectInfoId + " ]";
     }
-    
+
 }

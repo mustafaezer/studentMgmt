@@ -20,7 +20,7 @@ public class GradingPK implements Serializable {
     @Basic(optional = false)
     @Column(name = "subjectInfoId")
     private int subjectInfoId;
-    
+
     @Basic(optional = false)
     @Column(name = "studentCitizenshipNumber")
     private String studentCitizenshipNumber;
@@ -77,5 +77,5 @@ public class GradingPK implements Serializable {
     public String toString() {
         return "com.entity.GradingPK[ subjectInfoId=" + subjectInfoId + ", studentCitizenshipNumber=" + studentCitizenshipNumber + " ]";
     }
-    
+
 }

@@ -33,24 +33,24 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Grading implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @EmbeddedId
     protected GradingPK gradingPK;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    
+
     @Column(name = "midtermNote")
     private Double midtermNote;
-    
+
     @Column(name = "finaleNote")
     private Double finaleNote;
-    
+
     @Column(name = "grade")
     private String grade;
-    
+
     @JoinColumn(name = "subjectInfoId", referencedColumnName = "subjectInfoId", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Subjectinfo subjectinfo;
-    
+
     @JoinColumn(name = "studentCitizenshipNumber", referencedColumnName = "citizenshipNumber", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Userinfo userinfo;
@@ -138,5 +138,5 @@ public class Grading implements Serializable {
     public String toString() {
         return "com.entity.Grading[ gradingPK=" + gradingPK + " ]";
     }
-    
+
 }

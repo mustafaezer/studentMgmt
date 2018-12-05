@@ -31,12 +31,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Runtimeproperties implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "propertyId")
-    
+
     private Integer propertyId;
     @Column(name = "courseRegistrationStatus")
     private String courseRegistrationStatus;
@@ -88,5 +88,5 @@ public class Runtimeproperties implements Serializable {
     public String toString() {
         return "com.entity.Runtimeproperties[ propertyId=" + propertyId + " ]";
     }
-    
+
 }
