@@ -38,8 +38,6 @@ public class AnnouncementBean {
      */
     @PostConstruct
     public void init() {
-        ses = HibernateUtil.getSessionFactory().openSession();
-
         departmentList = listAllDepartments();
         announcementList = listAllAnnouncements();
 
@@ -51,11 +49,6 @@ public class AnnouncementBean {
 
         isRenderedP2 = "false";
         isCollapsedP2 = "true";
-    }
-
-    @PreDestroy
-    public void destroy() {
-        ses.close();
     }
 
     private Session ses;
@@ -90,6 +83,8 @@ public class AnnouncementBean {
 
     public void createAnnouncement() {
         try {
+            ses = HibernateUtil.getSessionFactory().openSession();
+
             ses.beginTransaction();
 
             if (departmentinfo != null && type != null && importance != null && header != "" && context != "" && startDate != null && endDate != null) {
@@ -114,6 +109,7 @@ public class AnnouncementBean {
 
                 ses.save(newAnnouncement);
                 ses.getTransaction().commit();
+                ses.close();
 
                 FacesContext context = FacesContext.getCurrentInstance();
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Announcement Created", "Announcement has been successfully created: " + newAnnouncement.getHeader()));
@@ -141,6 +137,8 @@ public class AnnouncementBean {
 
     public List<Announcementinfo> listAllAnnouncements() {
         try {
+            ses = HibernateUtil.getSessionFactory().openSession();
+
             ses.beginTransaction();
 
             announcementList = new ArrayList<>();
@@ -148,6 +146,8 @@ public class AnnouncementBean {
             announcementList = listAnnouncements.list();
 
             ses.getTransaction().commit();
+            ses.close();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -168,11 +168,15 @@ public class AnnouncementBean {
         departmentList = new ArrayList<>();
 
         try {
+            ses = HibernateUtil.getSessionFactory().openSession();
+
             ses.beginTransaction();
             Criteria cr = ses.createCriteria(Departmentinfo.class);
             cr.addOrder(Order.asc("name"));
             departmentList = cr.list();
             ses.getTransaction().commit();
+            ses.close();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -194,6 +198,8 @@ public class AnnouncementBean {
 
     public void editAnnouncement() {
         try {
+            ses = HibernateUtil.getSessionFactory().openSession();
+
             ses.beginTransaction();
 
             if (selectedAnnouncement.getHeader() != "" && selectedAnnouncement.getContext() != "" && selectedAnnouncement.getStartDate() != null && selectedAnnouncement.getEndDate() != null) {
@@ -222,6 +228,7 @@ public class AnnouncementBean {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Announcement Updated", "Selected announcement has been successfully updated."));
 
                 ses.getTransaction().commit();
+                ses.close();
 
                 isRenderedP2 = "false";
                 isCollapsedP2 = "false";
