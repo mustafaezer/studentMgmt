@@ -13,13 +13,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.primefaces.event.SelectEvent;
@@ -77,6 +77,8 @@ public class AnnouncementBean {
     private Date endDate;
     private String isActive;
 
+    Transaction tx = null;
+
     public AnnouncementBean() {
 
     }
@@ -85,7 +87,7 @@ public class AnnouncementBean {
         try {
             ses = HibernateUtil.getSessionFactory().openSession();
 
-            ses.beginTransaction();
+            tx = ses.beginTransaction();
 
             if (departmentinfo != null && type != null && importance != null && header != "" && context != "" && startDate != null && endDate != null) {
                 Announcementinfo newAnnouncement = new Announcementinfo();
@@ -108,7 +110,7 @@ public class AnnouncementBean {
                 newAnnouncement.setIsActive(isActive);
 
                 ses.save(newAnnouncement);
-                ses.getTransaction().commit();
+                tx.commit();
                 ses.close();
 
                 FacesContext context = FacesContext.getCurrentInstance();
@@ -129,7 +131,9 @@ public class AnnouncementBean {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Announcement Creation Error", "Please fill all the required fields for an announcement."));
             }
         } catch (Exception e) {
-            ses.getTransaction().rollback();
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
             e.printStackTrace();
         }
 
@@ -139,13 +143,13 @@ public class AnnouncementBean {
         try {
             ses = HibernateUtil.getSessionFactory().openSession();
 
-            ses.beginTransaction();
+            tx = ses.beginTransaction();
 
             announcementList = new ArrayList<>();
             Criteria listAnnouncements = ses.createCriteria(Announcementinfo.class);
             announcementList = listAnnouncements.list();
 
-            ses.getTransaction().commit();
+            tx.commit();
             ses.close();
 
         } catch (Exception e) {
@@ -170,11 +174,11 @@ public class AnnouncementBean {
         try {
             ses = HibernateUtil.getSessionFactory().openSession();
 
-            ses.beginTransaction();
+            tx = ses.beginTransaction();
             Criteria cr = ses.createCriteria(Departmentinfo.class);
             cr.addOrder(Order.asc("name"));
             departmentList = cr.list();
-            ses.getTransaction().commit();
+            tx.commit();
             ses.close();
 
         } catch (Exception e) {
@@ -200,7 +204,7 @@ public class AnnouncementBean {
         try {
             ses = HibernateUtil.getSessionFactory().openSession();
 
-            ses.beginTransaction();
+            tx = ses.beginTransaction();
 
             if (selectedAnnouncement.getHeader() != "" && selectedAnnouncement.getContext() != "" && selectedAnnouncement.getStartDate() != null && selectedAnnouncement.getEndDate() != null) {
 
@@ -227,7 +231,7 @@ public class AnnouncementBean {
                 FacesContext context = FacesContext.getCurrentInstance();
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Announcement Updated", "Selected announcement has been successfully updated."));
 
-                ses.getTransaction().commit();
+                tx.commit();
                 ses.close();
 
                 isRenderedP2 = "false";
@@ -240,10 +244,13 @@ public class AnnouncementBean {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Update Error", "Please fill all the required fields for an announcement."));
             }
         } catch (Exception e) {
-            e.printStackTrace();
-
             FacesContext context = FacesContext.getCurrentInstance();
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Announcement Update Error", "Selected announcement couldn't updated."));
+            
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+            e.printStackTrace();
         }
     }
 
@@ -402,6 +409,14 @@ public class AnnouncementBean {
 
     public void setSelectedAnnouncement(Announcementinfo selectedAnnouncement) {
         this.selectedAnnouncement = selectedAnnouncement;
+    }
+
+    public Transaction getTx() {
+        return tx;
+    }
+
+    public void setTx(Transaction tx) {
+        this.tx = tx;
     }
 
 }
