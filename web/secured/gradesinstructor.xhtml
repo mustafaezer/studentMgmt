@@ -95,7 +95,7 @@
                     <p:outputPanel id="editMidtermToUpdate">
                         <p:growl id="editMidtermGrowl" showDetail="true" severity="info, warn"/>
                         <p:panel id="editMidterm" header="Edit Midterm Note of Selected Student" rendered="#{gradesInstructorBean.isRenderedP3}" toggleable="false" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{gradesInstructorBean.isCollapsedP3}" style="margin-bottom:10px; font-size: 12px;">
-                            <p:messages>
+                            <p:messages severity="error">
                                 <p:autoUpdate />
                             </p:messages>
 
