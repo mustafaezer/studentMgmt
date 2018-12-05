@@ -77,8 +77,8 @@ public class Announcementinfo implements Serializable {
     @Basic(optional = false)
     @Column(name = "isActive")
     private String isActive;
-    @JoinColumn(name = "departmentInfoId", referencedColumnName = "departmentInfoId")
 
+    @JoinColumn(name = "departmentInfoId", referencedColumnName = "departmentInfoId")
     @ManyToOne(optional = false)
     private Departmentinfo departmentInfoId;
 
