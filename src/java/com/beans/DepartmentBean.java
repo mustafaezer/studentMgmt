@@ -19,6 +19,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.hibernate.Criteria;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.primefaces.event.SelectEvent;
@@ -59,10 +60,10 @@ public class DepartmentBean {
     private String isCollapsedP3;
     private String isCollapsedP4;
 
+    Transaction tx = null;
+
     @PostConstruct
     public void init() {
-        ses = HibernateUtil.getSessionFactory().openSession();
-
         isRenderedP0 = "true";
         isRenderedP1 = "true";
         isRenderedP2 = "false";
@@ -78,20 +79,18 @@ public class DepartmentBean {
         listAllDepartments();
     }
 
-    @PreDestroy
-    public void destroy() {
-        ses.close();
-    }
-
     public void createNewDepartment() {
         if (name != "") {
             try {
-                ses.beginTransaction();
+                ses = HibernateUtil.getSessionFactory().openSession();
+
+                tx = ses.beginTransaction();
 
                 Departmentinfo newDepartment = new Departmentinfo();
                 newDepartment.setName(name);
                 ses.save(newDepartment);
-                ses.getTransaction().commit();
+                tx.commit();
+                ses.close();
 
                 isCollapsedP0 = "true";
 
@@ -100,6 +99,15 @@ public class DepartmentBean {
                 FacesContext context = FacesContext.getCurrentInstance();
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Department Created", "Department has been successfully created: " + newDepartment.getName()));
             } catch (Exception e) {
+                if (tx != null && tx.isActive()) {
+                    tx.rollback();
+                }
+
+                if (ses != null && ses.isOpen()) {
+                    ses.close();
+                    ses = null;
+                }
+
                 e.printStackTrace();
             }
         } else {
@@ -112,11 +120,16 @@ public class DepartmentBean {
         departmentList = new ArrayList<>();
 
         try {
-            ses.beginTransaction();
+            ses = HibernateUtil.getSessionFactory().openSession();
+
+            tx = ses.beginTransaction();
             Criteria cr = ses.createCriteria(Departmentinfo.class);
             cr.addOrder(Order.asc("name"));
             departmentList = cr.list();
-            ses.getTransaction().commit();
+            tx.commit();
+
+            ses.close();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -144,14 +157,18 @@ public class DepartmentBean {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Show Instructor Members", "Please select a department first to proceed this event."));
         } else {
             try {
-                ses.beginTransaction();
+                ses = HibernateUtil.getSessionFactory().openSession();
+
+                tx = ses.beginTransaction();
                 String type = "Instructor";
                 Criteria cr = ses.createCriteria(Userinfo.class);
                 cr.add(Restrictions.eq("departmentInfoId.departmentInfoId", selectedDepartment.getDepartmentInfoId()));
                 cr.add(Restrictions.eq("userType", type));
                 cr.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
                 instructorList = cr.list();
-                ses.getTransaction().commit();
+                tx.commit();
+
+                ses.close();
 
                 if (instructorList.size() > 0) {
                     isRenderedP2 = "true";
@@ -211,14 +228,17 @@ public class DepartmentBean {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Show Instructor Members", "Please select a department first to proceed this event."));
         } else {
             try {
-                ses.beginTransaction();
+                ses = HibernateUtil.getSessionFactory().openSession();
+                tx = ses.beginTransaction();
                 String type = "Student";
                 Criteria cr = ses.createCriteria(Userinfo.class);
                 cr.add(Restrictions.eq("departmentInfoId.departmentInfoId", selectedDepartment.getDepartmentInfoId()));
                 cr.add(Restrictions.eq("userType", type));
                 cr.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
                 studentList = cr.list();
-                ses.getTransaction().commit();
+                tx.commit();
+
+                ses.close();
 
                 if (studentList.size() > 0) {
                     isRenderedP3 = "true";
@@ -278,12 +298,17 @@ public class DepartmentBean {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Show Subjects Given By Department", "Please select a department first to proceed this event."));
         } else {
             try {
-                ses.beginTransaction();
+
+                ses = HibernateUtil.getSessionFactory().openSession();
+
+                tx = ses.beginTransaction();
                 Criteria cr = ses.createCriteria(Subjectinfo.class);
                 cr.add(Restrictions.eq("departmentInfoId.departmentInfoId", selectedDepartment.getDepartmentInfoId()));
                 cr.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
                 subjectList = cr.list();
-                ses.getTransaction().commit();
+                tx.commit();
+
+                ses.close();
 
                 if (subjectList.size() > 0) {
                     isRenderedP4 = "true";
@@ -488,6 +513,14 @@ public class DepartmentBean {
 
     public void setIsRenderedCommandButton(String isRenderedCommandButton) {
         this.isRenderedCommandButton = isRenderedCommandButton;
+    }
+
+    public Transaction getTx() {
+        return tx;
+    }
+
+    public void setTx(Transaction tx) {
+        this.tx = tx;
     }
 
 }
