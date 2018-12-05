@@ -182,22 +182,22 @@
                                     <f:facet name="header">
                                         Subjects Given by #{departmentBean.selectedDepartment.name}
                                     </f:facet>
-                                    <p:column headerText="#" style="width: 10px;" >
+                                    <p:column headerText="#" style="width: 5%;" >
                                         <h:outputText value="#{rowIndex+1}"/>
                                     </p:column>
-                                    <p:column headerText="Subject Name" style="width: 200px;">
+                                    <p:column headerText="Subject Name" style="width: 40%;">
                                         <h:outputText value="#{_subjectList.name}"/>
                                     </p:column>
-                                    <p:column headerText="Instructor Citizenship Number" style="width: 75px;">
+                                    <p:column headerText="Instructor Citizenship Number" style="width: 10%;">
                                         <h:outputText value="#{_subjectList.instructorCitizenshipNumber.citizenshipNumber}"/>
                                     </p:column>
-                                    <p:column headerText="Instructor Name" style="width: 40px;">
+                                    <p:column headerText="Instructor Name" style="width: 25%">
                                         <h:outputText value="#{_subjectList.instructorCitizenshipNumber.firstName} #{_subjectList.instructorCitizenshipNumber.middleName} #{_subjectList.instructorCitizenshipNumber.lastName}"/>
                                     </p:column>
-                                    <p:column headerText="Year" style="width: 30px;">
+                                    <p:column headerText="Year" style="width: 10%">
                                         <h:outputText value="#{_subjectList.year}"/>
                                     </p:column>
-                                    <p:column headerText="Season" style="width: 40px;">
+                                    <p:column headerText="Season" style="width: 10%">
                                         <h:outputText value="#{_subjectList.season}"/>
                                     </p:column>
                                 </p:dataTable>
