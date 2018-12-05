@@ -9,6 +9,7 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -48,11 +49,11 @@ public class Grading implements Serializable {
     private String grade;
 
     @JoinColumn(name = "subjectInfoId", referencedColumnName = "subjectInfoId", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Subjectinfo subjectinfo;
 
     @JoinColumn(name = "studentCitizenshipNumber", referencedColumnName = "citizenshipNumber", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Userinfo userinfo;
 
     public Grading() {

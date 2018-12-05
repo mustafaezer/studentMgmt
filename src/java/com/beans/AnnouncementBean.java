@@ -134,6 +134,12 @@ public class AnnouncementBean {
             if (tx != null && tx.isActive()) {
                 tx.rollback();
             }
+
+            if (ses != null && ses.isOpen()) {
+                ses.close();
+                ses = null;
+            }
+
             e.printStackTrace();
         }
 
@@ -246,10 +252,16 @@ public class AnnouncementBean {
         } catch (Exception e) {
             FacesContext context = FacesContext.getCurrentInstance();
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Announcement Update Error", "Selected announcement couldn't updated."));
-            
+
             if (tx != null && tx.isActive()) {
                 tx.rollback();
             }
+
+            if (ses != null && ses.isOpen()) {
+                ses.close();
+                ses = null;
+            }
+
             e.printStackTrace();
         }
     }

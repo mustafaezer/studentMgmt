@@ -11,6 +11,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -72,11 +73,11 @@ public class Subjectinfo implements Serializable {
     private List<Grading> gradingList;
 
     @JoinColumn(name = "departmentInfoId", referencedColumnName = "departmentInfoId")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Departmentinfo departmentInfoId;
 
     @JoinColumn(name = "instructorCitizenshipNumber", referencedColumnName = "citizenshipNumber")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Userinfo instructorCitizenshipNumber;
 
     public Subjectinfo() {

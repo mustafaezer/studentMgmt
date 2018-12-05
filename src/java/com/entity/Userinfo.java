@@ -12,6 +12,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -100,7 +101,7 @@ public class Userinfo implements Serializable {
     private List<Announcementinfo> announcementinfoList;
 
     @JoinColumn(name = "departmentInfoId", referencedColumnName = "departmentInfoId")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Departmentinfo departmentInfoId;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "instructorCitizenshipNumber")
