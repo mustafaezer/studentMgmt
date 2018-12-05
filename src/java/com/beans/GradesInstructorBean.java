@@ -72,14 +72,8 @@ public class GradesInstructorBean {
 
     @PostConstruct
     public void init() {
-        ses = HibernateUtil.getSessionFactory().openSession();
         fetchCoursesGivenByInstructor();
         gradingList = new ArrayList<Grading>();
-    }
-
-    @PreDestroy
-    public void destroy() {
-        ses.close();
     }
 
     public GradesInstructorBean() {
@@ -88,15 +82,23 @@ public class GradesInstructorBean {
     public List<Subjectinfo> fetchCoursesGivenByInstructor() {
         coursesGiven = new ArrayList<Subjectinfo>();
         try {
-            ses.beginTransaction();
+            ses = HibernateUtil.getSessionFactory().openSession();
+
+            tx = ses.beginTransaction();
             String instructorCitizenshipNumber = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("citizenshipNumber");
 
             Criteria getCoursesGiven = ses.createCriteria(Subjectinfo.class);
             getCoursesGiven.add(Restrictions.eq("instructorCitizenshipNumber.citizenshipNumber", instructorCitizenshipNumber));
             coursesGiven = getCoursesGiven.list();
 
-            ses.getTransaction().commit();
+            tx.commit();
+            ses.close();
         } catch (Exception e) {
+            if (ses != null && ses.isOpen()) {
+                ses.close();
+                ses = null;
+            }
+
             e.printStackTrace();
         }
         return coursesGiven;
@@ -106,15 +108,24 @@ public class GradesInstructorBean {
         if (subjectInfoId != null) {
             gradingList = new ArrayList<Grading>();
             try {
-                ses.beginTransaction();
+                ses = HibernateUtil.getSessionFactory().openSession();
+
+                tx = ses.beginTransaction();
 
                 Criteria getGradingList = ses.createCriteria(Grading.class);
                 getGradingList.add(Restrictions.eq("gradingPK.subjectInfoId", subjectInfoId));
                 gradingList = getGradingList.list();
 
-                ses.getTransaction().commit();
+                tx.commit();
+                ses.close();
+
                 isRenderedP2 = "true";
             } catch (Exception e) {
+                if (ses != null && ses.isOpen()) {
+                    ses.close();
+                    ses = null;
+                }
+
                 e.printStackTrace();
             }
             return gradingList;
@@ -158,12 +169,15 @@ public class GradesInstructorBean {
     public void insertMidterm() {
         if (selectedCourse.getMidtermNote() != null) {
             try {
+                ses = HibernateUtil.getSessionFactory().openSession();
+
                 tx = ses.beginTransaction();
 
                 selectedCourse.setMidtermNote(selectedCourse.getMidtermNote());
                 ses.update(selectedCourse);
 
                 tx.commit();
+                ses.close();
 
                 if (!selectedCourse.getMidtermNote().equals(null) && !selectedCourse.getFinaleNote().equals(null)) {
                     calculateGrade(selectedCourse.getMidtermNote(), selectedCourse.getFinaleNote());
@@ -179,9 +193,15 @@ public class GradesInstructorBean {
                 FacesContext context = FacesContext.getCurrentInstance();
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Midterm has been successfully updated."));
             } catch (Exception e) {
-                if (tx != null) {
+                if (tx != null && tx.isActive()) {
                     tx.rollback();
                 }
+
+                if (ses != null && ses.isOpen()) {
+                    ses.close();
+                    ses = null;
+                }
+
                 e.printStackTrace();
             }
         } else {
@@ -193,12 +213,15 @@ public class GradesInstructorBean {
     public void insertFinale() {
         if (selectedCourse.getMidtermNote() != null) {
             try {
+                ses = HibernateUtil.getSessionFactory().openSession();
+
                 tx = ses.beginTransaction();
 
                 selectedCourse.setFinaleNote(selectedCourse.getFinaleNote());
                 ses.update(selectedCourse);
 
                 tx.commit();
+                ses.close();
 
                 calculateGrade(selectedCourse.getMidtermNote(), selectedCourse.getFinaleNote());
 
@@ -213,9 +236,15 @@ public class GradesInstructorBean {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Finale has been successfully updated."));
 
             } catch (Exception e) {
-                if (tx != null) {
+                if (tx != null && tx.isActive()) {
                     tx.rollback();
                 }
+
+                if (ses != null && ses.isOpen()) {
+                    ses.close();
+                    ses = null;
+                }
+
                 e.printStackTrace();
             }
         }
@@ -224,6 +253,7 @@ public class GradesInstructorBean {
 
     public void calculateGrade(double midtermNote, double finaleNote) {
         try {
+            ses = HibernateUtil.getSessionFactory().openSession();
             tx = ses.beginTransaction();
 
             String gradeTemp;
@@ -256,10 +286,14 @@ public class GradesInstructorBean {
             ses.update(selectedCourse);
 
             tx.commit();
+            ses.close();
+
         } catch (Exception e) {
-            if (tx != null) {
-                tx.rollback();
+            if (ses != null && ses.isOpen()) {
+                ses.close();
+                ses = null;
             }
+
             e.printStackTrace();
         }
 
