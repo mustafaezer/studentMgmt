@@ -47,47 +47,62 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Userinfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
     @Id
     @Basic(optional = false)
     @Column(name = "citizenshipNumber")
     private String citizenshipNumber;
+    
     @Basic(optional = false)
     @Column(name = "userType")
     private String userType;
+    
     @Basic(optional = false)
     @Column(name = "firstName")
     private String firstName;
+    
     @Column(name = "middleName")
     private String middleName;
+    
     @Basic(optional = false)
     @Column(name = "lastName")
     private String lastName;
+    
     @Basic(optional = false)
     @Column(name = "gender")
     private String gender;
+    
     @Basic(optional = false)
     @Column(name = "email")
     private String email;
+    
     @Basic(optional = false)
     @Column(name = "password")
     private String password;
+    
     @Basic(optional = false)
     @Column(name = "dateOfBirth")
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
+    
     @Basic(optional = false)
     @Column(name = "remark")
     private String remark;
+    
     @Basic(optional = false)
     @Column(name = "isActive")
     private String isActive;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userinfo")
     private List<Grading> gradingList;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "authorCitizenshipNumber")
     private List<Announcementinfo> announcementinfoList;
+    
     @JoinColumn(name = "departmentInfoId", referencedColumnName = "departmentInfoId")
     @ManyToOne(optional = false)
     private Departmentinfo departmentInfoId;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "instructorCitizenshipNumber")
     private List<Subjectinfo> subjectinfoList;
 

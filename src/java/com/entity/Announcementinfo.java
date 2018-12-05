@@ -42,36 +42,46 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Announcementinfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "announcementId")
     private Integer announcementId;
+    
     @Basic(optional = false)
     @Column(name = "type")
     private String type;
+    
     @Basic(optional = false)
     @Column(name = "importance")
     private String importance;
+    
     @Basic(optional = false)
     @Column(name = "header")
     private String header;
+    
     @Basic(optional = false)
     @Column(name = "context")
     private String context;
+    
     @Basic(optional = false)
     @Column(name = "startDate")
     @Temporal(TemporalType.DATE)
     private Date startDate;
+    
     @Column(name = "endDate")
     @Temporal(TemporalType.DATE)
     private Date endDate;
+    
     @Basic(optional = false)
     @Column(name = "isActive")
     private String isActive;
     @JoinColumn(name = "departmentInfoId", referencedColumnName = "departmentInfoId")
+    
     @ManyToOne(optional = false)
     private Departmentinfo departmentInfoId;
+    
     @JoinColumn(name = "authorCitizenshipNumber", referencedColumnName = "citizenshipNumber")
     @ManyToOne(optional = false)
     private Userinfo authorCitizenshipNumber;

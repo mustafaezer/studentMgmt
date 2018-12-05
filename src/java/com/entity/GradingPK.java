@@ -20,6 +20,7 @@ public class GradingPK implements Serializable {
     @Basic(optional = false)
     @Column(name = "subjectInfoId")
     private int subjectInfoId;
+    
     @Basic(optional = false)
     @Column(name = "studentCitizenshipNumber")
     private String studentCitizenshipNumber;

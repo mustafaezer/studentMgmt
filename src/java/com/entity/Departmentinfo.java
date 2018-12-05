@@ -35,18 +35,23 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Departmentinfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "departmentInfoId")
     private Integer departmentInfoId;
+    
     @Basic(optional = false)
     @Column(name = "name")
     private String name;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "departmentInfoId")
     private List<Announcementinfo> announcementinfoList;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "departmentInfoId")
     private List<Userinfo> userinfoList;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "departmentInfoId")
     private List<Subjectinfo> subjectinfoList;
 
