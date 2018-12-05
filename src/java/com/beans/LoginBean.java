@@ -18,6 +18,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -41,15 +42,11 @@ public class LoginBean implements Serializable {
     @ManagedProperty(value = "#{navigationBean}")
     private NavigationBean navigationBean;
 
+    Transaction tx = null;
+
     @PostConstruct
     public void init() {
-        ses = HibernateUtil.getSessionFactory().openSession();
         isLoggedIn = false;
-    }
-
-    @PreDestroy
-    public void destroy() {
-        ses.close();
     }
 
     public LoginBean() {
@@ -63,14 +60,17 @@ public class LoginBean implements Serializable {
     public String checkUser() {
 
         try {
-            ses.beginTransaction();
+            ses = HibernateUtil.getSessionFactory().openSession();
+
+            tx = ses.beginTransaction();
 
             Criteria cr = ses.createCriteria(Userinfo.class);
             cr.add(Restrictions.eq("citizenshipNumber", citizenshipNumber));
             cr.add(Restrictions.eq("password", UserBean.getSHA256(password)));
             List<Userinfo> list = cr.list();
 
-            ses.getTransaction().commit();
+            tx.commit();
+            ses.close();
 
             if (list.size() == 1) {
                 isLoggedIn = true;
@@ -89,6 +89,11 @@ public class LoginBean implements Serializable {
                 return navigationBean.toLogin();
             }
         } catch (Exception e) {
+            if (ses != null && ses.isOpen()) {
+                ses.close();
+                ses = null;
+            }
+
             e.printStackTrace();
             return navigationBean.toLogin();
         }
@@ -148,4 +153,13 @@ public class LoginBean implements Serializable {
     public void setIsRenderedIndeterminate(String isRenderedIndeterminate) {
         this.isRenderedIndeterminate = isRenderedIndeterminate;
     }
+
+    public Transaction getTx() {
+        return tx;
+    }
+
+    public void setTx(Transaction tx) {
+        this.tx = tx;
+    }
+
 }
