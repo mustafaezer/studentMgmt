@@ -159,6 +159,11 @@ public class AnnouncementBean {
             ses.close();
 
         } catch (Exception e) {
+            if (ses != null && ses.isOpen()) {
+                ses.close();
+                ses = null;
+            }
+
             e.printStackTrace();
         }
         return announcementList;
@@ -188,6 +193,11 @@ public class AnnouncementBean {
             ses.close();
 
         } catch (Exception e) {
+            if (ses != null && ses.isOpen()) {
+                ses.close();
+                ses = null;
+            }
+
             e.printStackTrace();
         }
 
