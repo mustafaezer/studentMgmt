@@ -20,6 +20,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
@@ -55,10 +56,10 @@ public class SubjectBean implements Serializable {
     private String isRenderedP3;
     private String isRenderedEditUserButton = "false";
 
+    Transaction tx = null;
+
     @PostConstruct
     public void init() {
-        ses = HibernateUtil.getSessionFactory().openSession();
-
         isCollapsedP1 = "false";
         isCollapsedP2 = "true";
         isCollapsedP3 = "true";
@@ -70,15 +71,11 @@ public class SubjectBean implements Serializable {
         listAllSubjects();
     }
 
-    @PreDestroy
-    public void destroy() {
-        ses.close();
-    }
-
     public List<Subjectinfo> listAllSubjects() {
         subjectList = new ArrayList<>();
         try {
-            ses.beginTransaction();
+            ses = HibernateUtil.getSessionFactory().openSession();
+            tx = ses.beginTransaction();
             Criteria cr = ses.createCriteria(Subjectinfo.class);
             cr.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
             cr.addOrder(Order.asc("isActive"));
@@ -88,8 +85,14 @@ public class SubjectBean implements Serializable {
             cr.addOrder(Order.asc("instructorCitizenshipNumber.citizenshipNumber"));
             cr.addOrder(Order.asc("name"));
             subjectList = cr.list();
-            ses.getTransaction().commit();
+            tx.commit();
+            ses.close();
         } catch (Exception e) {
+            if (ses != null && ses.isOpen()) {
+                ses.close();
+                ses = null;
+            }
+
             e.printStackTrace();
         }
         return subjectList;
@@ -107,7 +110,9 @@ public class SubjectBean implements Serializable {
 
     public void createNewSubject() {
         try {
-            ses.beginTransaction();
+            ses = HibernateUtil.getSessionFactory().openSession();
+
+            tx = ses.beginTransaction();
             Subjectinfo newSubject = new Subjectinfo();
             newSubject.setSubjectInfoId(null);
             newSubject.setDepartmentInfoId(departmentinfo);
@@ -118,7 +123,8 @@ public class SubjectBean implements Serializable {
             newSubject.setSeason(season);
             newSubject.setIsActive(isActive);
             ses.save(newSubject);
-            ses.getTransaction().commit();
+            tx.commit();
+            ses.close();
 
             isRenderedP1 = "true";
             isRenderedP2 = "false";
@@ -131,6 +137,15 @@ public class SubjectBean implements Serializable {
             FacesContext context = FacesContext.getCurrentInstance();
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Subject Creation Successful", "New subject has been successfully created with the informations given."));
         } catch (Exception e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+
+            if (ses != null && ses.isOpen()) {
+                ses.close();
+                ses = null;
+            }
+
             e.printStackTrace();
         }
     }
@@ -152,9 +167,11 @@ public class SubjectBean implements Serializable {
 
     public void updateSubject() {
         if (selectedSubject != null) {
-            if (selectedSubject.getIsActive() != "" && selectedSubject.getDepartmentInfoId()!= null && selectedSubject.getYear() != "" && selectedSubject.getSeason() != "" && selectedSubject.getInstructorCitizenshipNumber()!= null && selectedSubject.getName() != "" && selectedSubject.getQuota() > 0) {
+            if (selectedSubject.getIsActive() != "" && selectedSubject.getDepartmentInfoId() != null && selectedSubject.getYear() != "" && selectedSubject.getSeason() != "" && selectedSubject.getInstructorCitizenshipNumber() != null && selectedSubject.getName() != "" && selectedSubject.getQuota() > 0) {
                 try {
-                    ses.beginTransaction();
+                    ses = HibernateUtil.getSessionFactory().openSession();
+
+                    tx = ses.beginTransaction();
 
                     selectedSubject.setIsActive(selectedSubject.getIsActive());
                     selectedSubject.setDepartmentInfoId(selectedSubject.getDepartmentInfoId());
@@ -164,7 +181,8 @@ public class SubjectBean implements Serializable {
                     selectedSubject.setName(selectedSubject.getName());
                     selectedSubject.setQuota(selectedSubject.getQuota());
                     ses.update(selectedSubject);
-                    ses.getTransaction().commit();
+                    tx.commit();
+                    ses.close();
 
                     isRenderedP1 = "true";
                     isRenderedP2 = "false";
@@ -177,6 +195,15 @@ public class SubjectBean implements Serializable {
                     FacesContext context = FacesContext.getCurrentInstance();
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Update Successful", "You have successfully updated informations of subject selected."));
                 } catch (Exception e) {
+                    if (tx != null && tx.isActive()) {
+                        tx.rollback();
+                    }
+
+                    if (ses != null && ses.isOpen()) {
+                        ses.close();
+                        ses = null;
+                    }
+
                     e.printStackTrace();
                 }
             } else {
@@ -354,6 +381,14 @@ public class SubjectBean implements Serializable {
 
     public void setIsRenderedEditUserButton(String isRenderedEditUserButton) {
         this.isRenderedEditUserButton = isRenderedEditUserButton;
+    }
+
+    public Transaction getTx() {
+        return tx;
+    }
+
+    public void setTx(Transaction tx) {
+        this.tx = tx;
     }
 
 }
