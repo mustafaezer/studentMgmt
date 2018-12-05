@@ -16,6 +16,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -33,31 +34,36 @@ public class CoursesTakenBean {
 
     private List<Grading> coursesList;
 
+    Transaction tx = null;
+
     public CoursesTakenBean() {
     }
 
     @PostConstruct
     public void init() {
-        ses = HibernateUtil.getSessionFactory().openSession();
         coursesList = listCoursesTaken();
-    }
-
-    @PreDestroy
-    public void destroy() {
-        ses.close();
     }
 
     public List<Grading> listCoursesTaken() {
         coursesList = new ArrayList<>();
         try {
-            ses.beginTransaction();
+            ses = HibernateUtil.getSessionFactory().openSession();
+
+            tx = ses.beginTransaction();
             String studentCitizenshipNumber = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("citizenshipNumber");
             Criteria cr = ses.createCriteria(Grading.class);
             cr.add(Restrictions.eq("id.studentCitizenshipNumber", studentCitizenshipNumber));
             cr.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
             coursesList = cr.list();
-            ses.getTransaction().commit();
+            tx.commit();
+            ses.close();
+
         } catch (Exception e) {
+            if (ses != null && ses.isOpen()) {
+                ses.close();
+                ses = null;
+            }
+
             e.printStackTrace();
         }
         return coursesList;
@@ -70,7 +76,13 @@ public class CoursesTakenBean {
     public void setCoursesList(List<Grading> coursesList) {
         this.coursesList = coursesList;
     }
-    
-    
+
+    public Transaction getTx() {
+        return tx;
+    }
+
+    public void setTx(Transaction tx) {
+        this.tx = tx;
+    }
 
 }
