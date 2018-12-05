@@ -15,6 +15,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import org.hibernate.Session;
 import org.hibernate.Criteria;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 
 /**
@@ -29,31 +30,35 @@ public class GradesBean {
 
     private List<Grading> grading;
 
+    Transaction tx = null;
+
     @PostConstruct
     public void init() {
-        ses = HibernateUtil.getSessionFactory().openSession();
         grading = listAllGrades();
-    }
-
-    @PreDestroy
-    public void destroy() {
-        ses.close();
     }
 
     public List<Grading> listAllGrades() {
         grading = new ArrayList<>();
 
         try {
-            ses.beginTransaction();
+            ses = HibernateUtil.getSessionFactory().openSession();
+
+            tx = ses.beginTransaction();
 
             Criteria cr = ses.createCriteria(Grading.class);
             cr.addOrder(Order.asc("grade"));
 
             grading = cr.list();
 
-            ses.getTransaction().commit();
+            tx.commit();
+            ses.close();
 
         } catch (Exception e) {
+            if (ses != null && ses.isOpen()) {
+                ses.close();
+                ses = null;
+            }
+
             e.printStackTrace();
         }
         return grading;
@@ -65,5 +70,13 @@ public class GradesBean {
 
     public void setGrading(List<Grading> grading) {
         this.grading = grading;
+    }
+
+    public Transaction getTx() {
+        return tx;
+    }
+
+    public void setTx(Transaction tx) {
+        this.tx = tx;
     }
 }
