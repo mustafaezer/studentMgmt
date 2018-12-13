@@ -13,7 +13,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -22,6 +21,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 
@@ -35,6 +35,7 @@ public class SubjectBean implements Serializable {
 
     private Session ses;
     private List<Subjectinfo> subjectList;
+    private List<Userinfo> instructorList;
 
     private Integer subjectInfoId;
     private Departmentinfo departmentinfo;
@@ -69,6 +70,7 @@ public class SubjectBean implements Serializable {
         isRenderedP3 = "false";
 
         listAllSubjects();
+        listInstructors();
     }
 
     public List<Subjectinfo> listAllSubjects() {
@@ -96,6 +98,32 @@ public class SubjectBean implements Serializable {
             e.printStackTrace();
         }
         return subjectList;
+    }
+
+    public List<Userinfo> listInstructors() {
+        instructorList = new ArrayList<>();
+        String instructorType = "Instructor";
+        
+        try {
+            ses = HibernateUtil.getSessionFactory().openSession();
+            tx = ses.beginTransaction();
+
+            Criteria cr = ses.createCriteria(Userinfo.class);
+            cr.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+            cr.add(Restrictions.eq("userType", instructorType));
+            instructorList = cr.list();
+            
+            tx.commit();
+            ses.close();
+        } catch (Exception e) {
+            if (ses != null && ses.isOpen()) {
+                ses.close();
+                ses = null;
+            }
+
+            e.printStackTrace();
+        }
+        return instructorList;
     }
 
     public void createNewSubjectPanelInitializer() {
@@ -136,6 +164,8 @@ public class SubjectBean implements Serializable {
 
             FacesContext context = FacesContext.getCurrentInstance();
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Subject Creation Successful", "New subject has been successfully created with the informations given."));
+            
+            subjectList = listAllSubjects();
         } catch (Exception e) {
             if (tx != null && tx.isActive()) {
                 tx.rollback();
@@ -194,6 +224,8 @@ public class SubjectBean implements Serializable {
 
                     FacesContext context = FacesContext.getCurrentInstance();
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Update Successful", "You have successfully updated informations of subject selected."));
+                    
+                    subjectList = listAllSubjects();
                 } catch (Exception e) {
                     if (tx != null && tx.isActive()) {
                         tx.rollback();
@@ -389,6 +421,14 @@ public class SubjectBean implements Serializable {
 
     public void setTx(Transaction tx) {
         this.tx = tx;
+    }
+
+    public List<Userinfo> getInstructorList() {
+        return instructorList;
+    }
+
+    public void setInstructorList(List<Userinfo> instructorList) {
+        this.instructorList = instructorList;
     }
 
 }

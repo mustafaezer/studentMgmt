@@ -105,8 +105,11 @@
                                 <h:outputLabel for="name" value="Subject Name:*" style="font-weight: bold;"/>
                                 <p:inputText maxlength="135" id="name" required="false" value="#{subjectBean.name}" style="width:245px"/>
 
-                                <h:outputLabel for="citizenshipNumber" value="Instructor Citizenship Number:*" style="font-weight: bold;"/>
-                                <p:inputText maxlength="11" id="citizenshipNumber" required="false" value="#{subjectBean.userinfo.citizenshipNumber}" style="width:245px"/>
+                                <h:outputLabel for="citizenshipNumberPicklistCreate" value="Instructor:*" style="font-weight: bold;"/>
+                                <p:selectOneMenu id="citizenshipNumberPicklistCreate" value="#{subjectBean.userinfo.citizenshipNumber}" required="false" style="width:230px">
+                                    <f:selectItem itemValue="#{null}" itemLabel="-- Select an Instructor --" noSelectionOption="true"/>
+                                    <f:selectItems value="#{subjectBean.instructorList}" var="instructor" itemLabel="#{instructor.firstName} #{instructor.middleName} #{instructor.lastName}" itemValue="#{instructor.citizenshipNumber}"/>
+                                </p:selectOneMenu>
 
                                 <h:outputLabel for="quota" value="Quota:*" style="font-weight: bold;"/>
                                 <p:inputText maxlength="11" id="quota" required="false" value="#{subjectBean.quota}" style="width:245px"/>
@@ -168,9 +171,11 @@
                                     <f:selectItem itemLabel="Spring" itemValue="Spring" />
                                 </p:selectOneMenu>
 
-
-                                <h:outputLabel for="citizenshipNumberUpdate" value="Instructor Citizenship Number:*" style="font-weight: bold;"/>
-                                <p:inputText maxlength="11" id="citizenshipNumberUpdate" required="false" value="#{subjectBean.selectedSubject.instructorCitizenshipNumber.citizenshipNumber}" style="width:245px"/>
+                                <h:outputLabel for="citizenshipNumberPicklistUpdate" value="Instructor:*" style="font-weight: bold;"/>
+                                <p:selectOneMenu id="citizenshipNumberPicklistUpdate" value="#{subjectBean.selectedSubject.instructorCitizenshipNumber.citizenshipNumber}" required="false" style="width:230px">
+                                    <f:selectItem itemValue="#{subjectBean.selectedSubject.instructorCitizenshipNumber.citizenshipNumber}" itemLabel="#{subjectBean.selectedSubject.instructorCitizenshipNumber.firstName} #{subjectBean.selectedSubject.instructorCitizenshipNumber.middleName} #{subjectBean.selectedSubject.instructorCitizenshipNumber.lastName}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{subjectBean.instructorList}" var="instructor" itemLabel="#{instructor.firstName} #{instructor.middleName} #{instructor.lastName}" itemValue="#{instructor.citizenshipNumber}"/>
+                                </p:selectOneMenu>
 
                                 <h:outputLabel for="nameUpdate" value="Subject Name:*" style="font-weight: bold;"/>
                                 <p:inputText maxlength="135" id="nameUpdate" required="false" value="#{subjectBean.selectedSubject.name}" style="width:245px"/>
