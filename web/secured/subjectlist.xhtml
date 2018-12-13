@@ -148,7 +148,7 @@
                             <h:panelGrid  columns="2" rendered="#{not empty subjectBean.selectedSubject}" cellpadding="5" style="width= 500px;">
 
                                 <h:outputLabel for="isActiveUpdate" value="Status:*" style="font-weight: bold;"/>
-                                <p:selectOneMenu id="isActiveUpdate" value="#{subjectBean.isActive}" style="width:230px" required="false">
+                                <p:selectOneMenu id="isActiveUpdate" value="#{subjectBean.selectedSubject.isActive}" style="width:230px" required="false">
                                     <f:selectItem itemLabel="Active" itemValue="Active" />
                                     <f:selectItem itemLabel="Inactive" itemValue="Inactive" />
                                 </p:selectOneMenu>

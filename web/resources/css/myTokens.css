@@ -160,7 +160,7 @@ body .sidemenuDiv ul {
     position: fixed;
     height: 100%;
     overflow: auto;
-    background-color: #F1F1F1;
+    background-color: #f1f1f1;
 
 }
 
@@ -188,7 +188,7 @@ body .topbarDiv ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #F1F1F1;
+    background-color: #f6f6f6;
 }
 
 body .topbarDiv li {

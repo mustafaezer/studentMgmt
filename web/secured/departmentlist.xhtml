@@ -42,7 +42,7 @@
                                 <div class="ui-g-12 ui-md-4">
                                     <div class="ui-inputgroup">
                                         <span class="ui-inputgroup-addon"><i class="fa fa-bank"></i></span>
-                                        <p:inputText maxlength="45" id="departmentName" required="false" value="#{departmentBean.name}" placeholder="Department Name" /> 
+                                        <p:inputText maxlength="45" id="departmentName" type="text" required="false" value="#{departmentBean.name}" placeholder="Department Name"/>
                                         <p:commandButton process="@form" action="#{departmentBean.createNewDepartment}" update=":form:createNewDepartmentToUpdate, :form:departmentDTToUpdate, :form:departmentInstructorsToUpdate, :form:departmentStudentsToUpdate, :form:departmentSubjectsToUpdate" value="Create" style="border-radius: 0px !important;">
                                             <p:confirm header="Confirmation" message="New department will be created by the informations given?" icon="ui-icon-alert" />
                                         </p:commandButton>
@@ -51,7 +51,7 @@
                             </div>
                         </p:panel>
                     </p:outputPanel>
-                    
+
                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                         <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                         <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
