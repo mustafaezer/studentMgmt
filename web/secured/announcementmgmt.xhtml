@@ -70,12 +70,12 @@
                                 <h:outputLabel id="cOutput"/>
 
                                 <p:outputLabel for="startDate" value="Start Date:*" />
-                                <p:calendar id="startDate" value="#{announcementBean.startDate}" placeholder="e.g. 28/11/2018" maxdate="#{announcementBean.endDate}" styleClass="calendarClass" pattern="dd/MM/yyyy" navigator="true">
+                                <p:calendar id="startDate" value="#{announcementBean.startDate}" placeholder="e.g. 28/11/2018" mindate="#{announcementBean.formattedDateAsString}" maxdate="#{announcementBean.endDate}" showButtonPanel="true" styleClass="calendarClass" pattern="dd/MM/yyyy">
                                     <p:ajax event="dateSelect" update="endDate"/>
                                 </p:calendar>
 
                                 <p:outputLabel for="endDate" value="End Date:" />
-                                <p:calendar id="endDate" value="#{announcementBean.endDate}" placeholder="e.g. 01/01/2019" minDate="#{announcementBean.startDate}" styleClass="calendarClass"  disabled="#{empty announcementBean.startDate}" pattern="dd/MM/yyyy" navigator="true">
+                                <p:calendar id="endDate" value="#{announcementBean.endDate}" placeholder="e.g. 01/01/2019" mindate="#{announcementBean.startDate}" showButtonPanel="true" styleClass="calendarClass"  disabled="#{empty announcementBean.startDate}" pattern="dd/MM/yyyy">
                                     <p:ajax event="dateSelect" update="startDate"/>
                                 </p:calendar>
 
@@ -247,10 +247,14 @@
                                 <h:outputLabel id="cOutput1" style="font-weight: normal;"/>
 
                                 <p:outputLabel for="startDateEdit" value="Start Date:*" />
-                                <p:calendar id="startDateEdit" value="#{announcementBean.selectedAnnouncement.startDate}" styleClass="calendarClass"/>
+                                <p:calendar id="startDateEdit" value="#{announcementBean.selectedAnnouncement.startDate}" mindate="#{announcementBean.selectedAnnouncement.startDate}" maxdate="#{announcementBean.selectedAnnouncement.endDate}" showButtonPanel="true" styleClass="calendarClass">
+                                    <p:ajax event="dateSelect" update="endDateEdit"/>
+                                </p:calendar>
 
                                 <p:outputLabel for="endDateEdit" value="End Date:" />
-                                <p:calendar id="endDateEdit" value="#{announcementBean.selectedAnnouncement.endDate}" styleClass="calendarClass"/>
+                                <p:calendar id="endDateEdit" value="#{announcementBean.selectedAnnouncement.endDate}" mindate="#{announcementBean.selectedAnnouncement.startDate}" showButtonPanel="true" styleClass="calendarClass">
+                                    <p:ajax event="dateSelect" update="startDateEdit"/>
+                                </p:calendar>
 
                                 <h:outputLabel for="isActiveEdit" value="Status:*"/>
                                 <p:selectOneMenu id="isActiveEdit" value="#{announcementBean.selectedAnnouncement.isActive}" style="width: 250px;" required="false">

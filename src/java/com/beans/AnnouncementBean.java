@@ -9,6 +9,8 @@ import com.entity.Announcementinfo;
 import com.entity.Departmentinfo;
 import com.entity.Userinfo;
 import com.util.HibernateUtil;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -49,6 +51,8 @@ public class AnnouncementBean {
 
         isRenderedP2 = "false";
         isCollapsedP2 = "true";
+
+        fetchMinDateAsToday();
     }
 
     private Session ses;
@@ -76,6 +80,10 @@ public class AnnouncementBean {
     private Date startDate;
     private Date endDate;
     private String isActive;
+
+    private Date date;
+    private DateFormat dateFormat;
+    private String formattedDateAsString;
 
     Transaction tx = null;
 
@@ -218,12 +226,12 @@ public class AnnouncementBean {
 
     public void editAnnouncement() {
         try {
-            ses = HibernateUtil.getSessionFactory().openSession();
-
-            tx = ses.beginTransaction();
 
             if (selectedAnnouncement.getHeader() != "" && selectedAnnouncement.getContext() != "" && selectedAnnouncement.getStartDate() != null && selectedAnnouncement.getEndDate() != null) {
+                ses = HibernateUtil.getSessionFactory().openSession();
 
+                tx = ses.beginTransaction();
+                
                 selectedAnnouncement.setAnnouncementId(selectedAnnouncement.getAnnouncementId());
                 selectedAnnouncement.setDepartmentInfoId(selectedAnnouncement.getDepartmentInfoId());
 
@@ -242,13 +250,13 @@ public class AnnouncementBean {
                 selectedAnnouncement.setEndDate(selectedAnnouncement.getEndDate());
                 selectedAnnouncement.setIsActive(selectedAnnouncement.getIsActive());
 
-                ses.update(selectedAnnouncement);
-
-                FacesContext context = FacesContext.getCurrentInstance();
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Announcement Updated", "Selected announcement has been successfully updated."));
+                ses.saveOrUpdate(selectedAnnouncement);
 
                 tx.commit();
                 ses.close();
+
+                FacesContext context = FacesContext.getCurrentInstance();
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Announcement Updated", "Selected announcement has been successfully updated."));
 
                 isRenderedP2 = "false";
                 isCollapsedP2 = "false";
@@ -274,6 +282,12 @@ public class AnnouncementBean {
 
             e.printStackTrace();
         }
+    }
+
+    public void fetchMinDateAsToday() {
+        dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        date = new Date();
+        formattedDateAsString = dateFormat.format(date);
     }
 
     public String getIsRenderedP0() {
@@ -439,6 +453,30 @@ public class AnnouncementBean {
 
     public void setTx(Transaction tx) {
         this.tx = tx;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public DateFormat getDateFormat() {
+        return dateFormat;
+    }
+
+    public void setDateFormat(DateFormat dateFormat) {
+        this.dateFormat = dateFormat;
+    }
+
+    public String getFormattedDateAsString() {
+        return formattedDateAsString;
+    }
+
+    public void setFormattedDateAsString(String formattedDateAsString) {
+        this.formattedDateAsString = formattedDateAsString;
     }
 
 }
