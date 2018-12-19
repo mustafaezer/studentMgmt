@@ -32,7 +32,7 @@
                     <p:menuitem value="Dashboard" url="dashboard.xhtml"/>
                     <p:menuitem value="Grades" url="grades.xhtml"/>
                 </p:breadCrumb>
-                
+
                 <ui:insert name="sidebarBottom">
                     <ui:include src="templates/sidebarBottom.xhtml"/>
                 </ui:insert>
@@ -40,33 +40,36 @@
                     <p:dataTable var="grading" 
                                  value="#{gradesBean.grading}" 
                                  style="font-size: 12px; text-align: center;" 
-
-                                 rowIndexVar="rowIndex">
+                                 rowIndexVar="rowIndex"
+                                 rows="10"
+                                 paginator="true"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15">
                         <f:facet name="header">
                             Grade Informations of All Students 
                         </f:facet>
                         <p:column headerText="#" style="width: 10px;" >
                             <h:outputText value="#{rowIndex+1}"/>
                         </p:column>
-                        <p:column headerText="Department" style="width: 150px;" sortBy="#{grading.subjectinfo.departmentInfoId.departmentInfoId}">
+                        <p:column headerText="Department" style="width: 150px;" sortBy="#{grading.subjectinfo.departmentInfoId.departmentInfoId}" filterBy="#{grading.subjectinfo.departmentInfoId.name}" filterMatchMode="contains">
                             <h:outputText value="#{grading.subjectinfo.departmentInfoId.name}"/>
                         </p:column>
-                        <p:column headerText="Instructor" >
+                        <p:column headerText="Instructor" sortBy="#{grading.subjectinfo.instructorCitizenshipNumber.firstName}" filterBy="#{grading.subjectinfo.instructorCitizenshipNumber.firstName} #{grading.subjectinfo.instructorCitizenshipNumber.middleName} #{grading.subjectinfo.instructorCitizenshipNumber.lastName}" filterMatchMode="contains">
                             <h:outputText value="#{grading.subjectinfo.instructorCitizenshipNumber.firstName} #{grading.subjectinfo.instructorCitizenshipNumber.middleName} #{grading.subjectinfo.instructorCitizenshipNumber.lastName}"/>
                         </p:column>
-                        <p:column headerText="Subject" style="width: 250px;">
+                        <p:column headerText="Subject" style="width: 250px;" sortBy="#{grading.subjectinfo.name}" filterBy="#{grading.subjectinfo.name}" filterMatchMode="contains">
                             <h:outputText value="#{grading.subjectinfo.name}"/>
                         </p:column>
-                        <p:column headerText="Student" >
+                        <p:column headerText="Student" sortBy="#{grading.userinfo.firstName}" filterBy="#{grading.userinfo.firstName} #{grading.userinfo.middleName} #{grading.userinfo.lastName}" filterMatchMode="contains">
                             <h:outputText value="#{grading.userinfo.firstName} #{grading.userinfo.middleName} #{grading.userinfo.lastName}"/>
                         </p:column>
-                        <p:column headerText="Midterm" style="width: 40px">
+                        <p:column headerText="Midterm" style="width: 40px" sortBy="#{grading.midtermNote}">
                             <h:outputText value="#{grading.midtermNote}"/>
                         </p:column>
-                        <p:column headerText="Finale" style="width: 40px">
+                        <p:column headerText="Finale" style="width: 40px" sortBy="#{grading.finaleNote}">
                             <h:outputText value="#{grading.finaleNote}"/>
                         </p:column>
-                        <p:column headerText="Grade" style="width: 40px" styleClass="#{grading.grade eq 'AA' ? 'AA' : null} 
+                        <p:column headerText="Grade" style="width: 40px" sortBy="#{grading.grade}" styleClass="#{grading.grade eq 'AA' ? 'AA' : null} 
                                   #{grading.grade eq 'BA' ? 'BA' : null}
                                   #{grading.grade eq 'BB' ? 'BB' : null}
                                   #{grading.grade eq 'CB' ? 'CB' : null}
@@ -104,7 +107,7 @@
                 });
             });
         </script>
-        
+
         <a href="#" id="scroll" style="display: none;"><span></span></a>
         <script>
             $(document).ready(function () {
