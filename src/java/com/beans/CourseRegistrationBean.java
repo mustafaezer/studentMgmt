@@ -193,12 +193,13 @@ public class CourseRegistrationBean implements Serializable {
 
         if (!target.isEmpty()) {
             try {
-                ses = HibernateUtil.getSessionFactory().openSession();
-                tx = ses.beginTransaction();
 
                 String studentCitizenshipNumber = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("citizenshipNumber");
 
                 for (int i = 0; i < target.size(); i++) {
+                    ses = HibernateUtil.getSessionFactory().openSession();
+                    tx = ses.beginTransaction();
+
                     Integer ID = target.get(i).getSubjectInfoId();
 
                     Grading registerToCourse = new Grading();

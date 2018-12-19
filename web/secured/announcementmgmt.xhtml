@@ -70,7 +70,7 @@
                                 <h:outputLabel id="cOutput"/>
 
                                 <p:outputLabel for="startDate" value="Start Date:*" />
-                                <p:calendar id="startDate" value="#{announcementBean.startDate}" placeholder="e.g. 28/11/2018" minDate="#{now}" maxdate="#{announcementBean.endDate}" styleClass="calendarClass" pattern="dd/MM/yyyy" navigator="true">
+                                <p:calendar id="startDate" value="#{announcementBean.startDate}" placeholder="e.g. 28/11/2018" maxdate="#{announcementBean.endDate}" styleClass="calendarClass" pattern="dd/MM/yyyy" navigator="true">
                                     <p:ajax event="dateSelect" update="endDate"/>
                                 </p:calendar>
 
