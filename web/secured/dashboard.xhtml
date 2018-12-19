@@ -48,12 +48,12 @@
             }   
 
             .ui-panel .ui-panel-content {
-                background-color: #e1f6f4 !important;
+                background-color: #F6F6F6 !important;
                 background-image: none !important;
             }
 
             .ui-panelgrid .ui-panelgrid-cell {
-                background-color: #e1f6f4 !important;
+                background-color: #F6F6F6 !important;
                 background-image: none !important;
             }
 
@@ -92,7 +92,7 @@
                                         <p:spacer width="15"/>
                                     </p:column>
                                     <p:column style="width: 25%; text-align: center;">
-                                        <h:graphicImage value="/departmentCount.png" styleClass="infoImg"/>
+                                        <h:graphicImage value="/departmentCount2.png" styleClass="infoImg"/>
                                     </p:column>
                                 </p:panelGrid>
                             </p:panel>
@@ -112,7 +112,7 @@
                                         <p:spacer width="30"/>
                                     </p:column>
                                     <p:column style="width: 25%; text-align: center;">
-                                        <h:graphicImage value="/instructorCount.png" styleClass="infoImg"/>
+                                        <h:graphicImage value="/instructorCount2.png" styleClass="infoImg"/>
                                     </p:column>
                                 </p:panelGrid>
                             </p:panel>
@@ -132,7 +132,7 @@
                                         <p:spacer width="30"/>
                                     </p:column>
                                     <p:column style="width: 25%; text-align: center;">
-                                        <h:graphicImage value="/studentCount.png" styleClass="infoImg"/>
+                                        <h:graphicImage value="/studentCount2.png" styleClass="infoImg"/>
                                     </p:column>
                                 </p:panelGrid>
                             </p:panel>
@@ -152,7 +152,7 @@
                                         <p:spacer width="30"/>
                                     </p:column>
                                     <p:column style="width: 25%; text-align: center;">
-                                        <h:graphicImage value="/subjectCount.png" styleClass="infoImg"/>
+                                        <h:graphicImage value="/subjectCount2.png" styleClass="infoImg"/>
                                     </p:column>
                                 </p:panelGrid>
                             </p:panel>
@@ -161,24 +161,40 @@
                                                     <div id="donutchart" style="width: 100%; height: 100%;"></div>
                                                 </div>-->
 
-                        <div class="ui-g-6">
+                        <div class="ui-g-4">
                             <p:panel>
-                                <p:panelGrid columns="1" styleClass="ui-noborder">
-                                    <h:graphicImage value="/coding.png" styleClass="infoImg"/>
+                                <p:panelGrid columns="3" styleClass="ui-noborder">
+                                    <h:graphicImage value="/code.png" height="40"/>
+                                    <h:outputText value="Code Statistics" style="font-size: 18px; color: #7a7a7a; font-weight: bold;"/>
+                                    <h:outputText value=""/>
                                     <br></br>
-                                    <p:panelGrid columns="4" cellpadding="10">
-                                        <h:outputText value="HTML" styleClass="infoText"/>
-                                        <h:outputText value="53.3%" style="font-weight: bold; color: #7a7a7a; text-align: right; align-content: right;"/>
-                                        <h:outputText value="Java" styleClass="infoText"/>
-                                        <h:outputText value="44.4%" style="font-weight: bold; color: #7a7a7a; text-align: right; align-content: right;"/>
-                                        <h:outputText value="CSS" styleClass="infoText"/>
-                                        <h:outputText value="1.9%" style="font-weight: bold; color: #7a7a7a; text-align: right; align-content: right;"/>
-                                        <h:outputText value="JavaScript" styleClass="infoText"/>
-                                        <h:outputText value="0.4%" style="font-weight: bold; color: #7a7a7a; text-align: right; align-content: right;"/>
-                                    </p:panelGrid>
+
+                                    <h:outputText value="HTML" styleClass="infoText"/>
+                                    <h:outputText value="53.2%" style="font-weight: bold; color: #7a7a7a;"/>
+                                    <br></br>
+
+                                    <h:outputText value="Java" styleClass="infoText"/>
+                                    <h:outputText value="44.5%" style="font-weight: bold; color: #7a7a7a;"/>
+                                    <br></br>
+
+                                    <h:outputText value="CSS" styleClass="infoText"/>
+                                    <h:outputText value="1.9%" style="font-weight: bold; color: #7a7a7a;"/>
+                                    <br></br>
+
+                                    <h:outputText value="JavaScript" styleClass="infoText"/>
+                                    <h:outputText value="0.4%" style="font-weight: bold; color: #7a7a7a;"/>
+                                    <br></br>
+
+                                    <h:outputText value="Source: github.com" style="font-size: 10px; font-weight: 500"/>
                                 </p:panelGrid>
                             </p:panel>
                         </div>
+
+<!--                        <div class="ui-g-8">
+                            <p:panel>
+                                <h:graphicImage value="/db.png" width="600"/>
+                            </p:panel>
+                        </div>-->
                     </div>
                 </h:form>
             </div>

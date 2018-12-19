@@ -16,10 +16,10 @@ and open the template in the editor.
 /*Primefaces - Button Styling*/
 .ui-button, button.ui-button.ui-state-default, .ui-button.ui-state-default {
     border:1px solid #F1F3F5 !important;
-    background-color: #B5E8E1 !important;
+    background-color: #c1a3f7 !important;
     height: 28px !important; 
     text-indent: 0.1em !important;
-    color: #435D5B !important;
+    color: #FFFFFF !important;
 
     font-size: 12px;
     font-family: "latoregular","Trebuchet MS",Arial,Helvetica,sans-serif;
@@ -53,14 +53,15 @@ root {
 .count {
     font-size: 32px;
     text-align: center;
-    color: #606060;
+    color: #915BF1;
     font-weight: bold;
 }
 
 .infoText {
     text-align: center;
     font-size: 12px;
-    color: #7a7a7a;
+    color: #a3a3a3;
+    font-weight: 500;
 }
 
 .infoImg {
@@ -80,7 +81,7 @@ root {
 
 /*Select Row Background Color*/
 .ui-datatable tr.ui-state-highlight {
-    background-color: #A3E3DE;
+    background-color: #dac8f9;
     color: #435D5B;
 }
 
@@ -134,7 +135,7 @@ root {
 
 /*Primefaces Paginator Active State Coloring*/
 .ui-paginator .ui-paginator-page.ui-state-active {
-    background-color: #A3E3DE;
+    background-color: #dac8f9;
     color: #435D5B;
     border-color: #F1F3F5;
 }
@@ -172,7 +173,7 @@ body .sidemenuDiv ul li a {
 }
 
 body .sidemenuDiv ul li a.active {
-    background-color: #B5E8E1;
+    background-color: #a77bf4;
     color: white;
 }
 
@@ -237,7 +238,7 @@ body .topbarDiv .active {
     cursor:pointer;
     width:50px;
     height:50px;
-    background-color:#EB8D7D;
+    background-color:#925bf1;
     text-indent:-9999px;
     display:none;
     -webkit-border-radius:60px;
@@ -256,7 +257,7 @@ body .topbarDiv .active {
     border-bottom-color:#ffffff;
 }
 #scroll:hover {
-    background-color:#B5E8E1;
+    background-color:#dac8f9;
     opacity:1;filter:"alpha(opacity=100)";
     -ms-filter:"alpha(opacity=100)";
 }
