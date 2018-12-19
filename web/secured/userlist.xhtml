@@ -175,7 +175,7 @@
                         <p:panel id="editUserInformation" header="Edit User Information" rendered="#{userBean.isRenderedP3}" toggleable="false" closable="false" toggleSpeed="500" closeSpeed="500" widgetVar="registered" collapsed="#{userBean.isCollapsedP3}" style="margin-bottom:10px; font-size: 12px;">
                             <p:panelGrid  columns="2" rendered="#{not empty userBean.selectedUser}" columnClasses="label,value" styleClass="ui-noborder" style="width= 100px;">
                                 <h:outputLabel for="citizenshipNumberUpdate" value="Citizenship Number:" style="font-weight: bold;"/> 
-                                <h:outputLabel id="citizenshipNumberUpdate" value="#{userBean.selectedUser.citizenshipNumber}"/> 
+                                <h:outputLabel id="citizenshipNumberUpdate" value="#{userBean.selectedUser.citizenshipNumber}" /> 
 
                                 <h:outputLabel for="departmentInfoIdUpdate" value="Department:" style="font-weight: bold;"/> 
                                 <h:outputLabel id="departmentInfoIdUpdate" value="#{userBean.selectedUser.departmentInfoId.name}"/>
@@ -184,16 +184,16 @@
                                 <h:outputLabel id="userTypeUpdate" value="#{userBean.selectedUser.userType}"/> 
 
                                 <h:outputLabel for="firstNameUpdate" value="First Name:" style="font-weight: bold;"/> 
-                                <p:inputText maxlength="45" id="firstNameUpdate" required="false" value="#{userBean.selectedUser.firstName}"  style="width: 650px;"/>
+                                <p:inputText maxlength="45" id="firstNameUpdate" required="false" value="#{userBean.selectedUser.firstName}"  style="width:246px"/>
 
                                 <h:outputLabel for="middleNameUpdate" value="Middle Name:" style="font-weight: bold;"/> 
-                                <p:inputText maxlength="45" id="middleNameUpdate" required="false" value="#{userBean.selectedUser.middleName}" style="width: 650px"/>
+                                <p:inputText maxlength="45" id="middleNameUpdate" required="false" value="#{userBean.selectedUser.middleName}" style="width:246px"/>
 
                                 <h:outputLabel for="lastNameUpdate" value="Last Name:" style="font-weight: bold;"/> 
-                                <p:inputText maxlength="45" id="lastNameUpdate" value="#{userBean.selectedUser.lastName}" style="width: 650px"/>
+                                <p:inputText maxlength="45" id="lastNameUpdate" value="#{userBean.selectedUser.lastName}" style="width:246px"/>
 
                                 <h:outputLabel for="genderUpdate" value="Gender:" style="font-weight: bold;"/> 
-                                <p:selectOneMenu id="genderUpdate" value="#{userBean.selectedUser.gender}" style="width: 634px">
+                                <p:selectOneMenu id="genderUpdate" value="#{userBean.selectedUser.gender}" style="width:230px">
                                     <f:selectItem itemLabel="" itemValue="null" />
                                     <f:selectItem itemLabel="Female" itemValue="Female" />
                                     <f:selectItem itemLabel="Male" itemValue="Male" />
@@ -201,16 +201,16 @@
                                 </p:selectOneMenu>
 
                                 <h:outputLabel for="emailUpdate" value="Email:" style="font-weight: bold;"/> 
-                                <p:inputText maxlength="45" id="emailUpdate" value="#{userBean.selectedUser.email}" style="width: 650px"/>
+                                <p:inputText maxlength="45" id="emailUpdate" value="#{userBean.selectedUser.email}" style="width:246px"/>
 
                                 <h:outputLabel for="dateOfBirthUpdate" value="Date of Birth:" style="font-weight: bold;"/> 
                                 <h:outputLabel id="dateOfBirthUpdate" value="#{userBean.selectedUser.dateOfBirth}"/>
 
                                 <h:outputLabel for="remarkUpdate" value="Remark:" style="font-weight: bold;"/> 
-                                <p:inputText maxlength="45" id="remarkUpdate" value="#{userBean.selectedUser.remark}" style="width: 650px"/>
+                                <p:inputText maxlength="45" id="remarkUpdate" value="#{userBean.selectedUser.remark}" style="width:246px"/>
 
                                 <h:outputLabel for="isActiveUpdate" value="Status:" style="width:246px; font-weight: bold;"/>
-                                <p:selectOneMenu id="isActiveUpdate" value="#{userBean.selectedUser.isActive}" style="width: 634px;" required="false">
+                                <p:selectOneMenu id="isActiveUpdate" value="#{userBean.selectedUser.isActive}" style="width:230px" required="false">
                                     <f:selectItem itemLabel="Active" itemValue="Active" />
                                     <f:selectItem itemLabel="Inactive" itemValue="Inactive" />
                                 </p:selectOneMenu>
