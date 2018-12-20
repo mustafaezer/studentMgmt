@@ -59,7 +59,7 @@ public class CoursesTakenBean {
             ses.close();
 
         } catch (Exception e) {
-            if (ses != null && ses.isOpen()) {
+            if (ses != null || ses.isOpen()) {
                 ses.close();
                 ses = null;
             }

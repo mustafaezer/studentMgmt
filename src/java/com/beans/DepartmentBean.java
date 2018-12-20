@@ -99,11 +99,11 @@ public class DepartmentBean {
                 FacesContext context = FacesContext.getCurrentInstance();
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Department Created", "Department has been successfully created: " + newDepartment.getName()));
             } catch (Exception e) {
-                if (tx != null && tx.isActive()) {
+                if (tx != null || tx.isActive()) {
                     tx.rollback();
                 }
 
-                if (ses != null && ses.isOpen()) {
+                if (ses != null || ses.isOpen()) {
                     ses.close();
                     ses = null;
                 }

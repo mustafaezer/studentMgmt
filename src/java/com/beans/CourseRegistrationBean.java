@@ -15,7 +15,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -134,7 +133,11 @@ public class CourseRegistrationBean implements Serializable {
             ses.close();
 
         } catch (Exception e) {
-            if (ses != null && ses.isOpen()) {
+            if (tx != null || tx.isActive()) {
+                tx.rollback();
+            }
+
+            if (ses != null || ses.isOpen()) {
                 ses.close();
                 ses = null;
             }
@@ -177,7 +180,11 @@ public class CourseRegistrationBean implements Serializable {
             ses.close();
 
         } catch (Exception e) {
-            if (ses != null && ses.isOpen()) {
+            if (tx != null || tx.isActive()) {
+                tx.rollback();
+            }
+
+            if (ses != null || ses.isOpen()) {
                 ses.close();
                 ses = null;
             }
@@ -239,11 +246,11 @@ public class CourseRegistrationBean implements Serializable {
                 FacesContext context = FacesContext.getCurrentInstance();
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Registration Successful", "You have successfully registered to courses in target list."));
             } catch (Exception e) {
-                if (tx != null && tx.isActive()) {
+                if (tx != null || tx.isActive()) {
                     tx.rollback();
                 }
 
-                if (ses != null && ses.isOpen()) {
+                if (ses != null || ses.isOpen()) {
                     ses.close();
                     ses = null;
                 }
@@ -305,11 +312,11 @@ public class CourseRegistrationBean implements Serializable {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Resignation Successful", "You have successfully resigned from " + selectedSubject.getName()));
 
             } catch (Exception e) {
-                if (tx != null && tx.isActive()) {
+                if (tx != null || tx.isActive()) {
                     tx.rollback();
                 }
 
-                if (ses != null && ses.isOpen()) {
+                if (ses != null || ses.isOpen()) {
                     ses.close();
                     ses = null;
                 }

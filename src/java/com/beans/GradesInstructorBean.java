@@ -94,7 +94,7 @@ public class GradesInstructorBean {
             tx.commit();
             ses.close();
         } catch (Exception e) {
-            if (ses != null && ses.isOpen()) {
+            if (ses != null || ses.isOpen()) {
                 ses.close();
                 ses = null;
             }
@@ -121,7 +121,7 @@ public class GradesInstructorBean {
 
                 isRenderedP2 = "true";
             } catch (Exception e) {
-                if (ses != null && ses.isOpen()) {
+                if (ses != null || ses.isOpen()) {
                     ses.close();
                     ses = null;
                 }
@@ -193,11 +193,11 @@ public class GradesInstructorBean {
                 FacesContext context = FacesContext.getCurrentInstance();
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Midterm has been successfully updated."));
             } catch (Exception e) {
-                if (tx != null && tx.isActive()) {
+                if (tx != null || tx.isActive()) {
                     tx.rollback();
                 }
 
-                if (ses != null && ses.isOpen()) {
+                if (ses != null || ses.isOpen()) {
                     ses.close();
                     ses = null;
                 }
@@ -236,11 +236,11 @@ public class GradesInstructorBean {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Finale has been successfully updated."));
 
             } catch (Exception e) {
-                if (tx != null && tx.isActive()) {
+                if (tx != null || tx.isActive()) {
                     tx.rollback();
                 }
 
-                if (ses != null && ses.isOpen()) {
+                if (ses != null || ses.isOpen()) {
                     ses.close();
                     ses = null;
                 }
@@ -289,7 +289,7 @@ public class GradesInstructorBean {
             ses.close();
 
         } catch (Exception e) {
-            if (ses != null && ses.isOpen()) {
+            if (ses != null || ses.isOpen()) {
                 ses.close();
                 ses = null;
             }

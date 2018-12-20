@@ -139,11 +139,11 @@ public class AnnouncementBean {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Announcement Creation Error", "Please fill all the required fields for an announcement."));
             }
         } catch (Exception e) {
-            if (tx != null && tx.isActive()) {
+            if (tx != null || tx.isActive()) {
                 tx.rollback();
             }
 
-            if (ses != null && ses.isOpen()) {
+            if (ses != null || ses.isOpen()) {
                 ses.close();
                 ses = null;
             }
@@ -167,7 +167,7 @@ public class AnnouncementBean {
             ses.close();
 
         } catch (Exception e) {
-            if (ses != null && ses.isOpen()) {
+            if (ses != null || ses.isOpen()) {
                 ses.close();
                 ses = null;
             }
@@ -201,7 +201,7 @@ public class AnnouncementBean {
             ses.close();
 
         } catch (Exception e) {
-            if (ses != null && ses.isOpen()) {
+            if (ses != null || ses.isOpen()) {
                 ses.close();
                 ses = null;
             }
@@ -271,11 +271,11 @@ public class AnnouncementBean {
             FacesContext context = FacesContext.getCurrentInstance();
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Announcement Update Error", "Selected announcement couldn't updated."));
 
-            if (tx != null && tx.isActive()) {
+            if (tx != null || tx.isActive()) {
                 tx.rollback();
             }
 
-            if (ses != null && ses.isOpen()) {
+            if (ses != null || ses.isOpen()) {
                 ses.close();
                 ses = null;
             }

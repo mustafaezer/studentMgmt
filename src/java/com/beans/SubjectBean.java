@@ -90,7 +90,7 @@ public class SubjectBean implements Serializable {
             tx.commit();
             ses.close();
         } catch (Exception e) {
-            if (ses != null && ses.isOpen()) {
+            if (ses != null || ses.isOpen()) {
                 ses.close();
                 ses = null;
             }
@@ -116,7 +116,7 @@ public class SubjectBean implements Serializable {
             tx.commit();
             ses.close();
         } catch (Exception e) {
-            if (ses != null && ses.isOpen()) {
+            if (ses != null || ses.isOpen()) {
                 ses.close();
                 ses = null;
             }
@@ -167,11 +167,11 @@ public class SubjectBean implements Serializable {
             
             subjectList = listAllSubjects();
         } catch (Exception e) {
-            if (tx != null && tx.isActive()) {
+            if (tx != null || tx.isActive()) {
                 tx.rollback();
             }
 
-            if (ses != null && ses.isOpen()) {
+            if (ses != null || ses.isOpen()) {
                 ses.close();
                 ses = null;
             }
@@ -227,11 +227,11 @@ public class SubjectBean implements Serializable {
                     
                     subjectList = listAllSubjects();
                 } catch (Exception e) {
-                    if (tx != null && tx.isActive()) {
+                    if (tx != null || tx.isActive()) {
                         tx.rollback();
                     }
 
-                    if (ses != null && ses.isOpen()) {
+                    if (ses != null || ses.isOpen()) {
                         ses.close();
                         ses = null;
                     }

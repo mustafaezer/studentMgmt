@@ -90,7 +90,7 @@ public class PersonalInfoBean {
             ses.close();
 
         } catch (Exception e) {
-            if (ses != null && ses.isOpen()) {
+            if (ses != null || ses.isOpen()) {
                 ses.close();
                 ses = null;
             }
@@ -141,11 +141,11 @@ public class PersonalInfoBean {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to update password.", "Your current password is incorrect."));
             }
         } catch (Exception e) {
-            if (tx != null && tx.isActive()) {
+            if (tx != null || tx.isActive()) {
                 tx.rollback();
             }
 
-            if (ses != null && ses.isOpen()) {
+            if (ses != null || ses.isOpen()) {
                 ses.close();
                 ses = null;
             }

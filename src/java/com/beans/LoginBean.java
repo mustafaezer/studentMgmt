@@ -89,7 +89,7 @@ public class LoginBean implements Serializable {
                 return navigationBean.toLogin();
             }
         } catch (Exception e) {
-            if (ses != null && ses.isOpen()) {
+            if (ses != null || ses.isOpen()) {
                 ses.close();
                 ses = null;
             }
