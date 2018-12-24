@@ -68,7 +68,7 @@ public class GradesInstructorBean {
     private String isRenderedMidtermButton = "false";
     private String isRenderedFinaleButton = "false";
 
-    Transaction tx = null;
+    private Transaction tx = null;
 
     @PostConstruct
     public void init() {

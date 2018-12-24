@@ -59,7 +59,7 @@ public class PersonalInfoBean {
     private String isCollapsedP1;
     private String isCollapsedP2;
 
-    Transaction tx = null;
+    private Transaction tx = null;
 
     /**
      * Creates a new instance of PersonalInfo

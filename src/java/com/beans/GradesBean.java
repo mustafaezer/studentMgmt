@@ -30,7 +30,7 @@ public class GradesBean {
 
     private List<Grading> grading;
 
-    Transaction tx = null;
+    private Transaction tx = null;
 
     @PostConstruct
     public void init() {

@@ -72,7 +72,7 @@ public class CourseRegistrationBean implements Serializable {
 
     private DualListModel<Subjectinfo> subjectListDual;
 
-    Transaction tx = null;
+    private Transaction tx = null;
 
     @PostConstruct
     public void init() {

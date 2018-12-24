@@ -60,7 +60,7 @@ public class DepartmentBean {
     private String isCollapsedP3;
     private String isCollapsedP4;
 
-    Transaction tx = null;
+    private Transaction tx = null;
 
     @PostConstruct
     public void init() {

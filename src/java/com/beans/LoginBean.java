@@ -42,7 +42,7 @@ public class LoginBean implements Serializable {
     @ManagedProperty(value = "#{navigationBean}")
     private NavigationBean navigationBean;
 
-    Transaction tx = null;
+    private Transaction tx = null;
 
     @PostConstruct
     public void init() {

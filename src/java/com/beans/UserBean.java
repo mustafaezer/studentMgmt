@@ -63,7 +63,7 @@ public class UserBean implements Serializable {
     private String isRenderedP3;
     private String isRenderedEditUserButton = "false";
 
-    Transaction tx = null;
+    private Transaction tx = null;
 
     public UserBean() {
     }

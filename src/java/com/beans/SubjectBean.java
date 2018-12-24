@@ -57,7 +57,7 @@ public class SubjectBean implements Serializable {
     private String isRenderedP3;
     private String isRenderedEditUserButton = "false";
 
-    Transaction tx = null;
+    private Transaction tx = null;
 
     @PostConstruct
     public void init() {

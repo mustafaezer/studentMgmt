@@ -85,7 +85,7 @@ public class AnnouncementBean {
     private DateFormat dateFormat;
     private String formattedDateAsString;
 
-    Transaction tx = null;
+    private Transaction tx = null;
 
     public AnnouncementBean() {
 

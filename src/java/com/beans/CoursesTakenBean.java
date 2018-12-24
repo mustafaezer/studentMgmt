@@ -34,7 +34,7 @@ public class CoursesTakenBean {
 
     private List<Grading> coursesList;
 
-    Transaction tx = null;
+    private Transaction tx = null;
 
     public CoursesTakenBean() {
     }
