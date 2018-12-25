@@ -6,7 +6,7 @@
       xmlns:p="http://primefaces.org/ui">
     <h:head>    
         <title>Lazy</title>
-        <link rel="shorcut icon" type="image/x-icon" href="#{resource['images/i.png']}"/>
+        <link rel="shorcut icon" type="image/x-icon" href="#{resource['images/j.png']}"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
         <link href="../resources/css/myTokens.css" rel="stylesheet" type="text/css"/>
@@ -35,7 +35,7 @@
                     <p:dataTable id="singleDT"
                                  var="lazyUser" 
                                  value="#{personBean.lazyModel}" 
-                                 rows="5" 
+                                 rows="10" 
                                  paginator="true" 
                                  paginatorPosition="bottom"
                                  style="font-size: 12px; text-align: center;" 
@@ -43,15 +43,35 @@
                                  lazy="true"
                                  currentPageReportTemplate="{startRecord}-{endRecord} records are listed. Totally: {totalRecords} records" 
                                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"> 
-                        
+                        <p:column headerText="#" style="width: 10px; background-color: #EBEDF0 !important;">
+                            <h:outputText value="#{rowIndex+1}" />
+                        </p:column>
+                        <p:column headerText="Status" style="width: 40px;" styleClass="#{lazyUser.isActive eq 'Active' ? 'green' : null} #{lazyUser.isActive eq 'Inactive' ? 'red' : null}">
+                            <h:outputText value="#{lazyUser.isActive}"/>
+                        </p:column>
                         <p:column headerText="Department">
                             <h:outputText value="#{lazyUser.departmentInfoId.name}"/>
                         </p:column>
-                        <p:column headerText="Citizenship Number" filterBy="#{lazyUser.citizenshipNumber}">
+                        <p:column headerText="User Type" style="width: 70px;">
+                            <h:outputText value="#{lazyUser.userType}"/>
+                        </p:column>
+                        <p:column filterBy="#{lazyUser.firstName} #{lazyUser.middleName} #{lazyUser.lastName}" headerText="First Name">
+                            <h:outputText value="#{lazyUser.firstName} #{lazyUser.middleName} #{lazyUser.lastName}"/>
+                        </p:column>
+                        <p:column filterBy="#{lazyUser.citizenshipNumber}" headerText="Citizenship Number">
                             <h:outputText value="#{lazyUser.citizenshipNumber}"/>
                         </p:column>
-                        <p:column headerText="Full Name">
-                            <h:outputText value="#{lazyUser.firstName} #{lazyUser.middleName} #{lazyUser.lastName}"/>
+                        <p:column headerText="Gender" style="width: 50px;">
+                            <h:outputText value="#{lazyUser.gender}" />
+                        </p:column>
+                        <p:column filterBy="#{lazyUser.email}" headerText="Email" style="width: 150px;">
+                            <h:outputText value="#{lazyUser.email}"/>
+                        </p:column>
+                        <p:column headerText="Date of Birth">
+                            <h:outputText value="#{lazyUser.dateOfBirth}"/>
+                        </p:column>
+                        <p:column headerText="Remark">
+                            <h:outputText value="#{lazyUser.remark}"/>
                         </p:column>
 
                     </p:dataTable>
