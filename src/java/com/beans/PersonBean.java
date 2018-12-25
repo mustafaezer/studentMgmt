@@ -29,6 +29,8 @@ public class PersonBean implements Serializable {
     private Session ses;
     private Transaction tx = null;
 
+    private String citizenshipNumberFilterValue;
+
     private LazyDataModel<Userinfo> lazyModel;
 
     @PostConstruct
@@ -44,38 +46,47 @@ public class PersonBean implements Serializable {
             public List<Userinfo> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
 
                 ses = HibernateUtil.getSessionFactory().openSession();
-                Criteria cr = ses.createCriteria(Userinfo.class);
+                tx = ses.beginTransaction();
 
-                /**
-                 * Filter ****************************************************
-                 */
+                Criteria cr = ses.createCriteria(Userinfo.class);
+                Criteria crGeneral = ses.createCriteria(Userinfo.class);
+
+                /*citizenshipNumberFilter*/
                 if (filters.size() > 0) {
                     for (Map.Entry<String, Object> entry : filters.entrySet()) {
+                        
                         String key = entry.getKey();
                         String value = (String) entry.getValue();
-                        cr.add(Restrictions.like(key, value, MatchMode.ANYWHERE));
+
+                        if (key != null && key.equals("citizenshipNumber")) {
+                            cr.add(Restrictions.like(key, value, MatchMode.ANYWHERE));
+                            crGeneral.add(Restrictions.like("citizenshipNumber", value, MatchMode.ANYWHERE));
+                        }
+                        
+                        if (key != null && key.equals("remark")) {
+                            cr.add(Restrictions.like(key, value, MatchMode.ANYWHERE));
+                            crGeneral.add(Restrictions.like("remark", value, MatchMode.ANYWHERE));
+                        }
+                        
+                        if (key != null && key.equals("email")) {
+                            cr.add(Restrictions.like(key, value, MatchMode.ANYWHERE));
+                            crGeneral.add(Restrictions.like("email", value, MatchMode.ANYWHERE));
+                        }
                     }
                 }
 
-                /**
-                 * Row Count
-                 * ****************************************************
-                 */
+                /*rowCount*/
                 cr.setProjection(Projections.rowCount());
-                tx = ses.beginTransaction();
-
                 Long rowCount = (Long) cr.uniqueResult();
+
+                /*lazyModelRowCount*/
                 lazyModel.setRowCount(rowCount.intValue());
 
-                /**
-                 * Fetch Data
-                 * ****************************************************
-                 */
-                Criteria crGeneral = ses.createCriteria(Userinfo.class);
+                /*fetchData*/
                 crGeneral.setFirstResult(first);
                 crGeneral.setMaxResults(pageSize);
                 List<Userinfo> lazyUsers = (List<Userinfo>) crGeneral.list();
-                
+
                 tx.commit();
 
                 return lazyUsers;
@@ -99,4 +110,13 @@ public class PersonBean implements Serializable {
     public void setTx(Transaction tx) {
         this.tx = tx;
     }
+
+    public String getCitizenshipNumberFilterValue() {
+        return citizenshipNumberFilterValue;
+    }
+
+    public void setCitizenshipNumberFilterValue(String citizenshipNumberFilterValue) {
+        this.citizenshipNumberFilterValue = citizenshipNumberFilterValue;
+    }
+
 }

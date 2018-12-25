@@ -15,7 +15,7 @@ and open the template in the editor.
 
 /*Primefaces - Button Styling*/
 .ui-button, button.ui-button.ui-state-default, .ui-button.ui-state-default {
-    border:1px solid #F1F3F5 !important;
+    border:1px solid #e0e0e0 !important;
     background-color: #c1a3f7 !important;
     height: 28px !important; 
     text-indent: 0.1em !important;
@@ -88,47 +88,47 @@ root {
 /*Grades Coloring*/
 
 .AA {
-    color: #7B9EB5;
+    color: #C1A3F7;
     font-weight: bold;
     font-size: 12px;
 }
 .BA {
-    color: #899BAE;
+    color: #B79DE7;
     font-weight: bold;
     font-size: 12px;
 }
 .BB {
-    color: #9799A7;
+    color: #AE98D7;
     font-weight: bold;
     font-size: 12px;
 }
 .CB {
-    color: #A597A0;
+    color: #9C8DB7;
     font-weight: bold;
     font-size: 12px;
 }
 .CC {
-    color: #B39599;
+    color: #9287A7;
     font-weight: bold;
     font-size: 12px;
 }
 .DC {
-    color: #C19392;
+    color: #898297;
     font-weight: bold;
     font-size: 12px;
 }
 .DD {
-    color: #CF918B;
+    color: #807C87;
     font-weight: bold;
     font-size: 12px;
 }
 .FD {
-    color: #DD8F84;
+    color: #777777;
     font-weight: bold;
     font-size: 12px;
 }
 .FF {
-    color: #EB8D7D;
+    color: #6D7167;
     font-weight: bold;
     font-size: 12px;
 }
@@ -161,13 +161,12 @@ body .sidemenuDiv ul {
     position: fixed;
     height: 100%;
     overflow: auto;
-    background-color: #f1f1f1;
-
+    background-color: #777;
 }
 
 body .sidemenuDiv ul li a {
     display: block;
-    color: #000;
+    color: #ffffff;
     padding: 8px 16px;
     text-decoration: none;
 }
@@ -178,8 +177,8 @@ body .sidemenuDiv ul li a.active {
 }
 
 body .sidemenuDiv ul li a:hover:not(.active) {
-    background-color: #555;
-    color: white;
+    background-color: #f1f1f1;
+    color: black;
 }
 /*W3 Sidemenu End*/
 
@@ -189,7 +188,7 @@ body .topbarDiv ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #f6f6f6;
+    background-color: #f1f1f1;
 }
 
 body .topbarDiv li {
@@ -202,14 +201,15 @@ body .topbarDiv li a {
     text-align: center;
     padding: 16px 16px;
     text-decoration: none;
+    background-color: #f1f1f1;
 }
 
 body .topbarDiv li a:hover:not(.active) {
-    background-color: #F1F1F1;
+    background-color: #f1f1f1;
 }
 
 body .topbarDiv .active {
-    background-color: #4CAF50;
+    background-color: #f1f1f1;
 }
 /*W3 Topbar End*/
 
