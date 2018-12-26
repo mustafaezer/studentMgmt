@@ -59,16 +59,16 @@
                             <p:column headerText="#" style="width: 10px; background-color: #EBEDF0 !important;">
                                 <h:outputText value="#{rowIndex+1}" />
                             </p:column>
-                            <p:column headerText="Status" style="width: 40px;" styleClass="#{lazyUser.isActive eq 'Active' ? 'green' : null} #{lazyUser.isActive eq 'Inactive' ? 'red' : null}">
+                            <p:column filterBy="#{lazyUser.isActive}" headerText="Status" style="width: 60px;" styleClass="#{lazyUser.isActive eq 'Active' ? 'green' : null} #{lazyUser.isActive eq 'Inactive' ? 'red' : null}">
                                 <h:outputText value="#{lazyUser.isActive}"/>
                             </p:column>
-                            <p:column headerText="Department">
+                            <p:column filterBy="#{lazyUser.departmentInfoId.name}" headerText="Department">
                                 <h:outputText value="#{lazyUser.departmentInfoId.name}"/>
                             </p:column>
-                            <p:column headerText="User Type" style="width: 70px;">
+                            <p:column filterBy="#{lazyUser.userType}" headerText="User Type" style="width: 70px;">
                                 <h:outputText value="#{lazyUser.userType}"/>
                             </p:column>
-                            <p:column headerText="Full Name">
+                            <p:column filterBy="#{lazyUser.firstName} #{lazyUser.middleName} #{lazyUser.lastName}" headerText="Full Name">
                                 <h:outputText value="#{lazyUser.firstName} #{lazyUser.middleName} #{lazyUser.lastName}"/>
                             </p:column>
                             <p:column filterBy="#{lazyUser.citizenshipNumber}" headerText="Citizenship Number">

@@ -16,9 +16,13 @@ import javax.faces.bean.ViewScoped;
 import org.hibernate.Criteria;
 import org.hibernate.Transaction;
 import org.hibernate.Session;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.LogicalExpression;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -54,23 +58,57 @@ public class PersonBean implements Serializable {
                 /*citizenshipNumberFilter*/
                 if (filters.size() > 0) {
                     for (Map.Entry<String, Object> entry : filters.entrySet()) {
-                        
+
                         String key = entry.getKey();
                         String value = (String) entry.getValue();
 
+                        if (key != null && key.equals("departmentInfoId.name")) {
+                            cr.createAlias("departmentInfoId", "d", JoinType.LEFT_OUTER_JOIN);
+                            cr.add(Restrictions.like("d.name", value, MatchMode.ANYWHERE));
+                            
+                            crGeneral.createAlias("departmentInfoId", "d", JoinType.LEFT_OUTER_JOIN);
+                            crGeneral.add(Restrictions.like("d.name", value, MatchMode.ANYWHERE));
+                        }
+                        
                         if (key != null && key.equals("citizenshipNumber")) {
                             cr.add(Restrictions.like(key, value, MatchMode.ANYWHERE));
-                            crGeneral.add(Restrictions.like("citizenshipNumber", value, MatchMode.ANYWHERE));
+                            crGeneral.add(Restrictions.like(key, value, MatchMode.ANYWHERE));
                         }
-                        
+
+                        if (key != null && key.equals("userType")) {
+                            cr.add(Restrictions.like(key, value, MatchMode.ANYWHERE));
+                            crGeneral.add(Restrictions.like(key, value, MatchMode.ANYWHERE));
+                        }
+
+                        if (key != null && key.equals("isActive")) {
+                            cr.add(Restrictions.like(key, value, MatchMode.ANYWHERE));
+                            crGeneral.add(Restrictions.like(key, value, MatchMode.ANYWHERE));
+                        }
+
+                        if (key != null && key.equals("firstName} #{lazyUser.middleName} #{lazyUser.lastName")) {
+                            Criterion firstNameCr = Restrictions.like("firstName", value, MatchMode.ANYWHERE);
+                            Criterion middleNameCr = Restrictions.like("middleName", value, MatchMode.ANYWHERE);
+                            Criterion lastNameCr = Restrictions.like("lastName", value, MatchMode.ANYWHERE);
+                            
+                            Disjunction orExpCr = Restrictions.or(firstNameCr, middleNameCr, lastNameCr);
+                            cr.add(orExpCr);
+
+                            Criterion firstNameCrG = Restrictions.like("firstName", value, MatchMode.ANYWHERE);
+                            Criterion middleNameCrG = Restrictions.like("middleName", value, MatchMode.ANYWHERE);
+                            Criterion lastNameCrG = Restrictions.like("lastName", value, MatchMode.ANYWHERE);
+                            
+                            Disjunction orExpCrG = Restrictions.or(firstNameCrG, middleNameCrG, lastNameCrG);
+                            crGeneral.add(orExpCrG);
+                        }
+
                         if (key != null && key.equals("remark")) {
                             cr.add(Restrictions.like(key, value, MatchMode.ANYWHERE));
-                            crGeneral.add(Restrictions.like("remark", value, MatchMode.ANYWHERE));
+                            crGeneral.add(Restrictions.like(key, value, MatchMode.ANYWHERE));
                         }
-                        
+
                         if (key != null && key.equals("email")) {
                             cr.add(Restrictions.like(key, value, MatchMode.ANYWHERE));
-                            crGeneral.add(Restrictions.like("email", value, MatchMode.ANYWHERE));
+                            crGeneral.add(Restrictions.like(key, value, MatchMode.ANYWHERE));
                         }
                     }
                 }
