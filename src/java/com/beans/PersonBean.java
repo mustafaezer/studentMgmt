@@ -18,7 +18,6 @@ import org.hibernate.Transaction;
 import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Disjunction;
-import org.hibernate.criterion.LogicalExpression;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -55,7 +54,6 @@ public class PersonBean implements Serializable {
                 Criteria cr = ses.createCriteria(Userinfo.class);
                 Criteria crGeneral = ses.createCriteria(Userinfo.class);
 
-                /*citizenshipNumberFilter*/
                 if (filters.size() > 0) {
                     for (Map.Entry<String, Object> entry : filters.entrySet()) {
 

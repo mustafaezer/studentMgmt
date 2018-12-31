@@ -75,18 +75,14 @@ public class LoginBean implements Serializable {
             if (list.size() == 1) {
                 isLoggedIn = true;
 
-                FacesMessage msg = new FacesMessage("Welcome", "You've successfully accessed to the dashboard of Student Management System.");
-                msg.setSeverity(FacesMessage.SEVERITY_INFO);
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("citizenshipNumber", citizenshipNumber);
 
                 return navigationBean.redirectToWelcome();
             } else {
                 FacesContext context = FacesContext.getCurrentInstance();
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login Error", "Please check your citizenship number and password."));
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login Error", "Check your citizenship number or password again."));
 
-                return navigationBean.toLogin();
+                return null;
             }
         } catch (Exception e) {
             if (ses != null || ses.isOpen()) {
